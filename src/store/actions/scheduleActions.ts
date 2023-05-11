@@ -1,8 +1,9 @@
-import axios from "axios";
-import {localUrl} from "./store";
-import {facultyActionFaculties} from "./facultyReducer";
 
-export const facultiesList = () => {
+import {localUrl} from "../store";
+import {scheduleActionSchedule} from "../reducers/sheduleReducer/sheduleReducer";
+import axios from "axios";
+
+export const getSchedule = (id) => {
     return async (dispatch) => {
         try {
             // dispatch(authActionLoading(true)) -- лоудер;
@@ -12,15 +13,15 @@ export const facultiesList = () => {
                 method: 'post',
                 headers: {"Content-Type": "application/json", },
                 data: {
-                    "operationName": "fetchFaculties",
-                    "query": `query fetchFaculties{ faculties { id name number departments{ id name number }}}`,
+                    "operationName": "fetchSchedule",
+                    "query": `query fetchSchedule{ schedule (filter: {groupID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
                 }
             });
 
-            dispatch(facultyActionFaculties(res.data.data.faculties))
+            dispatch(scheduleActionSchedule(res.data.data.schedule));
+
             return true
         } catch (error) {
-            console.log(error)
             if (error.response.data.status === 400) {
                 return 400;
             }

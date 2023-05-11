@@ -1,0 +1,270 @@
+.open-list-fac {
+    display: flex;
+    justify-content: center;
+    opacity: 1;
+    transition: all 1s;
+    box-sizing: content-box;
+    width: 600px;
+    position: relative;
+}
+
+.open-list-fac-hidden {
+    opacity: 0;
+    position: absolute;
+    left: -99999px;
+}
+
+.head-of-list {
+    background-color: white;
+    cursor: pointer;
+    padding: 0 20px 0 20px;
+    align-items: center;
+    display: flex;
+    border: 2px solid var(--textColor);
+    width: 100%;
+    height: 50px;
+    justify-content: space-between;
+    font-size: 18px;
+    font-weight: lighter;
+}
+
+.head-of-list-active {
+    border: 2px solid var(--textColorHover);
+}
+
+.list-arrow {
+    transition: all 0.5s;
+    width: 30px;
+    height: 30px;
+    transform: rotate(0deg);
+}
+
+.list-arrow-active {
+    transform: rotate(180deg);
+}
+
+.header-list::-webkit-scrollbar {
+    width: 0;
+}
+
+.header-list {
+    height: auto;
+    max-height: 230px;
+    overflow-y: scroll;
+    border-radius: 0 0 10px 10px;
+    opacity: 1;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    width: 100%;
+    box-shadow: 0 20px 40px 0 rgb(0 0 0 / 30%);
+    z-index: 12;
+    transition: all 0.5s;
+    top: 50px;
+}
+
+.header-list-hidden {
+    opacity: 0;
+    position: absolute;
+    left: -9999px;
+}
+
+.search-list-med {
+    border-left: 2px solid var(--textColor);
+    border-right: 2px solid var(--textColor);
+    border-top: 0;
+    border-bottom: 0;
+    font-size: 18px;
+    width: 100%;
+    height: 40px;
+    outline: none;
+    padding-left: 20px;
+}
+
+.fac-input {
+    margin-top: 30px;
+    display: flex;
+    width: 800px;
+}
+
+.fac-input-text {
+    padding-right: 90px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 18px;
+    width: 200px;
+}
+
+.head-list-text {
+    width: 500px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.choose-course-cont {
+    display: flex;
+    width: 600px;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.course-number {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background-color: var(--textColor);
+    border-radius: 50%;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    transition: all 0.5s;
+}
+
+.course-number:hover {
+    transform: scale(1.15);
+}
+
+.check-mag-cont {
+    width: 600px;
+    height: 30px;
+}
+
+.course-inactive {
+    transform: scale(1.0) !important;
+    cursor: default !important;
+    background-color: lightgray;
+}
+
+.checkbox.style-e {
+    display: inline-block;
+    position: relative;
+    padding-left: 50px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checkbox.style-e:first-child {
+    margin-bottom: 20px;
+}
+
+.checkbox.style-e input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+.checkbox.style-e input:checked ~ .checkbox__checkmark {
+    background-color: var(--textColor);
+}
+.checkbox.style-e input:checked ~ .checkbox__checkmark:after {
+    left: 21px;
+}
+.checkbox.style-e:hover input ~ .checkbox__checkmark {
+    background-color: lightgray;
+}
+.checkbox.style-e:hover input:checked ~ .checkbox__checkmark {
+    background-color:  var(--textColor);
+}
+.checkbox.style-e .checkbox__checkmark {
+    position: absolute;
+    top: 1px;
+    left: 0;
+    height: 24px;
+    width: 42px;
+    background-color: lightgray;
+    transition: background-color 0.25s ease;
+    border-radius: 11px;
+}
+.checkbox.style-e .checkbox__checkmark:after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    display: block;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: left 0.25s ease;
+}
+.checkbox.style-e .checkbox__body {
+    margin-left: 10px;
+    color: var(--fontColor);
+    line-height: 1.4;
+    font-size: 20px;
+    transition: color 0.25s ease;
+}
+
+.timetable-container {
+    position: relative;
+    margin-top: 60px;
+    width: 100%;
+    margin-bottom: 50px;
+}
+
+.no-groups-time {
+    border-radius: 10px;
+    width: 100%;
+    text-align: center;
+    height: 110px;
+    font-weight: bold;
+    font-size: 25px;
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    border: 1px solid var(--textColor);
+    align-items: center;
+}
+
+.time-course-number {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-family: 'Gilroy-Bold', sans-serif;
+    font-weight: lighter;
+}
+
+.course-container {
+    flex-wrap: wrap;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.course-container:last-child {
+    margin-bottom: 0;
+}
+
+.course-box {
+    margin-bottom: 30px;
+    border-radius: 10px;
+    background-color: white;
+    border: 1px solid var(--textColor);
+    padding: 20px 20px 0 20px;
+    opacity: 1;
+    transition: 1s ease opacity, left;
+}
+
+.course-box:last-child {
+    margin-bottom: 0;
+}
+
+.course-box-hidden {
+    opacity: 0;
+    position: absolute;
+    left: -99999px;
+}
+
+.course-number-active {
+    background-color: var(--textColorHover);
+    transform: scale(1.15) !important;
+}

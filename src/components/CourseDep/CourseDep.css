@@ -1,0 +1,23 @@
+.number-course-cont {
+    width: 90px;
+    height: 35px;
+    background-color: var(--textColor);
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.5s;
+    margin-right: 60px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+.number-course-cont:hover {
+    transform: scale(1.1);
+}
+
+.number-course-text {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}

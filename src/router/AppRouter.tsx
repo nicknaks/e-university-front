@@ -1,13 +1,9 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Route, Routes} from "react-router-dom";
-import Main from "./pages/Main";
-import Groups from "./pages/Groups";
+import {AllRoutes} from "./router";
 
-const AppRouter = () => {
-    const AllRoutes = [
-        {path: "/", component: <Main/>},
-        {path: "/groups", component: <Groups/>},
-    ]
+const AppRouter: FC = () => {
+
     return (
         <Routes>
             {
