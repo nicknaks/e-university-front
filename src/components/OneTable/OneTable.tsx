@@ -62,13 +62,19 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             <>
                                 {
                                     couple1[0].isNumerator &&
-                                    <td className='table-column-second'>
-                                        <em>{LessonType[couple1[0].type]}</em> {couple1[0].name} {couple1[0].cabinet} {` `}
+                                    <>
+                                        <td className='table-column-second'>
+                                            <em>{LessonType[couple1[0].type]}</em> {couple1[0].name} {couple1[0].cabinet} {` `}
+                                            {
+                                                couple1[0].teacher !== undefined &&
+                                                couple1[0].teacher.name
+                                            }
+                                        </td>
                                         {
-                                            couple1[0].teacher !== undefined &&
-                                            couple1[0].teacher.name
+                                            couple1.length === 1 &&
+                                            <td className='table-column-third'></td>
                                         }
-                                    </td>
+                                    </>
                                 }
                                 {
                                     couple1[0].isDenominator &&
@@ -121,13 +127,19 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             <>
                                 {
                                     couple2[0].isNumerator &&
-                                    <td className='table-column-second'>
-                                        <em>{LessonType[couple2[0].type]}</em> {couple2[0].name} {couple2[0].cabinet} {` `}
+                                    <>
+                                        <td className='table-column-second'>
+                                            <em>{LessonType[couple2[0].type]}</em> {couple2[0].name} {couple2[0].cabinet} {` `}
+                                            {
+                                                couple2[0].teacher !== undefined &&
+                                                couple2[0].teacher.name
+                                            }
+                                        </td>
                                         {
-                                            couple2[0].teacher !== undefined &&
-                                            couple2[0].teacher.name
+                                            couple2.length === 1 &&
+                                            <td className='table-column-third'></td>
                                         }
-                                    </td>
+                                    </>
                                 }
                                 {
                                     couple2[0].isDenominator &&
@@ -178,13 +190,19 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             <>
                                 {
                                     couple3[0].isNumerator &&
-                                    <td className='table-column-second'>
-                                        <em>{LessonType[couple3[0].type]}</em> {couple3[0].name}  {couple3[0].cabinet} {` `}
+                                    <>
+                                        <td className='table-column-second'>
+                                            <em>{LessonType[couple3[0].type]}</em> {couple3[0].name} {couple3[0].cabinet} {` `}
+                                            {
+                                                couple3[0].teacher !== undefined &&
+                                                couple3[0].teacher.name
+                                            }
+                                        </td>
                                         {
-                                            couple3[0].teacher !== undefined &&
-                                            couple3[0].teacher.name
+                                            couple3.length === 1 &&
+                                            <td className='table-column-third'></td>
                                         }
-                                    </td>
+                                    </>
                                 }
                                 {
                                     couple3[0].isDenominator &&
@@ -235,14 +253,19 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             <>
                                 {
                                     couple4[0].isNumerator &&
-                                    <td className='table-column-second'>
-                                        <em>{LessonType[couple4[0].type]}</em> {couple4[0].name} {couple4[0].cabinet} {` `}
+                                    <>
+                                        <td className='table-column-second'>
+                                            <em>{LessonType[couple4[0].type]}</em> {couple4[0].name} {couple4[0].cabinet} {` `}
+                                            {
+                                                couple4[0].teacher !== undefined &&
+                                                couple4[0].teacher.name
+                                            }
+                                        </td>
                                         {
-                                            couple4[0].teacher !== undefined &&
-                                            couple4[0].teacher.name
+                                            couple4.length === 1 &&
+                                            <td className='table-column-third'></td>
                                         }
-                                    </td>
-
+                                    </>
                                 }
                                 {
                                     couple4[0].isDenominator &&
@@ -301,7 +324,10 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                                                 couple5[0].teacher.name
                                             }
                                         </td>
-                                        <td className='table-column-third'></td>
+                                        {
+                                            couple5.length === 1 &&
+                                                <td className='table-column-third'></td>
+                                        }
                                     </>
                                 }
                                 {
@@ -318,8 +344,7 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                                     </>
                                 }
                                 {
-                                    couple5.length === 2 &&
-                                    couple5[1].isDenominator &&
+                                    (couple5.length === 2 && couple5[1].isDenominator) &&
                                     <td className='table-column-third'>
                                         <em>{LessonType[couple5[1].type]}</em> {couple5[1].name} {couple5[1].cabinet} {` `}
                                         {
@@ -353,13 +378,19 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             <>
                                 {
                                     couple6[0].isNumerator &&
-                                    <td className='table-column-second'>
-                                        <em>{LessonType[couple6[0].type]}</em> {couple6[0].name} {couple6[0].cabinet} {` `}
+                                    <>
+                                        <td className='table-column-second'>
+                                            <em>{LessonType[couple6[0].type]}</em> {couple6[0].name} {couple6[0].cabinet} {` `}
+                                            {
+                                                couple6[0].teacher !== undefined &&
+                                                couple6[0].teacher.name
+                                            }
+                                        </td>
                                         {
-                                            couple6[0].teacher !== undefined &&
-                                            couple6[0].teacher.name
+                                            couple6.length === 1 &&
+                                            <td className='table-column-third'></td>
                                         }
-                                    </td>
+                                    </>
                                 }
                                 {
                                     couple6[0].isDenominator &&
@@ -410,13 +441,19 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             <>
                                 {
                                     couple7[0].isNumerator &&
-                                    <td className='table-column-second'>
-                                        <em>{LessonType[couple7[0].type]}</em> {couple7[0].name} {couple7[0].cabinet} {` `}
+                                    <>
+                                        <td className='table-column-second'>
+                                            <em>{LessonType[couple7[0].type]}</em> {couple7[0].name} {couple7[0].cabinet} {` `}
+                                            {
+                                                couple7[0].teacher !== undefined &&
+                                                couple7[0].teacher.name
+                                            }
+                                        </td>
                                         {
-                                            couple7[0].teacher !== undefined &&
-                                            couple7[0].teacher.name
+                                            couple7.length === 1 &&
+                                            <td className='table-column-third'></td>
                                         }
-                                    </td>
+                                    </>
                                 }
                                 {
                                     couple7[0].isDenominator &&

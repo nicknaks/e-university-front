@@ -1,6 +1,7 @@
 
 import {localUrl} from "../store";
 import {
+    scheduleActionLoading,
     scheduleActionSchedule,
     scheduleActionScheduleNull,
     scheduleActionSubjects, scheduleActionTeachers
@@ -10,7 +11,7 @@ import axios from "axios";
 export const getSchedule = (id) => {
     return async (dispatch) => {
         try {
-            // dispatch(authActionLoading(true)) -- лоудер;
+            dispatch(scheduleActionLoading(true));
 
             const res = await axios({
                 url: localUrl,
@@ -23,6 +24,11 @@ export const getSchedule = (id) => {
             });
 
             dispatch(scheduleActionScheduleNull([]));
+
+            if (res.data.data.schedule.length === 0) {
+                return false
+            }
+
             dispatch(scheduleActionSchedule(res.data.data.schedule));
 
             return true
@@ -35,15 +41,54 @@ export const getSchedule = (id) => {
                 return 500;
             }
         } finally {
-            // dispatch(authActionLoading(false));
+            dispatch(scheduleActionLoading(false));
         }
     }
 }
 
+export const getScheduleTeacher = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json", },
+                data: {
+                    "operationName": "fetchSchedule",
+                    "query": `query fetchSchedule{ schedule (filter: {teacherID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
+                }
+            });
+
+            dispatch(scheduleActionScheduleNull([]));
+
+            if (res.data.data.schedule.length === 0) {
+                return false
+            }
+
+            dispatch(scheduleActionSchedule(res.data.data.schedule));
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+
 export const getMySchedule = () => {
     return async (dispatch) => {
         try {
-            // dispatch(authActionLoading(true)) -- лоудер;
+            dispatch(scheduleActionLoading(true));
 
             const res = await axios({
                 url: localUrl,
@@ -69,7 +114,7 @@ export const getMySchedule = () => {
                 return 500;
             }
         } finally {
-            // dispatch(authActionLoading(false));
+            dispatch(scheduleActionLoading(false));
         }
     }
 }
@@ -77,7 +122,7 @@ export const getMySchedule = () => {
 export const getTeachers = () => {
     return async (dispatch) => {
         try {
-            // dispatch(authActionLoading(true)) -- лоудер;
+            dispatch(scheduleActionLoading(true));
 
             const res = await axios({
                 url: localUrl,
@@ -101,7 +146,7 @@ export const getTeachers = () => {
                 return 500;
             }
         } finally {
-            // dispatch(authActionLoading(false));
+            dispatch(scheduleActionLoading(false));
         }
     }
 }

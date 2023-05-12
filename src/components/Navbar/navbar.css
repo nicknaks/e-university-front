@@ -140,6 +140,10 @@
     transition: all .5s;
 }
 
+.invalid-input {
+    border-color: red;
+}
+
 .login-navbar {
     display: flex;
     align-items: center;

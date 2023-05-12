@@ -53,10 +53,12 @@ export interface ScheduleState {
     schedule: Array<Schedule>,
     subject: Array<Subjects>,
     teachers: Array<Teacher>,
+    loading: boolean,
 }
 
 export enum ScheduleActionEnum {
     SET_SCHEDULE = 'SET_SCHEDULE',
+    SET_LOADING = 'SET_LOADING',
     SET_TEACHERS = 'SET_TEACHERS',
     SET_NULL_SCHEDULE = 'SET_NULL_SCHEDULE',
     SET_SUBJECTS = 'SET_SUBJECTS',
@@ -66,6 +68,11 @@ export enum ScheduleActionEnum {
 export interface SetScheduleAction {
     type: ScheduleActionEnum.SET_SCHEDULE,
     payload: Array<Schedule>,
+}
+
+export interface SetLoadingAction {
+    type: ScheduleActionEnum.SET_LOADING,
+    payload: boolean,
 }
 
 export interface SetSubjectsAction {
@@ -88,4 +95,4 @@ export interface SetSubjectsNullAction {
     payload: [],
 }
 
-export type ScheduleAction = SetScheduleAction | SetScheduleNullAction | SetSubjectsNullAction | SetSubjectsAction | SetTeachersAction;
+export type ScheduleAction = SetScheduleAction | SetScheduleNullAction | SetSubjectsNullAction | SetSubjectsAction | SetTeachersAction | SetLoadingAction;

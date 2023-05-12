@@ -2,7 +2,7 @@ import React, {FC, useEffect, useRef, useState} from 'react';
 import './groupsPage.css';
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {useAppSelector} from "../../hooks/useAppSelector";
-import {facultiesList, groupsList, groupsNullList} from "../../store/actions/facultyActions";
+import {facultiesList, groupsList, groupsListMag, groupsNullList} from "../../store/actions/facultyActions";
 import ListElement from "../../components/ListElement/ListElement"
 import {Faculties} from "../../store/reducers/facultyReducer/types";
 import CourseDep from "../../components/CourseDep/CourseDep";
@@ -19,6 +19,8 @@ const GroupsPage: FC = () => {
 
     const [depList, setDepList] = useState('Выберите кафедру');
     const [prevDep, setPrevDep] = useState(null);
+
+    const [depId, setDepId] = useState('');
 
     const [checkMag, setCheckMag] = useState(false);
 
@@ -97,12 +99,13 @@ const GroupsPage: FC = () => {
 
                 setDepList(findDep.number + ' ' + findDep.name)
 
+                setDepId(findDep.id)
                 const res = dispatch(groupsList(findDep.id));
             }
         }
     }, [faculties])
 
-    useEffect(() => {
+    const checkCourse = () => {
         if (course1.length === 0) {
             refCourse1.current.classList.add('course-inactive');
         } else {
@@ -138,6 +141,10 @@ const GroupsPage: FC = () => {
         } else {
             refCourse6.current.classList.remove('course-inactive');
         }
+    }
+
+    useEffect(() => {
+        checkCourse();
     }, [groups])
 
     const openFacUl = () => {
@@ -229,15 +236,16 @@ const GroupsPage: FC = () => {
         refHeadDepList.current.classList.remove('head-of-list-active')
         refDepUl.current.classList.add('header-list-hidden');
         refDepArrow.current.classList.remove('list-arrow-active');
+        setDepId(id)
 
         const res = await dispatch(groupsList(id));
 
-        if (res) {
-            refCourse1.current.classList.remove('course-inactive');
-            refCourse2.current.classList.remove('course-inactive');
-            refCourse3.current.classList.remove('course-inactive');
-            refCourse4.current.classList.remove('course-inactive');
-        }
+        // if (res) {
+        //     refCourse1.current.classList.remove('course-inactive');
+        //     refCourse2.current.classList.remove('course-inactive');
+        //     refCourse3.current.classList.remove('course-inactive');
+        //     refCourse4.current.classList.remove('course-inactive');
+        // }
 
         if (!res) {
             refCourse1.current.classList.add('course-inactive');
@@ -263,20 +271,27 @@ const GroupsPage: FC = () => {
         setDepList(e.target.parentElement.textContent);
     }
 
-    const changeFirstCheck = (e) => {
-        if (course1.length === 0
-            || refCourse1.current.classList[1] === 'course-number-active'
+    const changeFirstCheck = async (e) => {
+        if (refCourse1.current.classList[1] === 'course-number-active'
             || refCourse2.current.classList[1] === 'course-number-active'
             || refCourse3.current.classList[1] === 'course-number-active'
             || refCourse4.current.classList[1] === 'course-number-active'
             || refCourse5.current.classList[1] === 'course-number-active'
-            || refCourse6.current.classList[1] === 'course-number-active') {
+            || refCourse6.current.classList[1] === 'course-number-active'
+            || depList === 'Выберите кафедру')
+            {
             return;
         }
 
         setCheckMag(e.target.checked);
 
-        if (!checkMag) {
+        if (!e.target.checked) {
+            const res = await dispatch(groupsList(depId));
+        } else {
+            const res = await dispatch(groupsListMag(depId, e.target.checked));
+        }
+
+        if (e.target.checked) {
             refCourse3.current.classList.add('course-inactive');
             refCourse4.current.classList.add('course-inactive');
             refCourse5.current.classList.add('course-inactive');
@@ -284,244 +299,256 @@ const GroupsPage: FC = () => {
 
             return
         }
-
-        refCourse3.current.classList.remove('course-inactive');
-        refCourse4.current.classList.remove('course-inactive');
-
-        if (course5.length !== 0) {
-            refCourse5.current.classList.remove('course-inactive');
-            refCourse6.current.classList.remove('course-inactive');
-        }
     }
 
     const changeCourse = (e) => {
         if (e.target === refCourse1.current && refCourse1.current.classList[1] !== 'course-inactive') {
-            refCourse1.current.classList.toggle('course-number-active');
-            refCourse2.current.classList.remove('course-number-active');
-            refCourse3.current.classList.remove('course-number-active');
-            refCourse4.current.classList.remove('course-number-active');
-            refCourse5.current.classList.remove('course-number-active');
-            refCourse6.current.classList.remove('course-number-active');
+            if (refCourse1.current.classList.length === 2) {
+                refCourse1.current.classList.remove('course-number-active');
+                checkCourse();
+            } else {
+                refCourse1.current.classList.add('course-number-active');
+                refCourse2.current.classList.remove('course-number-active');
+                refCourse3.current.classList.remove('course-number-active');
+                refCourse4.current.classList.remove('course-number-active');
+                refCourse5.current.classList.remove('course-number-active');
+                refCourse6.current.classList.remove('course-number-active');
 
-            refCourse2.current.classList.toggle('course-inactive');
-            refCourse3.current.classList.toggle('course-inactive');
-            refCourse4.current.classList.toggle('course-inactive');
-
-            if (course5.length !== 0) {
-                 refCourse5.current.classList.toggle('course-inactive');
-                 refCourse6.current.classList.toggle('course-inactive');
+                refCourse3.current.classList.add('course-inactive');
+                refCourse2.current.classList.add('course-inactive');
+                refCourse4.current.classList.add('course-inactive');
+                refCourse5.current.classList.add('course-inactive');
+                refCourse6.current.classList.add('course-inactive');
             }
 
-            if (refCourseBox2.current !== undefined) {
+            if (refCourseBox2.current !== null && refCourseBox2.current !== undefined) {
                 refCourseBox2.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox3.current !== undefined) {
+            if (refCourseBox3.current !== null && refCourseBox3.current !== undefined) {
                 refCourseBox3.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox4.current !== undefined) {
+            if (refCourseBox4.current !== null && refCourseBox4.current !== undefined) {
                 refCourseBox4.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox5.current !== undefined) {
+            if (refCourseBox5.current !== undefined && refCourseBox5.current !== null) {
                 refCourseBox5.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox6.current !== undefined) {
+            if (refCourseBox6.current !== undefined && refCourseBox6.current !== null) {
                 refCourseBox6.current.classList.toggle('course-box-hidden');
             }
 
         }
 
         if (e.target === refCourse2.current && refCourse2.current.classList[1] !== 'course-inactive') {
-            refCourse1.current.classList.remove('course-number-active');
-            refCourse2.current.classList.toggle('course-number-active');
-            refCourse3.current.classList.remove('course-number-active');
-            refCourse4.current.classList.remove('course-number-active');
-            refCourse5.current.classList.remove('course-number-active');
-            refCourse6.current.classList.remove('course-number-active');
+            if (refCourse2.current.classList.length === 2) {
+                refCourse2.current.classList.remove('course-number-active');
+                checkCourse();
+            } else {
+                refCourse1.current.classList.remove('course-number-active');
+                refCourse2.current.classList.add('course-number-active');
+                refCourse3.current.classList.remove('course-number-active');
+                refCourse4.current.classList.remove('course-number-active');
+                refCourse5.current.classList.remove('course-number-active');
+                refCourse6.current.classList.remove('course-number-active');
 
-            refCourse1.current.classList.toggle('course-inactive');
-            refCourse3.current.classList.toggle('course-inactive');
-            refCourse4.current.classList.toggle('course-inactive');
-
-            if (course5.length !== 0) {
-                refCourse5.current.classList.toggle('course-inactive');
-                refCourse6.current.classList.toggle('course-inactive');
+                refCourse1.current.classList.add('course-inactive');
+                refCourse3.current.classList.add('course-inactive');
+                refCourse4.current.classList.add('course-inactive');
+                refCourse5.current.classList.add('course-inactive');
+                refCourse6.current.classList.add('course-inactive');
             }
 
-            if (refCourseBox1.current !== undefined) {
+            if (refCourseBox1.current !== null && refCourseBox1.current !== undefined) {
                 refCourseBox1.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox3.current !== undefined) {
+            if (refCourseBox3.current !== null && refCourseBox3.current !== undefined) {
                 refCourseBox3.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox4.current !== undefined) {
+            if (refCourseBox4.current !== null && refCourseBox4.current !== undefined) {
                 refCourseBox4.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox5.current !== undefined) {
+            if (refCourseBox5.current !== undefined && refCourseBox5.current !== null) {
                 refCourseBox5.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox6.current !== undefined) {
+            if (refCourseBox6.current !== undefined && refCourseBox6.current !== null) {
                 refCourseBox6.current.classList.toggle('course-box-hidden');
             }
+
 
         }
 
         if (e.target === refCourse3.current && refCourse3.current.classList[1] !== 'course-inactive') {
-            refCourse1.current.classList.remove('course-number-active');
-            refCourse2.current.classList.remove('course-number-active');
-            refCourse3.current.classList.toggle('course-number-active');
-            refCourse4.current.classList.remove('course-number-active');
-            refCourse5.current.classList.remove('course-number-active');
-            refCourse6.current.classList.remove('course-number-active');
+            if (refCourse3.current.classList.length === 2) {
+                refCourse3.current.classList.remove('course-number-active');
+                checkCourse();
+            } else {
+                refCourse1.current.classList.remove('course-number-active');
+                refCourse2.current.classList.remove('course-number-active');
+                refCourse3.current.classList.add('course-number-active');
+                refCourse4.current.classList.remove('course-number-active');
+                refCourse5.current.classList.remove('course-number-active');
+                refCourse6.current.classList.remove('course-number-active');
 
-            refCourse1.current.classList.toggle('course-inactive');
-            refCourse2.current.classList.toggle('course-inactive');
-            refCourse4.current.classList.toggle('course-inactive');
-
-            if (course5.length !== 0) {
-                refCourse5.current.classList.toggle('course-inactive');
-                refCourse6.current.classList.toggle('course-inactive');
+                refCourse1.current.classList.add('course-inactive');
+                refCourse2.current.classList.add('course-inactive');
+                refCourse4.current.classList.add('course-inactive');
+                refCourse5.current.classList.add('course-inactive');
+                refCourse6.current.classList.add('course-inactive');
             }
 
-            if (refCourseBox1.current !== undefined) {
-                refCourseBox1.current.classList.toggle('course-box-hidden');
-            }
-
-            if (refCourseBox2.current !== undefined) {
+            if (refCourseBox2.current !== null && refCourseBox2.current !== undefined) {
                 refCourseBox2.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox4.current !== undefined) {
+            if (refCourseBox1.current !== null && refCourseBox1.current !== undefined) {
+                refCourseBox1.current.classList.toggle('course-box-hidden');
+            }
+
+            if (refCourseBox4.current !== null && refCourseBox4.current !== undefined) {
                 refCourseBox4.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox5.current !== undefined) {
+            if (refCourseBox5.current !== undefined && refCourseBox5.current !== null) {
                 refCourseBox5.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox6.current !== undefined) {
+            if (refCourseBox6.current !== undefined && refCourseBox6.current !== null) {
                 refCourseBox6.current.classList.toggle('course-box-hidden');
             }
+
 
         }
 
         if (e.target === refCourse4.current && refCourse4.current.classList[1] !== 'course-inactive') {
-            refCourse1.current.classList.remove('course-number-active');
-            refCourse2.current.classList.remove('course-number-active');
-            refCourse3.current.classList.remove('course-number-active');
-            refCourse4.current.classList.toggle('course-number-active');
-            refCourse5.current.classList.remove('course-number-active');
-            refCourse6.current.classList.remove('course-number-active');
+            if (refCourse4.current.classList.length === 2) {
+                refCourse4.current.classList.remove('course-number-active');
+                checkCourse();
+            } else {
+                refCourse1.current.classList.remove('course-number-active');
+                refCourse2.current.classList.remove('course-number-active');
+                refCourse3.current.classList.remove('course-number-active');
+                refCourse4.current.classList.add('course-number-active');
+                refCourse5.current.classList.remove('course-number-active');
+                refCourse6.current.classList.remove('course-number-active');
 
-            refCourse1.current.classList.toggle('course-inactive');
-            refCourse2.current.classList.toggle('course-inactive');
-            refCourse3.current.classList.toggle('course-inactive');
-
-            if (course5.length !== 0) {
-                refCourse5.current.classList.toggle('course-inactive');
-                refCourse6.current.classList.toggle('course-inactive');
+                refCourse1.current.classList.add('course-inactive');
+                refCourse2.current.classList.add('course-inactive');
+                refCourse3.current.classList.add('course-inactive');
+                refCourse5.current.classList.add('course-inactive');
+                refCourse6.current.classList.add('course-inactive');
             }
 
-            if (refCourseBox1.current !== undefined) {
-                refCourseBox1.current.classList.toggle('course-box-hidden');
-            }
-
-            if (refCourseBox2.current !== undefined) {
+            if (refCourseBox2.current !== null && refCourseBox2.current !== undefined) {
                 refCourseBox2.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox3.current !== undefined) {
+            if (refCourseBox3.current !== null && refCourseBox3.current !== undefined) {
                 refCourseBox3.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox5.current !== undefined) {
+            if (refCourseBox1.current !== null && refCourseBox1.current !== undefined) {
+                refCourseBox1.current.classList.toggle('course-box-hidden');
+            }
+
+            if (refCourseBox5.current !== undefined && refCourseBox5.current !== null) {
                 refCourseBox5.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox6.current !== undefined) {
+            if (refCourseBox6.current !== undefined && refCourseBox6.current !== null) {
                 refCourseBox6.current.classList.toggle('course-box-hidden');
             }
+
 
         }
 
         if (e.target === refCourse5.current && refCourse5.current.classList[1] !== 'course-inactive') {
-            refCourse1.current.classList.remove('course-number-active');
-            refCourse2.current.classList.remove('course-number-active');
-            refCourse3.current.classList.remove('course-number-active');
-            refCourse4.current.classList.remove('course-number-active');
-            refCourse5.current.classList.toggle('course-number-active');
-            refCourse6.current.classList.remove('course-number-active');
+            if (refCourse5.current.classList.length === 2) {
+                refCourse5.current.classList.remove('course-number-active');
+                checkCourse();
+            } else {
+                refCourse1.current.classList.remove('course-number-active');
+                refCourse2.current.classList.remove('course-number-active');
+                refCourse3.current.classList.remove('course-number-active');
+                refCourse4.current.classList.remove('course-number-active');
+                refCourse5.current.classList.add('course-number-active');
+                refCourse6.current.classList.remove('course-number-active');
 
-            refCourse1.current.classList.toggle('course-inactive');
-            refCourse2.current.classList.toggle('course-inactive');
-            refCourse3.current.classList.toggle('course-inactive');
-            refCourse4.current.classList.toggle('course-inactive');
-
-            if (course6.length !== 0) {
-                refCourse6.current.classList.toggle('course-inactive');
+                refCourse1.current.classList.add('course-inactive');
+                refCourse2.current.classList.add('course-inactive');
+                refCourse3.current.classList.add('course-inactive');
+                refCourse4.current.classList.add('course-inactive');
+                refCourse6.current.classList.add('course-inactive');
             }
 
-            if (refCourseBox1.current !== undefined) {
-                refCourseBox1.current.classList.toggle('course-box-hidden');
-            }
-
-            if (refCourseBox2.current !== undefined) {
+            if (refCourseBox2.current !== null && refCourseBox2.current !== undefined) {
                 refCourseBox2.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox3.current !== undefined) {
+            if (refCourseBox3.current !== null && refCourseBox3.current !== undefined) {
                 refCourseBox3.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox4.current !== undefined) {
+            if (refCourseBox4.current !== null && refCourseBox4.current !== undefined) {
                 refCourseBox4.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox6.current !== undefined) {
+            if (refCourseBox1.current !== undefined && refCourseBox1.current !== null) {
+                refCourseBox1.current.classList.toggle('course-box-hidden');
+            }
+
+            if (refCourseBox6.current !== undefined && refCourseBox6.current !== null) {
                 refCourseBox6.current.classList.toggle('course-box-hidden');
             }
+
         }
 
         if (e.target === refCourse6.current && refCourse6.current.classList[1] !== 'course-inactive') {
-            refCourse1.current.classList.remove('course-number-active');
-            refCourse2.current.classList.remove('course-number-active');
-            refCourse3.current.classList.remove('course-number-active');
-            refCourse4.current.classList.remove('course-number-active');
-            refCourse5.current.classList.remove('course-number-active');
-            refCourse6.current.classList.toggle('course-number-active');
+            if (refCourse6.current.classList.length === 2) {
+                refCourse6.current.classList.remove('course-number-active');
+                checkCourse();
+            } else {
+                refCourse1.current.classList.remove('course-number-active');
+                refCourse2.current.classList.remove('course-number-active');
+                refCourse3.current.classList.remove('course-number-active');
+                refCourse4.current.classList.remove('course-number-active');
+                refCourse5.current.classList.remove('course-number-active');
+                refCourse6.current.classList.add('course-number-active');
 
-            refCourse1.current.classList.toggle('course-inactive');
-            refCourse2.current.classList.toggle('course-inactive');
-            refCourse3.current.classList.toggle('course-inactive');
-            refCourse4.current.classList.toggle('course-inactive');
-            refCourse5.current.classList.toggle('course-inactive');
-
-            if (refCourseBox1.current !== undefined) {
-                refCourseBox1.current.classList.toggle('course-box-hidden');
+                refCourse1.current.classList.add('course-inactive');
+                refCourse2.current.classList.add('course-inactive');
+                refCourse3.current.classList.add('course-inactive');
+                refCourse5.current.classList.add('course-inactive');
+                refCourse4.current.classList.add('course-inactive');
             }
 
-            if (refCourseBox2.current !== undefined) {
+            if (refCourseBox2.current !== null && refCourseBox2.current !== undefined) {
                 refCourseBox2.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox3.current !== undefined) {
+            if (refCourseBox3.current !== null && refCourseBox3.current !== undefined) {
                 refCourseBox3.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox4.current !== undefined) {
+            if (refCourseBox4.current !== null && refCourseBox4.current !== undefined) {
                 refCourseBox4.current.classList.toggle('course-box-hidden');
             }
 
-            if (refCourseBox5.current !== undefined) {
+            if (refCourseBox5.current !== undefined && refCourseBox5.current !== null) {
                 refCourseBox5.current.classList.toggle('course-box-hidden');
             }
+
+            if (refCourseBox1.current !== undefined && refCourseBox1.current !== null) {
+                refCourseBox1.current.classList.toggle('course-box-hidden');
+            }
+
         }
     }
 

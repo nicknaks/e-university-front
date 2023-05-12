@@ -4,7 +4,6 @@ import {useLocation, Link} from "react-router-dom";
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {isLogin, loginAction, logoutAction} from "../../store/actions/authActions";
 import {useAppSelector} from "../../hooks/useAppSelector";
-import {log} from "util";
 
 const Navbar: FC = () => {
     const refFirst = useRef<HTMLAnchorElement>();
@@ -13,6 +12,8 @@ const Navbar: FC = () => {
     const refPopUp = useRef<HTMLDivElement>()
     const refPopUpBody = useRef<HTMLDivElement>();
     const refError = useRef<HTMLDivElement>();
+    const refLogin = useRef<HTMLInputElement>();
+    const refPass = useRef<HTMLInputElement>();
 
     const [login, setLogin] = useState('');
     const [pass, setPass] = useState('');
@@ -51,6 +52,8 @@ const Navbar: FC = () => {
     }, [])
 
     const openPopUp = (e) => {
+        setLogin('');
+        setPass('');
         document.body.style.overflowY = 'hidden';
         e.preventDefault();
 
@@ -68,16 +71,38 @@ const Navbar: FC = () => {
 
     const changeLogin = (value) => {
         setError('')
+        if (refLogin.current.classList.length === 2) {
+            refLogin.current.classList.remove('invalid-input');
+        }
+
         setLogin(value.trim())
     }
 
     const changePassword = (value) => {
         setError('')
+        if (refPass.current.classList.length === 2) {
+            refPass.current.classList.remove('invalid-input');
+        }
+
         setPass(value)
     }
 
     const sumbit = async (e) => {
         e.preventDefault();
+
+        if (login === '') {
+            setError('Введите логин')
+            refLogin.current.classList.add('invalid-input');
+
+            return
+        }
+
+        if (pass === '') {
+            setError('Введите пароль')
+            refPass.current.classList.add('invalid-input');
+
+            return
+        }
 
         if (login !== '' && pass !== '') {
             const res = await dispatch(loginAction(login, pass));
@@ -132,11 +157,11 @@ const Navbar: FC = () => {
                     <form className="menu-form" method="post" action="/" noValidate encType="application/json">
                         <div className='form-input-cont'>
                             <div className='input-text'>Логин</div>
-                            <input type='text' value={login} className='input-form' onChange={(e) => changeLogin(e.target.value)}/>
+                            <input ref={refLogin} type='text' value={login} className='input-form' onChange={(e) => changeLogin(e.target.value)}/>
                         </div>
                         <div className='form-input-cont'>
                             <div className='input-text'>Пароль</div>
-                            <input type='password' value={pass} className='input-form' onChange={(e) => changePassword(e.target.value)}/>
+                            <input ref={refPass} type='password' value={pass} className='input-form' onChange={(e) => changePassword(e.target.value)}/>
                         </div>
                         <div className='error' ref={refError}>{error}</div>
                         <button onClick={sumbit} className='btn-form'>Войти</button>

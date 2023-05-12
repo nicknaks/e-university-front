@@ -1,13 +1,15 @@
 import React, {FC, useEffect, useState} from 'react';
 import './timetablePage.css'
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {getSchedule} from "../../store/actions/scheduleActions";
+import {getSchedule, getScheduleTeacher} from "../../store/actions/scheduleActions";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import OneTable from "../../components/OneTable/OneTable";
+import {scheduleActionScheduleNull} from "../../store/reducers/sheduleReducer/sheduleReducer";
+import Loader from "../../components/Loader/Loader";
 
 const TimeTablePage: FC = () => {
     const dispatch = useAppDispatch();
-    const {schedule} = useAppSelector(state => state.schedule);
+    const {schedule, loading} = useAppSelector(state => state.schedule);
 
     const [day1, setDay1] = useState([])
     const [day2, setDay2] = useState([])
@@ -16,11 +18,22 @@ const TimeTablePage: FC = () => {
     const [day5, setDay5] = useState([])
     const [day6, setDay6] = useState([])
 
+    const [teach, setTeach] = useState(false)
+
     useEffect(() => {
         document.getElementsByTagName('title')[0].innerText = 'Расписание группы'
         const id = window.location.pathname.slice(10);
 
-        dispatch(getSchedule(id));
+        dispatch(getSchedule(id)).then((res) => {
+            if (!res) {
+                setTeach(true);
+                dispatch(getScheduleTeacher(id))
+            }
+        })
+
+        return () => {
+            dispatch(scheduleActionScheduleNull([]));
+        }
     }, [])
 
     useEffect(() => {
@@ -57,47 +70,68 @@ const TimeTablePage: FC = () => {
     }, [schedule])
 
     return (
+        loading
+        ?
+            <Loader/>
+        :
         <div className='main-container'>
             <div className='main-name'>
                 {
-                    schedule[0] !== undefined &&
+                    schedule[0] !== undefined ?
                     <>
-                        Расписание группы {schedule[0].group.number}
+                        {
+                            teach ?
+                                <>
+                                    Расписание преподавателя {schedule[0].teacher.name}
+                                </>
+                                :
+                                <>
+                                    Расписание группы {schedule[0].group.number}
+                                </>
+                        }
                     </>
+                        :
+                        <>
+                            Для такой группы пока нет расписания
+                        </>
                 }
             </div>
-            <div className='table-container'>
-                <div className='left-tables'>
-                    <div className='table-day'>
-                        <div className='table-day'>Понедельник</div>
-                        <OneTable key={1} schedule={day1}/>
+            {
+                schedule[0] !== undefined &&
+                <div className='table-container'>
+                    <div className='left-tables'>
+                        <div className='table-day'>
+                            <div className='table-day'>Понедельник</div>
+                            <OneTable key={1} schedule={day1}/>
+                        </div>
+                        <div className='table-day'>
+                            <div className='table-day'>Среда</div>
+                            <OneTable key={3} schedule={day3}/>
+                        </div>
+                        <div className='table-day'>
+                            <div className='table-day'>Пятница</div>
+                            <OneTable key={5} schedule={day5}/>
+                        </div>
                     </div>
-                    <div className='table-day'>
-                        <div className='table-day'>Среда</div>
-                        <OneTable key={3} schedule={day3}/>
-                    </div>
-                    <div className='table-day'>
-                        <div className='table-day'>Пятница</div>
-                        <OneTable key={5} schedule={day5}/>
+                    <div className='right-tables'>
+                        <div className='table-day'>
+                            <div className='table-day'>Вторник</div>
+                            <OneTable key={2} schedule={day2}/>
+                        </div>
+
+                        <div className='table-day'>
+                            <div className='table-day'>Четверг</div>
+                            <OneTable key={4} schedule={day4}/>
+                        </div>
+
+                        <div className='table-day'>
+                            <div className='table-day'>Суббота</div>
+                            <OneTable key={6} schedule={day6}/>
+                        </div>
                     </div>
                 </div>
-                <div className='right-tables'>
-                    <div className='table-day'>
-                        <div className='table-day'>Вторник</div>
-                        <OneTable key={2} schedule={day2}/>
-                    </div>
+            }
 
-                    <div className='table-day'>
-                        <div className='table-day'>Четверг</div>
-                        <OneTable key={4} schedule={day4}/>
-                    </div>
-
-                    <div className='table-day'>
-                        <div className='table-day'>Суббота</div>
-                        <OneTable key={6} schedule={day6}/>
-                    </div>
-                </div>
-            </div>
         </div>
     );
 };

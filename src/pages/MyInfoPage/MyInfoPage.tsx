@@ -6,12 +6,14 @@ import {getMySchedule, getSubjects} from "../../store/actions/scheduleActions";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import './myInfoPage.css'
 import OneTable from "../../components/OneTable/OneTable";
+import {scheduleActionScheduleNull} from "../../store/reducers/sheduleReducer/sheduleReducer";
+import Loader from "../../components/Loader/Loader";
 
 const MyInfoPage: FC = () => {
     const dispatch = useAppDispatch();
 
     const {me} = useAppSelector(state => state.auth)
-    const {subject, schedule} = useAppSelector(state => state.schedule)
+    const {subject, schedule, loading} = useAppSelector(state => state.schedule)
 
     const nav = useNavigate();
 
@@ -20,9 +22,13 @@ const MyInfoPage: FC = () => {
     const [day3, setDay3] = useState([])
     const [day4, setDay4] = useState([])
     const [day5, setDay5] = useState([])
-    const [day6, setDay6] = useState([])
+    const [day6, setDay6] = useState([]);
+
+
 
     useEffect(() => {
+        document.getElementsByTagName('title')[0].innerText = 'Профиль'
+
         if (Object.keys(me).length === 0) {
             dispatch(isLogin()).then(res => {
                 if (!res) {
@@ -35,44 +41,54 @@ const MyInfoPage: FC = () => {
 
         dispatch(getSubjects(me.owner_id))
         dispatch(getMySchedule())
+
+        return () => {
+            dispatch(scheduleActionScheduleNull([]));
+        }
     }, [me])
 
     useEffect(() => {
-        setDay1(schedule.filter((item) => {
-            if (item.day === 1) {
-                return item;
-            }
-        }))
-        setDay2(schedule.filter((item) => {
-            if (item.day === 2) {
-                return item;
-            }
-        }))
-        setDay3(schedule.filter((item) => {
-            if (item.day === 3) {
-                return item;
-            }
-        }))
-        setDay4(schedule.filter((item) => {
-            if (item.day === 4) {
-                return item;
-            }
-        }))
-        setDay5(schedule.filter((item) => {
-            if (item.day === 5) {
-                return item;
-            }
-        }))
-        setDay6(schedule.filter((item) => {
-            if (item.day === 6) {
-                return item;
-            }
-        }))
+        if (schedule) {
+            setDay1(schedule.filter((item) => {
+                if (item.day === 1) {
+                    return item;
+                }
+            }))
+            setDay2(schedule.filter((item) => {
+                if (item.day === 2) {
+                    return item;
+                }
+            }))
+            setDay3(schedule.filter((item) => {
+                if (item.day === 3) {
+                    return item;
+                }
+            }))
+            setDay4(schedule.filter((item) => {
+                if (item.day === 4) {
+                    return item;
+                }
+            }))
+            setDay5(schedule.filter((item) => {
+                if (item.day === 5) {
+                    return item;
+                }
+            }))
+            setDay6(schedule.filter((item) => {
+                if (item.day === 6) {
+                    return item;
+                }
+            }))
+        }
     }, [schedule])
 
 
 
     return (
+        loading
+        ?
+            <Loader/>
+        :
         <div className='main-container'>
             <div className='main-name'>
                 Предметы

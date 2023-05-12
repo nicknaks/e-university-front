@@ -4,12 +4,16 @@ const defaultState: ScheduleState = {
     schedule: [],
     subject: [],
     teachers: [],
+    loading: false,
 }
 
 export const ScheduleReducer = (state = defaultState, action: ScheduleAction) => {
     switch (action.type) {
         case ScheduleActionEnum.SET_SCHEDULE: {
             return {...state, schedule: action.payload}
+        }
+        case ScheduleActionEnum.SET_LOADING: {
+            return {...state, loading: action.payload}
         }
         case ScheduleActionEnum.SET_NULL_SCHEDULE: {
             return {...state, schedule: []}
@@ -31,6 +35,13 @@ export const ScheduleReducer = (state = defaultState, action: ScheduleAction) =>
 export const scheduleActionSchedule = (payload) => {
     return {
         type: ScheduleActionEnum.SET_SCHEDULE,
+        payload
+    }
+}
+
+export const scheduleActionLoading = (payload) => {
+    return {
+        type: ScheduleActionEnum.SET_LOADING,
         payload
     }
 }

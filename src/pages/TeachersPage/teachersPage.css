@@ -2,6 +2,8 @@
     font-size: 20px;
     margin-bottom: 15px;
     cursor: pointer;
+    text-decoration: none;
+    color: var(--fontColor)
 }
 
 .teacher-name:hover {
@@ -15,4 +17,26 @@
     align-items: center;
     margin-top: 30px;
     width: 50%;
+}
+
+.input-teachers {
+    font-family: 'Gilroy-Light', sans-serif;
+    font-weight: lighter;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border-radius: 10px;
+    outline: none;
+    border: 2px solid var(--textColor);
+    height: 45px;
+    margin-top: 30px;
+    width: 50%;
+    transition: all .5s;
+}
+
+.no-teachers {
+    margin-top: 30px;
+    font-size: 22px;
 }
