@@ -1,6 +1,7 @@
 import {localUrl, mutationUrl} from "../store";
 import axios from "axios";
 import {authActionLogin, authActionLogout} from "../reducers/authReducer/AuthReducer";
+import {Me} from "../reducers/authReducer/types";
 
 export const loginAction = (login, pass) => {
     return async (dispatch) => {
@@ -65,7 +66,7 @@ export const logoutAction = () => {
                 }
             });
 
-            dispatch(authActionLogout({}))
+            dispatch(authActionLogout({} as Me))
 
             return true
         } catch (error) {
@@ -96,6 +97,10 @@ export const isLogin = () => {
                     query: `{ me { id type owner_id }}`,
                 }
             });
+
+            if (me.data.data.me === null) {
+                return false
+            }
 
             dispatch(authActionLogin(me.data.data.me))
 

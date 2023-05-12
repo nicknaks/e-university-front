@@ -17,7 +17,6 @@ export interface Student {
     number: string,
 }
 
-
 export enum LessonType {
     DEFAULT = '',
     LAB = 'лаб',
@@ -41,13 +40,27 @@ export interface Schedule {
     group: Group
 }
 
+export interface Subjects {
+    id: string,
+    teacherID: string,
+    groupID: string,
+    name: string,
+    group: Group
+    teacher: Teacher
+}
+
 export interface ScheduleState {
     schedule: Array<Schedule>,
+    subject: Array<Subjects>,
+    teachers: Array<Teacher>,
 }
 
 export enum ScheduleActionEnum {
     SET_SCHEDULE = 'SET_SCHEDULE',
+    SET_TEACHERS = 'SET_TEACHERS',
     SET_NULL_SCHEDULE = 'SET_NULL_SCHEDULE',
+    SET_SUBJECTS = 'SET_SUBJECTS',
+    SET_NULL_SUBJECTS = 'SET_NULL_SUBJECTS',
 }
 
 export interface SetScheduleAction {
@@ -55,9 +68,24 @@ export interface SetScheduleAction {
     payload: Array<Schedule>,
 }
 
+export interface SetSubjectsAction {
+    type: ScheduleActionEnum.SET_SUBJECTS,
+    payload: Array<Subjects>,
+}
+
+export interface SetTeachersAction {
+    type: ScheduleActionEnum.SET_TEACHERS,
+    payload: Array<Teacher>,
+}
+
 export interface SetScheduleNullAction {
     type: ScheduleActionEnum.SET_NULL_SCHEDULE,
     payload: [],
 }
 
-export type ScheduleAction = SetScheduleAction | SetScheduleNullAction;
+export interface SetSubjectsNullAction {
+    type: ScheduleActionEnum.SET_NULL_SUBJECTS,
+    payload: [],
+}
+
+export type ScheduleAction = SetScheduleAction | SetScheduleNullAction | SetSubjectsNullAction | SetSubjectsAction | SetTeachersAction;

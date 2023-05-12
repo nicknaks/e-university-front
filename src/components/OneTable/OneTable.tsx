@@ -6,55 +6,54 @@ interface OneTableProps {
 }
 
 const OneTable: FC<OneTableProps> = ({schedule}) => {
-    const [couple1, setCouple1] = useState({} as Schedule)
-    const [couple2, setCouple2] = useState({} as Schedule)
-    const [couple3, setCouple3] = useState({} as Schedule)
-    const [couple4, setCouple4] = useState({} as Schedule)
-    const [couple5, setCouple5] = useState({} as Schedule)
-    const [couple6, setCouple6] = useState({} as Schedule)
-    const [couple7, setCouple7] = useState({} as Schedule)
+    const [couple1, setCouple1] = useState([])
+    const [couple2, setCouple2] = useState([])
+    const [couple3, setCouple3] = useState([])
+    const [couple4, setCouple4] = useState([])
+    const [couple5, setCouple5] = useState([])
+    const [couple6, setCouple6] = useState([])
+    const [couple7, setCouple7] = useState([])
 
     useEffect(() => {
         schedule.forEach((item) => {
             if (item.couple === 1) {
-                setCouple1(item)
+                setCouple1(prevState => [...prevState, item])
             }
             if (item.couple === 2) {
-                setCouple2(item)
+                setCouple2(prevState => [...prevState, item])
             }
             if (item.couple === 3) {
-                setCouple3(item)
+                setCouple3(prevState => [...prevState, item])
             }
             if (item.couple === 4) {
-                setCouple4(item)
+                setCouple4(prevState => [...prevState, item])
             }
             if (item.couple === 5) {
-                setCouple5(item)
+                setCouple5(prevState => [...prevState, item])
             }
             if (item.couple === 6) {
-                setCouple6(item)
+                setCouple6(prevState => [...prevState, item])
             }
             if (item.couple === 7) {
-                setCouple7(item)
+                setCouple7(prevState => [...prevState, item])
             }
         })
     }, [schedule])
-
 
     return (
         <table className='table-one'>
             <tbody>
                 <tr className='table-row'>
-                    <td className='table-column-first'>Время</td>
-                    <td className='table-column-second'>ЧС</td>
-                    <td className='table-column-third'>ЗН</td>
+                    <td style={{fontSize: 16, height: 40}} className='table-column-first'>Время</td>
+                    <td style={{fontSize: 16, fontWeight: "bold", height: 40}} className='table-column-second'>ЧС</td>
+                    <td style={{fontSize: 16, fontWeight: "bold", height: 40}} className='table-column-third'>ЗН</td>
                 </tr>
                 <tr className='table-row'>
                     <td className='table-column-first'>
                         08:30 - 10:05
                     </td>
                     {
-                        Object.keys(couple1).length === 0 ?
+                        couple1.length === 0 ?
                             <>
                                 <td className='table-column-second'></td>
                                 <td className='table-column-third'></td>
@@ -62,32 +61,49 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             :
                             <>
                                 {
-                                    couple1.isNumerator &&
+                                    couple1[0].isNumerator &&
                                     <td className='table-column-second'>
-                                        ({LessonType[couple1.type]}) {couple1.name} {couple1.cabinet}
+                                        <em>{LessonType[couple1[0].type]}</em> {couple1[0].name} {couple1[0].cabinet} {` `}
                                         {
-                                            couple1.teacher !== undefined &&
-                                            couple1.teacher.name
+                                            couple1[0].teacher !== undefined &&
+                                            couple1[0].teacher.name
                                         }
                                     </td>
                                 }
                                 {
-                                    couple1.isDenominator &&
+                                    couple1[0].isDenominator &&
+                                    <>
+                                        <td className='table-column-second'></td>
+                                        <td className='table-column-third'>
+                                            <em>{LessonType[couple1[0].type]}</em> {couple1[0].name}  {couple1[0].cabinet} {` `}
+                                            {
+                                                couple1[0].teacher !== undefined &&
+                                                couple1[0].teacher.name
+                                            }
+                                        </td>
+                                    </>
+                                }
+                                {
+                                    couple1.length === 2 &&
+                                        couple1[1].isDenominator &&
                                     <td className='table-column-third'>
-                                        ({LessonType[couple1.type]}) {couple1.name} {couple1.cabinet}
+                                        <em>{LessonType[couple1[1].type]}</em> {couple1[1].name} {couple1[1].cabinet} {` `}
                                         {
-                                            couple1.teacher !== undefined &&
-                                            couple1.teacher.name
+                                            couple1[1].teacher !== undefined &&
+                                            couple1[1].teacher.name
                                         }
                                     </td>
                                 }
-                                <td colSpan={2} className='table-column-comon'>
-                                    ({LessonType[couple1.type]}) {couple1.name} {couple1.cabinet}
-                                    {
-                                        couple1.teacher !== undefined &&
-                                        couple1.teacher.name
-                                    }
-                                </td>
+                                {
+                                    !couple1[0].isNumerator && !couple1[0].isDenominator &&
+                                    <td colSpan={2} className='table-column-comon'>
+                                        <em>{LessonType[couple1[0].type]}</em> {couple1[0].name} {couple1[0].cabinet} {` `}
+                                        {
+                                            couple1[0].teacher !== undefined &&
+                                            couple1[0].teacher.name
+                                        }
+                                    </td>
+                                }
                             </>
                     }
                 </tr>
@@ -96,7 +112,7 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                         10:15 - 11:50
                     </td>
                     {
-                        Object.keys(couple2).length === 0 ?
+                        couple2.length === 0 ?
                             <>
                                 <td className='table-column-second'></td>
                                 <td className='table-column-third'></td>
@@ -104,39 +120,56 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             :
                             <>
                                 {
-                                    couple2.isNumerator &&
+                                    couple2[0].isNumerator &&
                                     <td className='table-column-second'>
-                                        ({LessonType[couple2.type]}) {couple2.name} {couple2.cabinet}
+                                        <em>{LessonType[couple2[0].type]}</em> {couple2[0].name} {couple2[0].cabinet} {` `}
                                         {
-                                            couple2.teacher !== undefined &&
-                                            couple2.teacher.name
+                                            couple2[0].teacher !== undefined &&
+                                            couple2[0].teacher.name
                                         }
                                     </td>
                                 }
                                 {
-                                    couple2.isDenominator &&
+                                    couple2[0].isDenominator &&
+                                    <>
+                                        <td className='table-column-second'></td>
+                                        <td className='table-column-third'>
+                                            <em>{LessonType[couple2[0].type]}</em> {couple2[0].name} {couple2[0].cabinet} {` `}
+                                            {
+                                                couple2[0].teacher !== undefined &&
+                                                couple2[0].teacher.name
+                                            }
+                                        </td>
+                                    </>
+                                }
+                                {
+                                    couple2.length === 2 &&
+                                    couple2[1].isDenominator &&
                                     <td className='table-column-third'>
-                                        ({LessonType[couple2.type]}) {couple2.name} {couple2.cabinet}
+                                        <em>{LessonType[couple2[1].type]}</em> {couple2[1].name} {couple2[1].cabinet} {` `}
                                         {
-                                            couple2.teacher !== undefined &&
-                                            couple2.teacher.name
+                                            couple2[1].teacher !== undefined &&
+                                            couple2[1].teacher.name
                                         }
                                     </td>
                                 }
-                                <td colSpan={2} className='table-column-comon'>
-                                    ({LessonType[couple2.type]}) {couple2.name} {couple2.cabinet}
-                                    {
-                                        couple2.teacher !== undefined &&
-                                        couple2.teacher.name
-                                    }
-                                </td>
+                                {
+                                    !couple2[0].isNumerator && !couple2[0].isDenominator &&
+                                    <td colSpan={2} className='table-column-comon'>
+                                        <em>{LessonType[couple2[0].type]}</em> {couple2[0].name} {couple2[0].cabinet} {` `}
+                                        {
+                                            couple2[0].teacher !== undefined &&
+                                            couple2[0].teacher.name
+                                        }
+                                    </td>
+                                }
                             </>
                     }
                 </tr>
                 <tr className='table-row'>
                     <td className='table-column-first'>12:00 - 13:35</td>
                     {
-                        Object.keys(couple3).length === 0 ?
+                        couple3.length === 0 ?
                             <>
                                 <td className='table-column-second'></td>
                                 <td className='table-column-third'></td>
@@ -144,39 +177,56 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             :
                             <>
                                 {
-                                    couple3.isNumerator &&
+                                    couple3[0].isNumerator &&
                                     <td className='table-column-second'>
-                                        ({LessonType[couple3.type]}) {couple3.name} {couple3.cabinet}
+                                        <em>{LessonType[couple3[0].type]}</em> {couple3[0].name}  {couple3[0].cabinet} {` `}
                                         {
-                                            couple3.teacher !== undefined &&
-                                            couple3.teacher.name
+                                            couple3[0].teacher !== undefined &&
+                                            couple3[0].teacher.name
                                         }
                                     </td>
                                 }
                                 {
-                                    couple3.isDenominator &&
+                                    couple3[0].isDenominator &&
+                                    <>
+                                        <td className='table-column-second'></td>
+                                        <td className='table-column-third'>
+                                            <em>{LessonType[couple3[0].type]}</em> {couple3[0].name}  {couple3[0].cabinet} {` `}
+                                            {
+                                                couple3[0].teacher !== undefined &&
+                                                couple3[0].teacher.name
+                                            }
+                                        </td>
+                                    </>
+                                }
+                                {
+                                    couple3.length === 2 &&
+                                    couple3[1].isDenominator &&
                                     <td className='table-column-third'>
-                                        ({LessonType[couple3.type]}) {couple3.name} {couple3.cabinet}
+                                        <em>{LessonType[couple3[1].type]}</em> {couple3[1].name}  {couple3[1].cabinet} {` `}
                                         {
-                                            couple3.teacher !== undefined &&
-                                            couple3.teacher.name
+                                            couple3[1].teacher !== undefined &&
+                                            couple3[1].teacher.name
                                         }
                                     </td>
                                 }
-                                <td colSpan={2} className='table-column-comon'>
-                                    ({LessonType[couple3.type]}) {couple3.name} {couple3.cabinet}
-                                    {
-                                        couple3.teacher !== undefined &&
-                                        couple3.teacher.name
-                                    }
-                                </td>
+                                {
+                                    !couple3[0].isNumerator && !couple3[0].isDenominator &&
+                                    <td colSpan={2} className='table-column-comon'>
+                                        <em>{LessonType[couple3[0].type]}</em> {couple3[0].name} {couple3[0].cabinet} {` `}
+                                        {
+                                            couple3[0].teacher !== undefined &&
+                                            couple3[0].teacher.name
+                                        }
+                                    </td>
+                                }
                             </>
                     }
                 </tr>
                 <tr className='table-row'>
                     <td className='table-column-first'>13:50 - 15:25</td>
                     {
-                        Object.keys(couple4).length === 0 ?
+                        couple4.length === 0 ?
                             <>
                                 <td className='table-column-second'></td>
                                 <td className='table-column-third'></td>
@@ -184,39 +234,57 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             :
                             <>
                                 {
-                                    couple4.isNumerator &&
+                                    couple4[0].isNumerator &&
                                     <td className='table-column-second'>
-                                        ({LessonType[couple4.type]}) {couple4.name} {couple4.cabinet}
+                                        <em>{LessonType[couple4[0].type]}</em> {couple4[0].name} {couple4[0].cabinet} {` `}
                                         {
-                                            couple4.teacher !== undefined &&
-                                            couple4.teacher.name
+                                            couple4[0].teacher !== undefined &&
+                                            couple4[0].teacher.name
+                                        }
+                                    </td>
+
+                                }
+                                {
+                                    couple4[0].isDenominator &&
+                                    <>
+                                        <td className='table-column-second'></td>
+                                        <td className='table-column-third'>
+                                            <em>{LessonType[couple4[0].type]}</em> {couple4[0].name} {couple4[0].cabinet} {` `}
+                                            {
+                                                couple4[0].teacher !== undefined &&
+                                                couple4[0].teacher.name
+                                            }
+                                        </td>
+                                    </>
+                                }
+                                {
+                                    couple4.length === 2 &&
+                                    couple4[1].isDenominator &&
+                                    <td className='table-column-third'>
+                                        <em>{LessonType[couple4[1].type]}</em> {couple4[1].name} {couple4[1].cabinet} {` `}
+                                        {
+                                            couple4[1].teacher !== undefined &&
+                                            couple4[1].teacher.name
                                         }
                                     </td>
                                 }
                                 {
-                                    couple4.isDenominator &&
-                                    <td className='table-column-third'>
-                                        ({LessonType[couple4.type]}) {couple4.name} {couple4.cabinet}
+                                    !couple4[0].isNumerator && !couple4[0].isDenominator &&
+                                    <td colSpan={2} className='table-column-comon'>
+                                        <em>{LessonType[couple4[0].type]}</em> {couple4[0].name} {couple4[0].cabinet} {` `}
                                         {
-                                            couple4.teacher !== undefined &&
-                                            couple4.teacher.name
+                                            couple4[0].teacher !== undefined &&
+                                            couple4[0].teacher.name
                                         }
                                     </td>
                                 }
-                                <td colSpan={2} className='table-column-comon'>
-                                    ({LessonType[couple4.type]}) {couple4.name} {couple4.cabinet}
-                                    {
-                                        couple4.teacher !== undefined &&
-                                        couple4.teacher.name
-                                    }
-                                </td>
                             </>
                     }
                 </tr>
                 <tr className='table-row'>
                     <td className='table-column-first'>15:40 - 17:15</td>
                     {
-                        Object.keys(couple5).length === 0 ?
+                        couple5.length === 0 ?
                             <>
                                 <td className='table-column-second'></td>
                                 <td className='table-column-third'></td>
@@ -224,39 +292,59 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             :
                             <>
                                 {
-                                    couple5.isNumerator &&
-                                    <td className='table-column-second'>
-                                        ({LessonType[couple5.type]}) {couple5.name} {couple5.cabinet}
+                                    couple5[0].isNumerator &&
+                                    <>
+                                        <td className='table-column-second'>
+                                            <em>{LessonType[couple5[0].type]}</em> {couple5[0].name} {couple5[0].cabinet} {` `}
+                                            {
+                                                couple5[0].teacher !== undefined &&
+                                                couple5[0].teacher.name
+                                            }
+                                        </td>
+                                        <td className='table-column-third'></td>
+                                    </>
+                                }
+                                {
+                                    couple5[0].isDenominator &&
+                                    <>
+                                        <td className='table-column-second'></td>
+                                        <td className='table-column-third'>
+                                            <em>{LessonType[couple5[0].type]}</em> {couple5[0].name} {couple5[0].cabinet} {` `}
+                                            {
+                                                couple5[0].teacher !== undefined &&
+                                                couple5[0].teacher.name
+                                            }
+                                        </td>
+                                    </>
+                                }
+                                {
+                                    couple5.length === 2 &&
+                                    couple5[1].isDenominator &&
+                                    <td className='table-column-third'>
+                                        <em>{LessonType[couple5[1].type]}</em> {couple5[1].name} {couple5[1].cabinet} {` `}
                                         {
-                                            couple5.teacher !== undefined &&
-                                            couple5.teacher.name
+                                            couple5[1].teacher !== undefined &&
+                                            couple5[1].teacher.name
                                         }
                                     </td>
                                 }
                                 {
-                                    couple5.isDenominator &&
-                                    <td className='table-column-third'>
-                                        ({LessonType[couple5.type]}) {couple5.name} {couple5.cabinet}
+                                    !couple5[0].isNumerator && !couple5[0].isDenominator &&
+                                    <td colSpan={2} className='table-column-comon'>
+                                        <em>{LessonType[couple5[0].type]}</em> {couple5[0].name} {couple5[0].cabinet} {` `}
                                         {
-                                            couple5.teacher !== undefined &&
-                                            couple5.teacher.name
+                                            couple5[0].teacher !== undefined &&
+                                            couple5[0].teacher.name
                                         }
                                     </td>
                                 }
-                                <td colSpan={2} className='table-column-comon'>
-                                    ({LessonType[couple5.type]}) {couple5.name} {couple5.cabinet}
-                                    {
-                                        couple5.teacher !== undefined &&
-                                        couple5.teacher.name
-                                    }
-                                </td>
                             </>
                     }
                 </tr>
                 <tr className='table-row'>
                     <td className='table-column-first'>17:25 - 19:00</td>
                     {
-                        Object.keys(couple6).length === 0 ?
+                        couple6.length === 0 ?
                             <>
                                 <td className='table-column-second'></td>
                                 <td className='table-column-third'></td>
@@ -264,39 +352,56 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             :
                             <>
                                 {
-                                    couple6.isNumerator &&
+                                    couple6[0].isNumerator &&
                                     <td className='table-column-second'>
-                                        ({LessonType[couple6.type]}) {couple6.name} {couple6.cabinet}
+                                        <em>{LessonType[couple6[0].type]}</em> {couple6[0].name} {couple6[0].cabinet} {` `}
                                         {
-                                            couple6.teacher !== undefined &&
-                                            couple6.teacher.name
+                                            couple6[0].teacher !== undefined &&
+                                            couple6[0].teacher.name
                                         }
                                     </td>
                                 }
                                 {
-                                    couple6.isDenominator &&
+                                    couple6[0].isDenominator &&
+                                    <>
+                                        <td className='table-column-second'></td>
+                                        <td className='table-column-third'>
+                                            <em>{LessonType[couple6[0].type]}</em> {couple6[0].name} {couple6[0].cabinet} {` `}
+                                            {
+                                                couple6[0].teacher !== undefined &&
+                                                couple6[0].teacher.name
+                                            }
+                                        </td>
+                                    </>
+                                }
+                                {
+                                    couple6.length === 2 &&
+                                    couple6[1].isDenominator &&
                                     <td className='table-column-third'>
-                                        ({LessonType[couple1.type]}) {couple6.name} {couple6.cabinet}
+                                        <em>{LessonType[couple6[1].type]}</em> {couple6[1].name} {couple6[1].cabinet} {` `}
                                         {
-                                            couple6.teacher !== undefined &&
-                                            couple6.teacher.name
+                                            couple6[1].teacher !== undefined &&
+                                            couple6[1].teacher.name
                                         }
                                     </td>
                                 }
-                                <td colSpan={2} className='table-column-comon'>
-                                    ({LessonType[couple6.type]}) {couple6.name} {couple6.cabinet}
-                                    {
-                                        couple6.teacher !== undefined &&
-                                        couple6.teacher.name
-                                    }
-                                </td>
+                                {
+                                    !couple6[0].isNumerator && !couple6[0].isDenominator &&
+                                    <td colSpan={2} className='table-column-comon'>
+                                        <em>{LessonType[couple6[0].type]}</em> {couple6[0].name} {couple6[0].cabinet} {` `}
+                                        {
+                                            couple6[0].teacher !== undefined &&
+                                            couple6[0].teacher.name
+                                        }
+                                    </td>
+                                }
                             </>
                     }
                 </tr>
                 <tr className='table-row'>
                     <td className='table-column-first'>19:10 - 20:45</td>
                     {
-                        Object.keys(couple7).length === 0 ?
+                        couple7.length === 0 ?
                             <>
                                 <td className='table-column-second'></td>
                                 <td className='table-column-third'></td>
@@ -304,32 +409,49 @@ const OneTable: FC<OneTableProps> = ({schedule}) => {
                             :
                             <>
                                 {
-                                    couple7.isNumerator &&
+                                    couple7[0].isNumerator &&
                                     <td className='table-column-second'>
-                                        ({LessonType[couple7.type]}) {couple7.name} {couple7.cabinet}
+                                        <em>{LessonType[couple7[0].type]}</em> {couple7[0].name} {couple7[0].cabinet} {` `}
                                         {
-                                            couple7.teacher !== undefined &&
-                                            couple7.teacher.name
+                                            couple7[0].teacher !== undefined &&
+                                            couple7[0].teacher.name
                                         }
                                     </td>
                                 }
                                 {
-                                    couple7.isDenominator &&
+                                    couple7[0].isDenominator &&
+                                    <>
+                                        <td className='table-column-second'></td>
+                                        <td className='table-column-third'>
+                                            <em>{LessonType[couple7[0].type]}</em> {couple7[0].name} {couple7[0].cabinet} {` `}
+                                            {
+                                                couple7[0].teacher !== undefined &&
+                                                couple7[0].teacher.name
+                                            }
+                                        </td>
+                                    </>
+                                }
+                                {
+                                    couple7.length === 2 &&
+                                    couple7[1].isDenominator &&
                                     <td className='table-column-third'>
-                                        ({LessonType[couple7.type]}) {couple7.name} {couple7.cabinet}
+                                        <em>{LessonType[couple7[1].type]}</em> {couple7[1].name} {couple7[1].cabinet} {` `}
                                         {
-                                            couple7.teacher !== undefined &&
-                                            couple7.teacher.name
+                                            couple7[1].teacher !== undefined &&
+                                            couple7[1].teacher.name
                                         }
                                     </td>
                                 }
-                                <td colSpan={2} className='table-column-comon'>
-                                    ({LessonType[couple7.type]}) {couple7.name} {couple7.cabinet}
-                                    {
-                                        couple7.teacher !== undefined &&
-                                        couple7.teacher.name
-                                    }
-                                </td>
+                                {
+                                    !couple7[0].isNumerator && !couple7[0].isDenominator &&
+                                    <td colSpan={2} className='table-column-comon'>
+                                        <em>{LessonType[couple7[0].type]}</em> {couple7[0].name} {couple7[0].cabinet} {` `}
+                                        {
+                                            couple7[0].teacher !== undefined &&
+                                            couple7[0].teacher.name
+                                        }
+                                    </td>
+                                }
                             </>
                     }
                 </tr>

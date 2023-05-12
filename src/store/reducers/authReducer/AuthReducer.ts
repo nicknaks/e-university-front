@@ -17,14 +17,14 @@ export const AuthReducer = (state = defaultState, action: AuthAction) => {
     }
 }
 
-export const authActionLogin = (payload) => {
+export const authActionLogin = (payload: Me) => {
     return {
         type: AuthActionEnum.SET_LOGIN,
         payload
     }
 }
 
-export const authActionLogout = (payload) => {
+export const authActionLogout = (payload: Me) => {
     return {
         type: AuthActionEnum.SET_LOGOUT,
         payload

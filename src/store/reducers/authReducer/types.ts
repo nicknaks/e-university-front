@@ -20,7 +20,7 @@ export interface SetLoginAction {
 
 export interface SetLogoutAction {
     type: AuthActionEnum.SET_LOGOUT,
-    payload: {},
+    payload: Me,
 }
 
 export type AuthAction = SetLoginAction | SetLogoutAction;
