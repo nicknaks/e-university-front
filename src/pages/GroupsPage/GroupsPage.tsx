@@ -72,12 +72,47 @@ const GroupsPage: FC = () => {
     useEffect(() => {
         const pathGet = window.location.search.replace( '?', '').split('&');
 
+        if (localStorage.getItem('fac') && localStorage.getItem('dep')) {
+            if (faculties.length !== 0) {
+                const getFac = Object.keys(translate).find(key => translate[key] === localStorage.getItem('fac'))
+
+                const findFac = faculties.filter((item) => {
+                    if (item.number === getFac) {
+                        return item
+                    }
+                })[0];
+
+                setFacList(findFac.number + " " + findFac.name);
+                setFacDep(findFac);
+
+                if (!localStorage.getItem('dep')) {
+                    return;
+                }
+
+                const depGet = getFac + +/\d+/.exec(localStorage.getItem('dep'));
+
+                const findDep = findFac.departments.filter((item) => {
+                    if (item.number === depGet) {
+                        return item
+                    }
+                })[0];
+
+                setDepList(findDep.number + ' ' + findDep.name)
+
+                setDepId(findDep.id)
+                const res = dispatch(groupsList(findDep.id));
+
+                return
+            }
+        }
+
         if (pathGet[0] !== '') {
             const facGet = Object.keys(translate).find(key => translate[key] === pathGet[0].slice(4))
 
             if (faculties.length !== 0) {
                 const findFac = faculties.filter((item) => {
                     if (item.number === facGet) {
+                        console.log(item.number, facGet)
                         return item
                     }
                 })[0];
@@ -177,6 +212,7 @@ const GroupsPage: FC = () => {
 
         if (e.target.classList[0] === 'list-element') {
             setFacList(e.target.textContent);
+            localStorage.setItem('fac', translate[e.target.textContent.split(' ')[0]]);
 
             setFacDep(faculties.filter((item) => {
                 if (item.number === e.target.textContent.split(' ')[0]) {
@@ -191,6 +227,7 @@ const GroupsPage: FC = () => {
 
         if (e.target.classList[0] === 'fac-in-list') {
             setFacList(e.target.textContent);
+            localStorage.setItem('fac', translate[e.target.textContent.split(' ')[0]]);
 
             setFacDep(faculties.filter((item) => {
                 if (item.number === e.target.textContent.split(' ')[0]) {
@@ -204,6 +241,7 @@ const GroupsPage: FC = () => {
         }
 
         setFacList(e.target.parentElement.textContent);
+        localStorage.setItem('fac', translate[e.target.parentElement.textContent.split(' ')[0]]);
 
         setFacDep(faculties.filter((item) => {
             if (item.number === e.target.parentElement.textContent.split(' ')[0]) {
@@ -257,6 +295,9 @@ const GroupsPage: FC = () => {
         }
 
         if (e.target.classList[0] === 'list-element') {
+            const depGet = +/\d+/.exec(e.target.textContent.split(' ')[0]);
+            localStorage.setItem('dep', translate[e.target.textContent.split(' ')[0].replace(/[0-9]/g, '')] + depGet)
+
             setDepList(e.target.textContent);
 
             return
@@ -264,11 +305,16 @@ const GroupsPage: FC = () => {
 
         if (e.target.classList[0] === 'fac-in-list') {
             setDepList(e.target.textContent);
+            const depGet = +/\d+/.exec(e.target.textContent.split(' ')[0]);
+            localStorage.setItem('dep', translate[e.target.textContent.split(' ')[0].replace(/[0-9]/g, '')] + depGet)
 
             return;
         }
 
         setDepList(e.target.parentElement.textContent);
+        const depGet = +/\d+/.exec(e.target.parentElement.textContent.split(' ')[0]);
+        localStorage.setItem('dep', translate[e.target.parentElement.textContent.split(' ')[0].replace(/[0-9]/g, '')] + depGet)
+        //localStorage.setItem('dep', translate[e.target.parentElement.textContent.split(' ')[0]]);
     }
 
     const changeFirstCheck = async (e) => {

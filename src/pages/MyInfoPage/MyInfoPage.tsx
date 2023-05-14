@@ -8,6 +8,7 @@ import './myInfoPage.css'
 import OneTable from "../../components/OneTable/OneTable";
 import {scheduleActionScheduleNull} from "../../store/reducers/sheduleReducer/sheduleReducer";
 import Loader from "../../components/Loader/Loader";
+import {LessonType, SubjectType} from "../../store/reducers/sheduleReducer/types";
 
 const MyInfoPage: FC = () => {
     const dispatch = useAppDispatch();
@@ -23,8 +24,6 @@ const MyInfoPage: FC = () => {
     const [day4, setDay4] = useState([])
     const [day5, setDay5] = useState([])
     const [day6, setDay6] = useState([]);
-
-
 
     useEffect(() => {
         document.getElementsByTagName('title')[0].innerText = 'Профиль'
@@ -99,6 +98,7 @@ const MyInfoPage: FC = () => {
                         return <div className='subj-row'>
                             <div className='subj-name'>{item.name}</div>
                             <div className='subj-group'>{item.group.number}</div>
+                            <div className='subj-type'>{SubjectType[item.type]}</div>
                         </div>
                     })
                 }
@@ -107,31 +107,31 @@ const MyInfoPage: FC = () => {
                 <div className='left-tables'>
                     <div className='table-day'>
                         <div className='table-day'>Понедельник</div>
-                        <OneTable key={1} schedule={day1}/>
+                        <OneTable change={false} teach={true} key={1} schedule={day1}/>
                     </div>
                     <div className='table-day'>
                         <div className='table-day'>Среда</div>
-                        <OneTable key={3} schedule={day3}/>
+                        <OneTable change={false} key={3} teach={true} schedule={day3}/>
                     </div>
                     <div className='table-day'>
                         <div className='table-day'>Пятница</div>
-                        <OneTable key={5} schedule={day5}/>
+                        <OneTable change={false} key={5} teach={true} schedule={day5}/>
                     </div>
                 </div>
                 <div className='right-tables'>
                     <div className='table-day'>
                         <div className='table-day'>Вторник</div>
-                        <OneTable key={2} schedule={day2}/>
+                        <OneTable change={false} key={2} teach={true} schedule={day2}/>
                     </div>
 
                     <div className='table-day'>
                         <div className='table-day'>Четверг</div>
-                        <OneTable key={4} schedule={day4}/>
+                        <OneTable change={false} key={4} teach={true} schedule={day4}/>
                     </div>
 
                     <div className='table-day'>
                         <div className='table-day'>Суббота</div>
-                        <OneTable key={6} schedule={day6}/>
+                        <OneTable change={false} key={6} teach={true} schedule={day6}/>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,14 @@
 export interface Me {
     id: number,
-    type: string,
+    type: UserType,
     owner_id: number,
+}
+
+export enum UserType {
+    UNKNOWN = '',
+    TEACHER = 'TEACHER',
+    STUDENT = 'STUDENT',
+    ADMIN = 'ADMIN',
 }
 
 export interface AuthState {

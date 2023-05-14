@@ -29,6 +29,10 @@ const FacList: FC<FacListProps> = ({number, name, depList}) => {
         refArrow.current.classList.add('fac-svg-down');
     }
 
+    const clear = () => {
+        localStorage.clear()
+    }
+
     return (
         <>
             <div className="list-container">
@@ -47,7 +51,7 @@ const FacList: FC<FacListProps> = ({number, name, depList}) => {
                             <div ref={refDep} className='dep-list dep-list-hidden'>
                             {
                                 depList.map((item) => {
-                                    return <Link to={'/groups' + `?fac=${translate[number]}` + `&dep=${translate[number] + +/\d+/.exec(item.number)}`} className='dep-name' key={item.id}> <span className='number-dec'>{item.number}</span> {' ' + item.name} </Link>
+                                    return <Link onClick={clear} to={'/groups' + `?fac=${translate[number]}` + `&dep=${translate[number] + +/\d+/.exec(item.number)}`} className='dep-name' key={item.id}> <span className='number-dec'>{item.number}</span> {' ' + item.name} </Link>
                                 })
                             }
                             </div>

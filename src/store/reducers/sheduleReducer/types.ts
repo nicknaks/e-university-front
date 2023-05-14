@@ -24,6 +24,14 @@ export enum LessonType {
     SEM = 'сем',
 }
 
+export enum SubjectType {
+    UNKNOWN = '',
+    CREDIT = 'Зачет',
+    EXAM = 'Экзамен',
+    COURSE_WORK = 'К.Р.',
+    PRACTICAL = 'Практика',
+}
+
 export interface Schedule {
     id: string,
     type: string,
@@ -46,7 +54,8 @@ export interface Subjects {
     groupID: string,
     name: string,
     group: Group
-    teacher: Teacher
+    teacher: Teacher,
+    type: SubjectType
 }
 
 export interface ScheduleState {

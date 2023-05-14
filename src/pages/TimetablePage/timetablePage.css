@@ -12,7 +12,6 @@
 
 .table-day {
     font-size: 18px;
-    margin-bottom: 10px;
     font-weight: bolder;
 }
 
@@ -67,4 +66,93 @@
     text-align: center;
     width: 50px;
     height: 50px;
+}
+
+.type-btn {
+    opacity: 1;
+    margin-left: 15px;
+    border-radius: 10px;
+    font-family: 'Gilroy-Light', sans-serif;
+    font-size: 18px;
+    width: 20%;
+    height: 30px;
+    color: var(--textColor);
+    border: 1px solid var(--textColor);
+    cursor: pointer;
+    background-color: transparent;
+    transition: all 0.5s;
+}
+
+.open-list-fac-hidden {
+    position: absolute;
+    left: -99999px;
+    opacity: 0;
+}
+
+.type-btn:hover {
+    background-color: var(--textColor);
+    color: white;
+    border: 1px solid transparent;
+}
+
+.save-type-btn:hover {
+    background-color: var(--textColor);
+    color: white;
+    border: 1px solid transparent;
+}
+
+.save-type-btn {
+    opacity: 1;
+    margin-left: 15px;
+    border-radius: 10px;
+    font-family: 'Gilroy-Light', sans-serif;
+    font-size: 18px;
+    width: 20%;
+    height: 30px;
+    color: var(--textColor);
+    border: 1px solid var(--textColor);
+    cursor: pointer;
+    background-color: transparent;
+    transition: all 0.5s;
+}
+
+.edit-btn:hover {
+    background-color: var(--textColorHover);
+}
+
+.on-tbl {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.edit-btn {
+    margin-top: 15px;
+    border-radius: 10px;
+    font-family: 'Gilroy-Light', sans-serif;
+    font-size: 20px;
+    width: 20%;
+    height: 45px;
+    color: white;
+    border: 0;
+    cursor: pointer;
+    background-color: var(--textColor);
+    transition: all 0.5s;
+}
+
+.btn-subj {
+    border-radius: 10px;
+    font-family: 'Gilroy-Light', sans-serif;
+    font-size: 20px;
+    width: 20%;
+    height: 45px;
+    color: white;
+    border: 0;
+    cursor: pointer;
+    background-color: var(--textColor);
+    transition: all 0.5s;
+}
+
+.btn-subj:hover {
+    background-color: var(--textColorHover);
 }

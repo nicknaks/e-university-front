@@ -1,5 +1,5 @@
 .subjects-cont {
-    width: 45%;
+    width: 70%;
     margin-top: 30px;
 }
 
@@ -10,11 +10,26 @@
     width: 100%;
 }
 
-.subj-name {
-    font-size: 18px;
+.subj-teach {
+    width: 20%;
     padding-left: 10px;
+    font-size: 18px;
+}
+
+.subj-type {
+    opacity: 1;
+    width: 10%;
+    padding-left: 10px;
+    font-size: 16px;
+    font-style: oblique;
+}
+
+.subj-name {
+    width: 70%;
+    font-size: 18px;
 }
 
 .subj-group {
+    width: 20%;
     font-size: 18px;
 }
