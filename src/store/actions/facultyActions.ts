@@ -50,7 +50,7 @@ export const groupsList = (id) => {
                 headers: {"Content-Type": "application/json", },
                 data: {
                     "operationName": "fetchGroups",
-                    "query": `query fetchGroups { groups (filter: { departmentID: "${id}" }) { id number course students { id name login number } } }`,
+                    "query": `query fetchGroups { groups (filter: { departmentID: "${id}" }) { id number course students { id name groupId } } }`,
                 }
             });
 

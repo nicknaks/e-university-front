@@ -21,8 +21,7 @@ export interface Groups {
 export interface Students {
     id: string,
     name: string,
-    login: string,
-    number: string
+    groupId: string
 }
 
 export interface FacState {
@@ -87,4 +86,12 @@ export interface SetCourse6Action {
     payload: Array<Groups>
 }
 
-export type FacAction = SetFacAction | SetGroupAction | SetCourse6Action | SetCourse5Action | SetCourse4Action | SetCourse3Action | SetCourse2Action | SetCourse1Action
+export type FacAction =
+    SetFacAction
+    | SetGroupAction
+    | SetCourse6Action
+    | SetCourse5Action
+    | SetCourse4Action
+    | SetCourse3Action
+    | SetCourse2Action
+    | SetCourse1Action
