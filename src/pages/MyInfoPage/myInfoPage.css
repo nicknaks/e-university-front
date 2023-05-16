@@ -25,6 +25,8 @@
 }
 
 .subj-name {
+    color: var(--fontColor);
+    text-decoration: none;
     width: 70%;
     font-size: 18px;
 }

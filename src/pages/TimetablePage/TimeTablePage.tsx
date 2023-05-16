@@ -2,34 +2,35 @@ import React, {FC, useEffect, useRef, useState} from 'react';
 import './timetablePage.css'
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {
+    addStudents,
     addSubjects, changeTypeSubjects,
     getGroupSubjects,
     getSchedule,
-    getScheduleTeacher,
+    getScheduleTeacher, getStudents,
     getTeachers
 } from "../../store/actions/scheduleActions";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import OneTable from "../../components/OneTable/OneTable";
 import {
-    scheduleActionLoading,
-    scheduleActionScheduleNull,
+    scheduleActionScheduleNull, scheduleActionStudentsNull,
     scheduleActionSubjectsNull
 } from "../../store/reducers/sheduleReducer/sheduleReducer";
 import Loader from "../../components/Loader/Loader";
-import {LessonType, SubjectType} from "../../store/reducers/sheduleReducer/types";
+import {SubjectType} from "../../store/reducers/sheduleReducer/types";
 import ListElement from "../../components/ListElement/ListElement";
-import {groupsNullList} from "../../store/actions/facultyActions";
 import SmallListElement from "../../components/SmallListElement/SmallListElement";
-import {all} from "axios";
+import {isLogin} from "../../store/actions/authActions";
+import {Link} from "react-router-dom";
 
 const TimeTablePage: FC = () => {
     const dispatch = useAppDispatch();
-    const {schedule, loading, subject, teachers} = useAppSelector(state => state.schedule);
+    const {schedule, students, loading, subject, teachers} = useAppSelector(state => state.schedule);
     const {me} = useAppSelector(state => state.auth);
 
     const refPopUp = useRef<HTMLDivElement>()
     const refPopUpBody = useRef<HTMLDivElement>();
     const refName = useRef<HTMLInputElement>();
+    const refStud = useRef<HTMLInputElement>();
     const refError = useRef<HTMLDivElement>();
     const refHeadTeachList = useRef<HTMLDivElement>();
     const refTeachArrow = useRef<SVGSVGElement>();
@@ -38,6 +39,7 @@ const TimeTablePage: FC = () => {
     const refTypeArrow = useRef<SVGSVGElement>();
     const refTypeUl = useRef<HTMLUListElement>();
     const refChangeType = useRef<HTMLDivElement>();
+    const refBtnAddStud = useRef<HTMLButtonElement>();
 
     const [day1, setDay1] = useState([])
     const [day2, setDay2] = useState([])
@@ -47,6 +49,7 @@ const TimeTablePage: FC = () => {
     const [day6, setDay6] = useState([])
 
     const [name, setName] = useState('');
+    const [studName, setStudName] = useState('');
     const [teachList, setTeachList] = useState('Выберите преподавателя');
     const [typeList, setTypeList] = useState('Выберите тип предмета');
     const [oneTypeList, setOneTypeList] = useState('');
@@ -68,13 +71,28 @@ const TimeTablePage: FC = () => {
                 setTeach(true);
                 dispatch(getScheduleTeacher(id))
             }
-        })
+        });
 
         return () => {
+            dispatch(scheduleActionStudentsNull([]));
             dispatch(scheduleActionScheduleNull([]));
             dispatch(scheduleActionSubjectsNull([]));
         }
     }, [])
+
+    useEffect(() => {
+        const id = window.location.pathname.slice(10);
+
+        if (Object.keys(me).length === 0) {
+            dispatch(isLogin()).then(res => {
+                if (res) {
+                    dispatch(getStudents(id));
+                }
+            });
+        } else {
+            dispatch(getStudents(id));
+        }
+    }, [me])
 
     useEffect(() => {
         const id = window.location.pathname.slice(10);
@@ -399,6 +417,40 @@ const TimeTablePage: FC = () => {
         setChange(false)
     }
 
+    const addStudent = (e) => {
+        if (e.target.textContent === 'Добавить студента') {
+            refStud.current.classList.remove('open-list-fac-hidden');
+            e.target.textContent = 'Отмена'
+
+            return
+        }
+
+        if (e.target.textContent === 'Отмена') {
+            refStud.current.classList.add('open-list-fac-hidden');
+            e.target.textContent = 'Добавить студента'
+
+            return;
+        }
+
+        dispatch(addStudents(studName, groupId));
+
+        setStudName('');
+        refStud.current.classList.add('open-list-fac-hidden');
+        e.target.textContent = 'Добавить студента'
+    }
+
+    const changeStudInput = (value) => {
+        setStudName(value);
+
+        if (value !== '') {
+            refBtnAddStud.current.textContent = 'Сохранить'
+
+            return
+        }
+
+        refBtnAddStud.current.textContent = 'Отмена'
+    }
+
     return (
         loading
         ?
@@ -408,6 +460,33 @@ const TimeTablePage: FC = () => {
             {
                 !teach &&
                 <>
+                    {
+                        Object.keys(me).length !== 0 &&
+                        <>
+                            <div className='main-name'>
+                                Студенты
+                            </div>
+                            <div className='students-cont'>
+                                {
+                                    students.length !== 0 &&
+                                    <>
+                                        {
+                                            students.map((item) => {
+                                                return <div className='stud-row'>
+                                                    <div className='stud-name'>{item.name}</div>
+                                                </div>
+                                            })
+                                        }
+                                    </>
+                                }
+                                <input ref={refStud} placeholder='ФИО студента' type='text' value={studName} className='input-form-stud open-list-fac-hidden' onChange={(e) => changeStudInput(e.target.value)}/>
+                                {
+                                    me.type === 'ADMIN' &&
+                                    <button ref={refBtnAddStud} style={{marginTop: 20, marginBottom: 30, width: '39%'}} onClick={(e) => addStudent(e)} className='btn-subj'>Добавить студента</button>
+                                }
+                            </div>
+                        </>
+                    }
                     <div className='main-name'>
                         Предметы
                     </div>
@@ -417,7 +496,13 @@ const TimeTablePage: FC = () => {
                                 {
                                     subject.map((item) => {
                                         return <div className='subj-row'>
-                                            <div className='subj-name'>{item.name}</div>
+                                            {
+                                                Object.keys(me).length === 0
+                                                    ?
+                                                    <div className='subj-name'>{item.name}</div>
+                                                    :
+                                                    <Link to={`/grade/${item.id}`} className='subj-name subj-link'>{item.name}</Link>
+                                            }
                                             <div className='subj-teach'>{item.teacher.name}</div>
                                             <div className='subj-type'>{SubjectType[item.type]}</div>
                                             {
@@ -605,7 +690,7 @@ const TimeTablePage: FC = () => {
                     </>
                     :
                     <>
-                        Для такой группы пока нет расписания
+
                     </>
             }
         </div>

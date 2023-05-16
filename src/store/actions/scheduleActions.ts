@@ -1,10 +1,16 @@
-
 import {localUrl} from "../store";
 import {
+    scheduleActionClasses, scheduleActionClassesNull,
     scheduleActionLoading,
     scheduleActionSchedule,
     scheduleActionScheduleNull,
-    scheduleActionSubjects, scheduleActionSubjectsNull, scheduleActionTeachers
+    scheduleActionStudents,
+    scheduleActionStudentsNull,
+    scheduleActionSubjectResult,
+    scheduleActionSubjectResultNull,
+    scheduleActionSubjects,
+    scheduleActionSubjectsNull,
+    scheduleActionTeachers
 } from "../reducers/sheduleReducer/sheduleReducer";
 import axios from "axios";
 
@@ -16,7 +22,7 @@ export const getSchedule = (id) => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSchedule",
                     "query": `query fetchSchedule{ schedule (filter: {groupID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
@@ -54,7 +60,7 @@ export const getScheduleTeacher = (id) => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSchedule",
                     "query": `query fetchSchedule{ schedule (filter: {teacherID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
@@ -93,7 +99,7 @@ export const getMySchedule = () => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchMySchedule",
                     "query": `query fetchMySchedule{ mySchedule{id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
@@ -127,7 +133,7 @@ export const getTeachers = () => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchTeachers",
                     "query": `query fetchTeachers{ teachers{ id name }}`,
@@ -160,15 +166,15 @@ export const getSubjects = (id) => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
-                    "query": `query fetchSubjects{ subjects (filter:{teacherID:"${id}"}) { id group{ number } teacher{ name } name type}}`,
+                    "query": `query fetchSubjects{ subjects (filter:{teacherID:"${id}"}) { id group{ id number } teacher{ name } name type}}`,
                 },
                 withCredentials: true,
             });
 
-           dispatch(scheduleActionSubjects(res.data.data.subjects))
+            dispatch(scheduleActionSubjects(res.data.data.subjects))
 
             return true
         } catch (error) {
@@ -195,7 +201,7 @@ export const addSubjects = (name, groupId, teacherId, type) => {
                 url: localUrl,
                 method: 'post',
                 withCredentials: true,
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "subjectCreate",
                     query: `mutation subjectCreate{ subjectCreate (input:{name:"${name}", groupID:"${groupId}", teacherID:"${teacherId}", type:${type}}){id}}`,
@@ -207,7 +213,7 @@ export const addSubjects = (name, groupId, teacherId, type) => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
                     "query": `query fetchSubjects{ subjects (filter:{groupID:"${groupId}"}) { id group{ number } teacher{ name } name type}}`,
@@ -244,7 +250,7 @@ export const changeTypeSubjects = (id, groupId, type) => {
                 url: localUrl,
                 method: 'post',
                 withCredentials: true,
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     query: `mutation { subjectTypeChange(input:{id:"${id}", type:${type}}){type}}`,
                 }
@@ -255,7 +261,7 @@ export const changeTypeSubjects = (id, groupId, type) => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
                     "query": `query fetchSubjects{ subjects (filter:{groupID:"${groupId}"}) { id group{ number } teacher{ name } name type}}`,
@@ -286,43 +292,43 @@ export const changeTypeSubjects = (id, groupId, type) => {
 export const addLesson = (id, type, couple, day, isDen, isNum, cab, groupId) => {
     return async (dispatch) => {
         try {
-            dispatch(scheduleActionLoading(true));
+            //dispatch(scheduleActionLoading(true));
 
             const add = await axios({
                 url: localUrl,
                 method: 'post',
                 withCredentials: true,
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     query: `mutation { lessonCreate(input:{subjectID:"${id}", type:${type}, couple:${couple},day:${day},isDenominator:${isDen}, isNumerator:${isNum}, cabinet:"${cab}"}){id}}`,
                 }
             });
 
-            dispatch(scheduleActionScheduleNull([]));
+            if (add.data.data.lessonCreate === null) {
 
-            const res = await axios({
-                url: localUrl,
-                method: 'post',
-                headers: {"Content-Type": "application/json", },
-                data: {
-                    "operationName": "fetchSchedule",
-                    "query": `query fetchSchedule{ schedule (filter: {groupID:"${groupId}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
-                }
-            });
+                throw Error('false');
+            } else {
 
-            dispatch(scheduleActionSchedule(res.data.data.schedule))
+                dispatch(scheduleActionScheduleNull([]));
 
-            return true
+                const res = await axios({
+                    url: localUrl,
+                    method: 'post',
+                    headers: {"Content-Type": "application/json",},
+                    data: {
+                        "operationName": "fetchSchedule",
+                        "query": `query fetchSchedule{ schedule (filter: {groupID:"${groupId}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
+                    }
+                });
+
+                dispatch(scheduleActionSchedule(res.data.data.schedule))
+
+                return true
+            }
         } catch (error) {
-            if (error.response.data.status === 400) {
-                return 400;
-            }
-
-            if (Math.trunc(error.response.data.status / 100) === 5) {
-                return 500;
-            }
+            return false
         } finally {
-            dispatch(scheduleActionLoading(false));
+            //dispatch(scheduleActionLoading(false));
         }
     }
 }
@@ -334,7 +340,7 @@ export const getGroupSubjects = (id) => {
             const res = await axios({
                 url: localUrl,
                 method: 'post',
-                headers: {"Content-Type": "application/json", },
+                headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
                     "query": `query fetchSubjects{ subjects (filter:{groupID:"${id}"}) { id group{ number } teacher{ name } name type}}`,
@@ -356,3 +362,419 @@ export const getGroupSubjects = (id) => {
         }
     }
 }
+
+export const getStudents = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchStudents",
+                    "query": `query fetchStudents{students(filter:{groupID:"${id}"}) {id name groupId}}`,
+                }
+            });
+
+
+            dispatch(scheduleActionStudentsNull([]))
+
+            dispatch(scheduleActionStudents(res.data.data.students))
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const addStudents = (name, id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { studentCreate(input:{name:"${name}", groupID:"${id}"}) { id name groupId }}`,
+                },
+                withCredentials: true
+            });
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchStudents",
+                    "query": `query fetchStudents{students(filter:{groupID:"${id}"}) {id name groupId}}`,
+                }
+            });
+
+            dispatch(scheduleActionStudentsNull([]))
+
+            dispatch(scheduleActionStudents(res.data.data.students))
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const getSubjectsResult = (id) => {
+    return async (dispatch) => {
+        try {
+            //dispatch(scheduleActionLoading(true));
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchSubjectsResult",
+                    "query": `query fetchSubjectsResult{ subjectResults(filter:{studentID:"${id}"}){ studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total }}`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionSubjectResultNull([]));
+
+            if (res.data.data.subjectResults !== null) {
+                dispatch(scheduleActionSubjectResult(res.data.data.subjectResults));
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+           // dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const getOneSubjectsResult = (id, subId) => {
+    return async (dispatch) => {
+        try {
+            //dispatch(scheduleActionLoading(true));
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchSubjectsResult",
+                    "query": `query fetchSubjectsResult{ subjectResults(filter:{subjectID: "${subId}"}){ id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult}}`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionSubjectResultNull([]));
+
+            if (res.data.data.subjectResults !== null) {
+                dispatch(scheduleActionSubjectResult(res.data.data.subjectResults));
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            // dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const getOneSubjects = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchSubject",
+                    "query": `query fetchSubject{ subjects (filter:{ID:"${id}"}) { id group{ id number } teacher{ name } name type}}`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionSubjectsNull([]));
+
+            if (res.data.data.subjects !== null) {
+                dispatch(scheduleActionSubjects(res.data.data.subjects))
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const getClasses = (id) => {
+    return async (dispatch) => {
+        try {
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchClasses",
+                    "query": `query fetchClasses{ classes(filter:{subjectID:"${id}"}){ id groupID subjectID day module name comment type studentProgress{ id isAbsent mark studentID }} }`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionClassesNull([]));
+
+            if (res.data.data.classes !== null) {
+                dispatch(scheduleActionClasses(res.data.data.classes))
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        }
+    }
+}
+
+export const changeAbsentAction = (ids, id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            console.log()
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { absentSet(input:{classProgressID: [${ids.map((item) => {return `"${item}"`})}]}){ id isAbsent} }`,
+                },
+                withCredentials: true
+            });
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchClasses",
+                    "query": `query fetchClasses{ classes(filter:{subjectID:"${id}"}){ id groupID subjectID day module name comment type studentProgress{ id isAbsent mark studentID }} }`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionClassesNull([]));
+
+            if (res.data.data.classes !== null) {
+                dispatch(scheduleActionClasses(res.data.data.classes))
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const changeAbsentFalseAction = (ids, id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { attendedSet(input:{classProgressID: [${ids.map((item) => {return `"${item}"`})}]}){ id isAbsent} }`,
+                },
+                withCredentials: true
+            });
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchClasses",
+                    "query": `query fetchClasses{ classes(filter:{subjectID:"${id}"}){ id groupID subjectID day module name comment type studentProgress{ id isAbsent mark studentID }} }`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionClassesNull([]));
+
+            if (res.data.data.classes !== null) {
+                dispatch(scheduleActionClasses(res.data.data.classes))
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const changeMark = (id, mark, subId) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { markCreate(input:{classProgressID:"${id}", mark:${mark}}){ id } }`,
+                },
+                withCredentials: true
+            });
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchClasses",
+                    "query": `query fetchClasses{ classes(filter:{subjectID:"${subId}"}){ id groupID subjectID day module name comment type studentProgress{ id isAbsent mark studentID }} }`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionClassesNull([]));
+
+            if (res.data.data.classes !== null) {
+                dispatch(scheduleActionClasses(res.data.data.classes))
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const changeExam = (id, exam, subId) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { examResultSet(input:{examResultID:"${id}", mark:${exam}}){ id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult} }`,
+                },
+                withCredentials: true
+            });
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchClasses",
+                    "query": `query fetchClasses{ classes(filter:{subjectID:"${subId}"}){ id groupID subjectID day module name comment type studentProgress{ id isAbsent mark studentID }} }`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionClassesNull([]));
+
+            if (res.data.data.classes !== null) {
+                dispatch(scheduleActionClasses(res.data.data.classes))
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+

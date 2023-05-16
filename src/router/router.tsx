@@ -4,6 +4,7 @@ import React from "react";
 import TimeTablePage from "../pages/TimetablePage/TimeTablePage";
 import MyInfoPage from "../pages/MyInfoPage/MyInfoPage";
 import TeachersPage from "../pages/TeachersPage/TeachersPage";
+import GradePage from "../pages/GradePage/GradePage";
 
 export interface IRoutes {
     path: string;
@@ -14,6 +15,7 @@ export enum RoutesNames {
     MAIN = '/',
     GROUPS = '/groups',
     TEACHERS = '/teachers',
+    GRADE = '/grade/:id',
     MYINFO = '/myinfo',
     TIMETABLE = '/schedule/:id',
     ERROR = '*',
@@ -21,6 +23,7 @@ export enum RoutesNames {
 
 export const AllRoutes: IRoutes[] = [
      {path: RoutesNames.MAIN, component: <MainPage/>},
+     {path: RoutesNames.GRADE, component: <GradePage/>},
      {path: RoutesNames.TIMETABLE, component: <TimeTablePage/>},
      {path: RoutesNames.TEACHERS, component: <TeachersPage/>},
      {path: RoutesNames.MYINFO, component: <MyInfoPage/>},

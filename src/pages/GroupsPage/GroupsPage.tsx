@@ -112,7 +112,6 @@ const GroupsPage: FC = () => {
             if (faculties.length !== 0) {
                 const findFac = faculties.filter((item) => {
                     if (item.number === facGet) {
-                        console.log(item.number, facGet)
                         return item
                     }
                 })[0];

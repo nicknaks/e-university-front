@@ -13,8 +13,7 @@ export interface Teacher {
 export interface Student {
     id: string,
     name: string,
-    login: string,
-    number: string,
+    groupId: string
 }
 
 export enum LessonType {
@@ -55,7 +54,42 @@ export interface Subjects {
     name: string,
     group: Group
     teacher: Teacher,
-    type: SubjectType
+    type: SubjectType,
+}
+
+export interface SubjectResults {
+    id: string,
+    studentID: string,
+    subjectID: string,
+    subject: Array<Subjects>
+    firstModuleMark: number,
+    secondModuleMark: number,
+    thirdModuleMark: number,
+    mark: number,
+    total: number,
+    examResult: number,
+}
+
+export interface ClassProgress {
+    id: string,
+    classID: string,
+    studentID: string,
+    isAbsent: boolean,
+    teacherID: string,
+    mark: number,
+}
+
+export interface Class {
+    id: string,
+    day: string,
+    type: LessonType,
+    comment: string,
+    name: string,
+    module: number,
+    subjectID: string,
+    lessonID: string,
+    groupID: string,
+    studentProgress: Array<ClassProgress>
 }
 
 export interface ScheduleState {
@@ -63,20 +97,39 @@ export interface ScheduleState {
     subject: Array<Subjects>,
     teachers: Array<Teacher>,
     loading: boolean,
+    subjectResults: Array<SubjectResults>
+    students: Array<Student>,
+    classes: Array<Class>
 }
 
 export enum ScheduleActionEnum {
     SET_SCHEDULE = 'SET_SCHEDULE',
+    SET_SUBJECT_RESULTS = 'SET_SUBJECT_RESULTS',
+    SET_SUBJECT_RESULTS_NULL = 'SET_SUBJECT_RESULTS_NULL',
     SET_LOADING = 'SET_LOADING',
     SET_TEACHERS = 'SET_TEACHERS',
+    SET_STUDENTS = 'SET_STUDENTS',
+    SET_NULL_STUDENTS = 'SET_NULL_STUDENTS',
     SET_NULL_SCHEDULE = 'SET_NULL_SCHEDULE',
     SET_SUBJECTS = 'SET_SUBJECTS',
     SET_NULL_SUBJECTS = 'SET_NULL_SUBJECTS',
+    SET_CLASSES = 'SET_CLASSES',
+    SET_CLASSES_NULL = 'SET_CLASSES_NULL',
 }
 
 export interface SetScheduleAction {
     type: ScheduleActionEnum.SET_SCHEDULE,
     payload: Array<Schedule>,
+}
+
+export interface SetSubjectResultAction {
+    type: ScheduleActionEnum.SET_SUBJECT_RESULTS,
+    payload: Array<SubjectResults>,
+}
+
+export interface SetSubjectResultNullAction {
+    type: ScheduleActionEnum.SET_SUBJECT_RESULTS_NULL,
+    payload: [],
 }
 
 export interface SetLoadingAction {
@@ -104,4 +157,24 @@ export interface SetSubjectsNullAction {
     payload: [],
 }
 
-export type ScheduleAction = SetScheduleAction | SetScheduleNullAction | SetSubjectsNullAction | SetSubjectsAction | SetTeachersAction | SetLoadingAction;
+export interface SetStudentsAction {
+    type: ScheduleActionEnum.SET_STUDENTS,
+    payload: Array<Student>,
+}
+
+export interface SetStudentsNullAction {
+    type: ScheduleActionEnum.SET_NULL_STUDENTS,
+    payload: [],
+}
+
+export interface SetClassesNullAction {
+    type: ScheduleActionEnum.SET_CLASSES_NULL,
+    payload: [],
+}
+
+export interface SetClassesAction {
+    type: ScheduleActionEnum.SET_CLASSES,
+    payload: Array<Class>,
+}
+
+export type ScheduleAction = SetClassesNullAction | SetClassesAction | SetSubjectResultAction | SetSubjectResultNullAction | SetScheduleAction | SetScheduleNullAction | SetSubjectsNullAction | SetSubjectsAction | SetTeachersAction | SetLoadingAction | SetStudentsAction | SetStudentsNullAction;

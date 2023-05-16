@@ -5,6 +5,9 @@ const defaultState: ScheduleState = {
     subject: [],
     teachers: [],
     loading: false,
+    students: [],
+    subjectResults: [],
+    classes: []
 }
 
 export const ScheduleReducer = (state = defaultState, action: ScheduleAction) => {
@@ -26,6 +29,24 @@ export const ScheduleReducer = (state = defaultState, action: ScheduleAction) =>
         }
         case ScheduleActionEnum.SET_NULL_SUBJECTS: {
             return {...state, subject: []}
+        }
+        case ScheduleActionEnum.SET_STUDENTS: {
+            return {...state, students: action.payload}
+        }
+        case ScheduleActionEnum.SET_NULL_STUDENTS: {
+            return {...state, students: []}
+        }
+        case ScheduleActionEnum.SET_SUBJECT_RESULTS_NULL: {
+            return {...state, subjectResults: []}
+        }
+        case ScheduleActionEnum.SET_SUBJECT_RESULTS: {
+            return {...state, subjectResults: action.payload}
+        }
+        case ScheduleActionEnum.SET_CLASSES: {
+            return {...state, classes: action.payload}
+        }
+        case ScheduleActionEnum.SET_CLASSES_NULL: {
+            return {...state, classes: []}
         }
         default:
             return state;
@@ -70,6 +91,48 @@ export const scheduleActionSubjects = (payload) => {
 export const scheduleActionSubjectsNull = (payload) => {
     return {
         type: ScheduleActionEnum.SET_NULL_SUBJECTS,
+        payload
+    }
+}
+
+export const scheduleActionStudentsNull = (payload) => {
+    return {
+        type: ScheduleActionEnum.SET_NULL_STUDENTS,
+        payload
+    }
+}
+
+export const scheduleActionStudents = (payload) => {
+    return {
+        type: ScheduleActionEnum.SET_STUDENTS,
+        payload
+    }
+}
+
+export const scheduleActionSubjectResult = (payload) => {
+    return {
+        type: ScheduleActionEnum.SET_SUBJECT_RESULTS,
+        payload
+    }
+}
+
+export const scheduleActionSubjectResultNull = (payload) => {
+    return {
+        type: ScheduleActionEnum.SET_SUBJECT_RESULTS_NULL,
+        payload
+    }
+}
+
+export const scheduleActionClassesNull = (payload) => {
+    return {
+        type: ScheduleActionEnum.SET_CLASSES_NULL,
+        payload
+    }
+}
+
+export const scheduleActionClasses = (payload) => {
+    return {
+        type: ScheduleActionEnum.SET_CLASSES,
         payload
     }
 }
