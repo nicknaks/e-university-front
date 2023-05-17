@@ -6,7 +6,7 @@ import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {isLogin} from "../../store/actions/authActions";
 import {useNavigate} from "react-router-dom";
 import {
-    changeAbsentAction, changeAbsentFalseAction,
+    changeAbsentAction, changeAbsentFalseAction, changeMarkAction, changeName,
     getClasses,
     getOneSubjects,
     getStudents
@@ -14,6 +14,7 @@ import {
 import {LessonType, SubjectType} from "../../store/reducers/sheduleReducer/types";
 import OneRowTable from "../../components/OneRowTable/OneRowTable";
 import {scheduleActionClassesNull} from "../../store/reducers/sheduleReducer/sheduleReducer";
+import ChangeName from "../../components/changeName/ChangeName";
 
 const GradePage: FC = () => {
     const {loading, classes, subject, students} = useAppSelector(state => state.schedule)
@@ -34,10 +35,18 @@ const GradePage: FC = () => {
     const [checkFirst, setCheckFirst] = useState(false);
     const [checkSecond, setCheckSecond] = useState(false);
     const [checkThird, setCheckThird] = useState(false);
+    const [checkTotal, setCheckTotal] = useState(false);
+    const [checkLek, setCheckLek] = useState(false);
+    const [checkSem, setCheckSem] = useState(false);
+    const [childnName, setChildnName] = useState([]);
+    const [childnMark, setChildnMark] = useState([]);
 
     const [scroll, setScroll] = useState(0);
 
     const tableHead = useRef<HTMLDivElement>();
+    const absentBtn = useRef<HTMLButtonElement>();
+    const markBtn = useRef<HTMLButtonElement>();
+    const examBtn = useRef<HTMLButtonElement>();
 
     useEffect(() => {
         document.getElementsByTagName('title')[0].innerText = 'Успеваемость';
@@ -69,20 +78,28 @@ const GradePage: FC = () => {
     }, [subject])
 
     useEffect(() => {
+
         if ((module1.length === 0 && module2.length === 0 && module3.length === 0)) {
+            console.log(classes)
             if (classes.length !== 0) {
+
                 setTempClasses(classes);
-                classes.forEach((item) => {
+
+                setModule1(classes.filter((item) => {
                     if (item.module === 1) {
-                        setModule1(prevState => [...prevState, item])
+                        return item
                     }
+                }))
+                setModule2(classes.filter((item) => {
                     if (item.module === 2) {
-                        setModule2(prevState => [...prevState, item])
+                        return item
                     }
+                }))
+                setModule3(classes.filter((item) => {
                     if (item.module === 3) {
-                        setModule3(prevState => [...prevState, item])
+                        return item
                     }
-                })
+                }))
             }
         }
 
@@ -143,10 +160,67 @@ const GradePage: FC = () => {
 
             return;
         }
-    }, [checkThird, checkFirst, checkSecond])
+        if (checkTotal) {
+            setTempClasses([])
+            setModule2([])
+            setModule1([])
+            setModule3([])
+
+            return;
+        }
+        if (checkLek) {
+            setTempClasses(classes.filter((item) => {
+                if (LessonType[item.type] === 'лек') {
+                    return item
+                }
+            }))
+            setModule2(classes.filter((item) => {
+                if (LessonType[item.type] === 'лек' && item.module === 2) {
+                    return item
+                }
+            }))
+            setModule3(classes.filter((item) => {
+                if (LessonType[item.type] === 'лек' && item.module === 3) {
+                    return item
+                }
+            }))
+            setModule1(classes.filter((item) => {
+                if (LessonType[item.type] === 'лек' && item.module === 1) {
+                    return item
+                }
+            }))
+
+            return;
+        }
+        if (checkSem) {
+            setTempClasses(classes.filter((item) => {
+                if (LessonType[item.type] === 'сем') {
+                    return item
+                }
+            }))
+            setModule2(classes.filter((item) => {
+                if (LessonType[item.type] === 'сем' && item.module === 2) {
+                    return item
+                }
+            }))
+            setModule3(classes.filter((item) => {
+                if (LessonType[item.type] === 'сем' && item.module === 3) {
+                    return item
+                }
+            }))
+            setModule1(classes.filter((item) => {
+                if (LessonType[item.type] === 'сем' && item.module === 1) {
+                    return item
+                }
+            }))
+
+            return;
+        }
+    }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
 
     const changeAbsent = (e) => {
         if (e.target.textContent === 'Режим проставления пропусков' && !mark) {
+            markBtn.current.classList.add('check-btn');
             setAbsent(true);
             e.target.textContent = 'Сохранить изменения';
 
@@ -177,6 +251,7 @@ const GradePage: FC = () => {
         }
 
         setAbsent(false);
+        markBtn.current.classList.remove('check-btn');
         e.target.textContent = 'Режим проставления пропусков';
         setCheckAll([]);
     }
@@ -193,14 +268,39 @@ const GradePage: FC = () => {
         }
     }
 
+    const changeChild = (name) => {
+        setChildnName(prevState => [...prevState, name]);
+    }
+
+    const changeChildMark = (mark) => {
+        setChildnMark(prevState => [...prevState, mark]);
+    }
+
     const changeMark = (e) => {
         if (e.target.textContent === 'Режим проставления оценок' && !absent) {
             setMark(true);
+            absentBtn.current.classList.add('check-btn');
             e.target.textContent = 'Выйти из режима';
 
             return
         }
 
+        if (childnName.length !== 0) {
+            childnName.forEach((item) => {
+                dispatch(changeName(item.id, item.value, subId))
+            })
+            setModule2([])
+            setModule1([])
+            setModule3([])
+        }
+        if (childnMark.length !== 0) {
+            childnMark.forEach((item) => {
+                dispatch(changeMarkAction(item.id, Number(item.value), subId))
+            })
+
+        }
+
+        absentBtn.current.classList.remove('check-btn');
         setMark(false);
         e.target.textContent = 'Режим проставления оценок';
     }
@@ -218,7 +318,7 @@ const GradePage: FC = () => {
     }
 
     const changeFirstCheck = (e) => {
-        if (checkThird || checkSecond) {
+        if (checkThird || checkSecond || checkLek || checkSem || checkTotal || exam || absent || mark) {
             return
         }
 
@@ -226,7 +326,7 @@ const GradePage: FC = () => {
     }
 
     const changeSecondCheck = (e) => {
-        if (checkFirst || checkThird) {
+        if (checkFirst || checkThird || checkLek || checkSem || checkTotal || exam || absent || mark) {
             return
         }
 
@@ -234,16 +334,41 @@ const GradePage: FC = () => {
     }
 
     const changeThirdCheck = (e) => {
-        if (checkFirst || checkSecond) {
+        if (checkFirst || checkSecond || checkLek || checkSem || checkTotal || exam || absent || mark) {
             return
         }
 
         setCheckThird(e.target.checked);
     }
 
+    const changeTotalCheck = (e) => {
+        if (checkFirst || checkThird || checkLek || checkSem || checkSecond || exam || absent || mark) {
+            return
+        }
+
+        setCheckTotal(e.target.checked);
+    }
+
+    const changeLekCheck = (e) => {
+        if (checkFirst || checkThird || checkSecond || checkTotal || checkSem || exam || absent || mark) {
+            return
+        }
+
+        setCheckLek(e.target.checked);
+    }
+
+    const changeSemCheck = (e) => {
+        if (checkFirst || checkThird || checkSecond || checkTotal || checkLek || exam || absent || mark) {
+            return
+        }
+
+        setCheckSem(e.target.checked);
+    }
+
     const scrollDiv = (e) => {
         setScroll(e.target.scrollLeft)
     }
+
 
     return (
         loading
@@ -267,7 +392,7 @@ const GradePage: FC = () => {
                     Object.keys(me).length !== 0 && me.type !== 'STUDENT' &&
                     <>
                         {
-                            checkFirst || checkThird || checkSecond
+                            checkFirst || checkThird || checkSecond || checkTotal || checkLek || checkSem
                             ?
                                 <div className='btn-grade-cont'>
                                     <button style={{width: '30%'}} className='btn-subj check-btn'>Режим проставления пропусков</button>
@@ -293,13 +418,13 @@ const GradePage: FC = () => {
                                 </div>
                             :
                                 <div className='btn-grade-cont'>
-                                    <button onClick={(e) => changeAbsent(e)} style={{width: '30%'}} className='btn-subj'>Режим проставления пропусков</button>
+                                    <button ref={absentBtn} onClick={(e) => changeAbsent(e)} style={{width: '30%'}} className='btn-subj'>Режим проставления пропусков</button>
                                     {
                                         mark
                                             ?
                                             <button onClick={(e) => changeMark(e)} style={{width: '30%'}} className='btn-subj'>Выйти из режима</button>
                                             :
-                                            <button onClick={(e) => changeMark(e)} style={{width: '30%'}} className='btn-subj'>Режим проставления оценок</button>
+                                            <button ref={markBtn} onClick={(e) => changeMark(e)} style={{width: '30%'}} className='btn-subj'>Режим проставления оценок</button>
                                     }
                                     {
                                         subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
@@ -309,7 +434,7 @@ const GradePage: FC = () => {
                                                     ?
                                                     <button onClick={(e) => changeExam(e)} style={{width: '30%'}} className='btn-subj'>Выйти из режима экзамена</button>
                                                     :
-                                                    <button onClick={(e) => changeExam(e)} style={{width: '30%'}} className='btn-subj'>Режим проставления экзамена</button>
+                                                    <button ref={examBtn} onClick={(e) => changeExam(e)} style={{width: '30%'}} className='btn-subj'>Режим проставления экзамена</button>
                                             }
                                         </>
                                     }
@@ -319,7 +444,7 @@ const GradePage: FC = () => {
 
                 }
                 <div className='filter-cont'>
-                    <div style={{fontWeight: "bold", width: '16%'}} className='subj-group'>Фильтр по модулям:</div>
+                    <div style={{fontWeight: "bold", width: '210px'}} className='subj-group'>Фильтр по модулям:</div>
                     <label className="checkbox style-e">
                         <input onChange={(e) => changeFirstCheck(e)} checked={checkFirst} type="checkbox"/>
                         <div className="checkbox__checkmark"></div>
@@ -334,6 +459,24 @@ const GradePage: FC = () => {
                         <input onChange={(e) => changeThirdCheck(e)} checked={checkThird} type="checkbox"/>
                         <div className="checkbox__checkmark"></div>
                         <div style={{marginLeft: 15, marginRight: 0}} className="checkbox__body">Только 3 модуль</div>
+                    </label>
+                    <label style={{marginLeft: 50}} className="checkbox style-e">
+                        <input onChange={(e) => changeTotalCheck(e)} checked={checkTotal} type="checkbox"/>
+                        <div className="checkbox__checkmark"></div>
+                        <div style={{marginLeft: 15, marginRight: 0}} className="checkbox__body">Только итог</div>
+                    </label>
+                </div>
+                <div className='filter-cont-two'>
+                    <div style={{fontWeight: "bold", width: '210px'}} className='subj-group'>Фильтр по типам пар:</div>
+                    <label className="checkbox style-e">
+                        <input onChange={(e) => changeLekCheck(e)} checked={checkLek} type="checkbox"/>
+                        <div className="checkbox__checkmark"></div>
+                        <div style={{marginLeft: 15, marginRight: 0}} className="checkbox__body">Только лекции</div>
+                    </label>
+                    <label style={{marginLeft: 60}} className="checkbox style-e">
+                        <input onChange={(e) => changeSemCheck(e)} checked={checkSem} type="checkbox"/>
+                        <div className="checkbox__checkmark"></div>
+                        <div style={{marginLeft: 15, marginRight: 0}} className="checkbox__body">Только семинар</div>
                     </label>
                 </div>
                 {
@@ -354,40 +497,64 @@ const GradePage: FC = () => {
                                                 <>
                                                     {
                                                         module1.map((item) => {
-                                                            return <td className='grade-table-column-type'>{LessonType[item.type]}<p></p> {item.name}<p></p> {item.day}</td>
+                                                            return <>
+                                                                    {
+                                                                        mark
+                                                                        ?
+                                                                        <ChangeName key={item.id} changeChild={changeChild} item={item}/>
+                                                                        :
+                                                                        <td className='grade-table-column-type'> {item.name}<p></p> {LessonType[item.type]}<p></p>{item.day}</td>
+                                                                    }
+                                                                </>
                                                         })
                                                     }
                                                 </>
                                             }
-                                            <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>Модуль 1</td>
+                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 1</td>
                                             {
                                                 module2.length !== 0 &&
                                                 <>
                                                     {
                                                         module2.map((item) => {
-                                                            return <td className='grade-table-column-type'>{LessonType[item.type]}<p></p> {item.name}<p></p> {item.day}</td>
+                                                            return <>
+                                                                {
+                                                                    mark
+                                                                        ?
+                                                                        <ChangeName key={item.id} changeChild={changeChild} item={item}/>
+                                                                        :
+                                                                        <td className='grade-table-column-type'> {item.name}<p></p> {LessonType[item.type]}<p></p>{item.day}</td>
+                                                                }
+                                                            </>
                                                         })
                                                     }
                                                 </>
                                             }
-                                            <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>Модуль 2</td>
+                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 2</td>
                                             {
                                                 module3.length !== 0 &&
                                                 <>
                                                     {
                                                         module3.map((item) => {
-                                                            return <td className='grade-table-column-type'>{LessonType[item.type]}<p></p> {item.name}<p></p> {item.day}</td>
+                                                            return <>
+                                                                {
+                                                                    mark
+                                                                        ?
+                                                                        <ChangeName key={item.id} changeChild={changeChild} item={item}/>
+                                                                        :
+                                                                        <td className='grade-table-column-type'>{item.name}<p></p>{LessonType[item.type]}<p></p>  {item.day}</td>
+                                                                }
+                                                            </>
                                                         })
                                                     }
                                                 </>
                                             }
-                                            <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>Модуль 3</td>
+                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 3</td>
                                             {
                                                 subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
-                                                <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>Экзамен</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Экзамен</td>
                                             }
-                                            <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>Результат</td>
-                                            <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>Итог</td>
+                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Результат</td>
+                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Итог</td>
                                         </tr>
                                         {
                                             <>
@@ -396,6 +563,9 @@ const GradePage: FC = () => {
                                                         return <OneRowTable exam={exam}
                                                                             key={item.id}
                                                                             mark={mark}
+                                                                            changeChildMark={changeChildMark}
+                                                                            checkLek={checkLek}
+                                                                            checkSem={checkSem}
                                                                             checkAllAbsent={checkAllAbsent}
                                                                             absent={absent}
                                                                             name={item.name}
@@ -404,6 +574,7 @@ const GradePage: FC = () => {
                                                                             checkFirst={checkFirst}
                                                                             checkSecond={checkSecond}
                                                                             checkThird={checkThird}
+                                                                            checkTotal={checkTotal}
                                                                             studId={item.id}/>
                                                     })
                                                 }

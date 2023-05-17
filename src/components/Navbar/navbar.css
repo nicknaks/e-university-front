@@ -31,12 +31,12 @@
 
 .link-container {
     display: flex;
-    justify-content: space-between;
     width: 650px;
     margin-left: 50px;
 }
 
 .navbar-link {
+    margin-right: 50px;
     cursor: pointer;
     font-family: 'Gilroy-Bold', sans-serif;
     font-size: 20px;

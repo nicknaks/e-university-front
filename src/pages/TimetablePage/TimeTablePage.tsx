@@ -305,7 +305,6 @@ const TimeTablePage: FC = () => {
                 e.target.parentElement.parentElement.classList.add('head-of-list-active');
                 e.target.parentElement.parentElement.classList.remove('head-of-list-error')
                 e.target.parentElement.parentElement.nextElementSibling.classList.remove('header-list-hidden');
-                e.target.parentElement.parentElement.childNodes[0].classList.add('list-arrow-active');
 
                 return
             }
@@ -313,7 +312,6 @@ const TimeTablePage: FC = () => {
             if (e.target.parentElement.parentElement.nextElementSibling.classList.length === 1) {
                 e.target.parentElement.parentElement.classList.remove('head-of-list-active')
                 e.target.parentElement.parentElement.nextElementSibling.classList.add('header-list-hidden');
-                e.target.parentElement.parentElement.childNodes[0].classList.remove('list-arrow-active');
 
                 return
             }
@@ -326,7 +324,6 @@ const TimeTablePage: FC = () => {
                 e.target.parentElement.classList.add('head-of-list-active');
                 e.target.parentElement.classList.remove('head-of-list-error')
                 e.target.parentElement.nextElementSibling.classList.remove('header-list-hidden');
-                e.target.parentElement.childNodes[0].classList.add('list-arrow-active');
 
                 return
             }
@@ -334,7 +331,6 @@ const TimeTablePage: FC = () => {
             if (e.target.parentElement.nextElementSibling.classList.length === 1) {
                 e.target.parentElement.classList.remove('head-of-list-active')
                 e.target.parentElement.nextElementSibling.classList.add('header-list-hidden');
-                e.target.parentElement.childNodes[0].classList.remove('list-arrow-active');
 
                 return
             }
@@ -346,7 +342,6 @@ const TimeTablePage: FC = () => {
             e.target.classList.add('head-of-list-active');
             e.target.classList.remove('head-of-list-error')
             e.target.nextElementSibling.classList.remove('header-list-hidden');
-            e.target.childNodes[0].classList.add('list-arrow-active');
 
             return
         }
@@ -354,7 +349,6 @@ const TimeTablePage: FC = () => {
         if (e.target.nextElementSibling.classList.length === 1) {
             e.target.classList.remove('head-of-list-active')
             e.target.nextElementSibling.classList.add('header-list-hidden');
-            e.target.childNodes[0].classList.remove('list-arrow-active');
 
             return
         }
@@ -365,7 +359,6 @@ const TimeTablePage: FC = () => {
         if (e.target.classList[0] === 'list-element') {
             e.target.parentElement.previousElementSibling.classList.remove('head-of-list-active')
             e.target.parentElement.classList.add('header-list-hidden');
-            e.target.parentElement.previousElementSibling.childNodes[0].classList.remove('list-arrow-active');
             setOneTypeList(e.target.textContent);
 
             return
@@ -374,7 +367,6 @@ const TimeTablePage: FC = () => {
         if (e.target.classList[0] === 'fac-in-list') {
             e.target.parentElement.parentElement.previousElementSibling.classList.remove('head-of-list-active')
             e.target.parentElement.parentElement.classList.add('header-list-hidden');
-            e.target.parentElement.parentElement.previousElementSibling.childNodes[0].classList.remove('list-arrow-active');
             setOneTypeList(e.target.textContent);
 
             return;
@@ -383,7 +375,6 @@ const TimeTablePage: FC = () => {
         setOneTypeList(e.target.parentElement.textContent);
         e.target.parentElement.parentElement.parentElement.previousElementSibling.classList.remove('head-of-list-active')
         e.target.parentElement.parentElement.parentElement.classList.add('header-list-hidden');
-        e.target.parentElement.parentElement.parentElement.previousElementSibling.childNodes[0].classList.remove('list-arrow-active');
     }
 
     const saveType = (e) => {
@@ -439,6 +430,16 @@ const TimeTablePage: FC = () => {
         e.target.textContent = 'Добавить студента'
     }
 
+    const keySubmit = (e) => {
+        if (e.code === 'Enter' && studName !== '') {
+            dispatch(addStudents(studName, groupId));
+
+            setStudName('');
+            refStud.current.classList.add('open-list-fac-hidden');
+            e.target.textContent = 'Добавить студента'
+        }
+    }
+
     const changeStudInput = (value) => {
         setStudName(value);
 
@@ -479,7 +480,7 @@ const TimeTablePage: FC = () => {
                                         }
                                     </>
                                 }
-                                <input ref={refStud} placeholder='ФИО студента' type='text' value={studName} className='input-form-stud open-list-fac-hidden' onChange={(e) => changeStudInput(e.target.value)}/>
+                                <input onKeyDown={(e) => keySubmit(e)} ref={refStud} placeholder='ФИО студента' type='text' value={studName} className='input-form-stud open-list-fac-hidden' onChange={(e) => changeStudInput(e.target.value)}/>
                                 {
                                     me.type === 'ADMIN' &&
                                     <button ref={refBtnAddStud} style={{marginTop: 20, marginBottom: 30, width: '39%'}} onClick={(e) => addStudent(e)} className='btn-subj'>Добавить студента</button>
@@ -501,19 +502,25 @@ const TimeTablePage: FC = () => {
                                                     ?
                                                     <div className='subj-name'>{item.name}</div>
                                                     :
-                                                    <Link to={`/grade/${item.id}`} className='subj-name subj-link'>{item.name}</Link>
+                                                    <>
+                                                        {
+                                                            SubjectType[item.type] === 'Практика' || SubjectType[item.type] === 'К.Р.'
+                                                                ?
+                                                                <Link to={`/gradekr/${item.id}`} className='subj-name subj-link'>{item.name}</Link>
+                                                                :
+                                                                <Link to={`/grade/${item.id}`} className='subj-name subj-link'>{item.name}</Link>
+                                                        }
+                                                    </>
+
                                             }
                                             <div className='subj-teach'>{item.teacher.name}</div>
                                             <div className='subj-type'>{SubjectType[item.type]}</div>
                                             {
                                                 me.type === 'ADMIN' &&
                                                 <>
-                                                    <div ref={refChangeType} style={{width: '10%'}} className="open-list-fac open-list-fac-hidden">
-                                                        <div style={{height: '30px'}} onClick={openOneTypeUl} className='head-of-list'>
-                                                            <svg className='list-arrow' viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                                                                <path fill="#000000"
-                                                                      d="M104.704 338.752a64 64 0 0 1 90.496 0l316.8 316.8 316.8-316.8a64 64 0 0 1 90.496 90.496L557.248 791.296a64 64 0 0 1-90.496 0L104.704 429.248a64 64 0 0 1 0-90.496z"/>
-                                                            </svg>
+                                                    <div ref={refChangeType} style={{width: '11%'}} className="open-list-fac open-list-fac-hidden">
+                                                        <div style={{fontSize: 16, padding: 0, alignItems: 'center', justifyContent: 'center', height: '30px', borderRadius: '10px 10px 0 0'}} onClick={openOneTypeUl} className='head-of-list'>
+                                                            {oneTypeList}
                                                         </div>
                                                         <ul style={{zIndex: '13', top: '30px'}} className='header-list header-list-hidden'>
                                                             {

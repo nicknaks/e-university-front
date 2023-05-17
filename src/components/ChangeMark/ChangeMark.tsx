@@ -1,13 +1,12 @@
 import React, {FC, useState} from 'react';
 import {useAppDispatch} from "../../hooks/useAppDispatch";
-import {changeMark} from "../../store/actions/scheduleActions";
 
 interface ChangeMarkProps {
     item: any,
-    subId: string,
+    changeChildMark: (mark) => void
 }
 
-const ChangeMark: FC<ChangeMarkProps> = ({item, subId}) => {
+const ChangeMark: FC<ChangeMarkProps> = ({item, changeChildMark}) => {
     const [value, setValue] = useState(item.block[0].mark);
     const dispatch = useAppDispatch();
 
@@ -24,15 +23,43 @@ const ChangeMark: FC<ChangeMarkProps> = ({item, subId}) => {
     }
 
     const submit = () => {
-        if (value !== '') {
-            dispatch(changeMark(item.block[0].id, Number(value), subId))
+        if (value === item.block[0].mark || value === '') {
+            setValue('0')
+            return;
+        }
+
+        if (Number(value) === 0) {
+            return
+        }
+
+        changeChildMark({id: item.block[0].id, value})
+    }
+
+    const keySubmit = (e) => {
+        if (e.code === 'Enter') {
+            if (value === item.block[0].mark || value === '') {
+                setValue('0')
+                return;
+            }
+
+            if (Number(value) === 0) {
+                return
+            }
+
+            changeChildMark({id: item.block[0].id, value})
         }
     }
 
     return (
-        <td className='grade-table-column-type'>
-            <input onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
-        </td>
+        item.block[0].isAbsent
+            ?
+            <td style={{backgroundColor: 'lightgray'}} className='grade-table-column-type'>
+                <input onKeyDown={keySubmit} onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
+            </td>
+            :
+            <td className='grade-table-column-type'>
+                <input onKeyDown={keySubmit} onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
+            </td>
     );
 };
 

@@ -124,7 +124,7 @@ export const groupsListMag = (id, check) => {
                 headers: {"Content-Type": "application/json", },
                 data: {
                     "operationName": "fetchGroups",
-                    "query": `query fetchGroups { groups (filter: { departmentID: "${id}", isMagistracy: ${check} }) { id number course students { id name login number } } }`,
+                    "query": `query fetchGroups { groups (filter: { departmentID: "${id}", isMagistracy: ${check} }) { id number course students { id name groupId } } }`,
                 }
             });
 

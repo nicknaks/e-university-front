@@ -543,6 +543,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
         document.body.style.overflowY = 'visible';
         e.preventDefault();
 
+        setName('');
+        setCheckSecond(false);
+        setTeachList('Выберите предмет')
+        setTypeList('Выберите тип предмета')
         refPopUp.current.classList.remove('popUp-container-active');
         refPopUpBody.current.classList.remove('popUp-active');
     }
@@ -697,6 +701,7 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
         changeTimeTable(e)
 
         setName('');
+        setCheckSecond(false);
         setTeachList('Выберите предмет')
         setTypeList('Выберите тип предмета')
 

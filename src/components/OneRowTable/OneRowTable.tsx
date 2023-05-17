@@ -12,15 +12,19 @@ interface OneRowTableProps {
     classes: Array<Class>,
     name: string,
     absent: boolean,
+    changeChildMark: (mark) => void;
     mark: boolean,
     exam: boolean,
     checkFirst: boolean,
     checkSecond: boolean,
     checkThird: boolean,
+    checkTotal: boolean,
+    checkLek: boolean,
+    checkSem: boolean,
     checkAllAbsent: (id, double) => void,
 }
 
-const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond, exam, mark, checkAllAbsent, absent, name, classes, studId, subId}) => {
+const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem, checkTotal, checkThird, checkFirst, checkSecond, exam, mark, checkAllAbsent, absent, name, classes, studId, subId}) => {
     const {subjectResults} = useAppSelector(state => state.schedule);
     const dispatch = useAppDispatch();
 
@@ -42,6 +46,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
                 });
 
                 return {
+                    type: item.type,
                     id: item.id,
                     module: item.module,
                     block: block
@@ -73,7 +78,6 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
             if (oneClass.length !== 0) {
                 oneClass.forEach((item) => {
                     if (item.module === 1) {
-
                         setModule1(prevState => [...prevState, item])
                     }
                     if (item.module === 2) {
@@ -119,7 +123,51 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
             setModule2([])
             setModule1([])
         }
-    }, [checkThird, checkFirst, checkSecond])
+        if (checkTotal) {
+            setModule2([])
+            setModule1([])
+            setModule3([])
+        }
+        if (checkLek) {
+            setModule2(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'лек' && item.module === 2) {
+                    return item
+                }
+            }))
+            setModule3(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'лек' && item.module === 3) {
+                    return item
+                }
+            }))
+            setModule1(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'лек' && item.module === 1) {
+
+                    return item
+                }
+            }))
+
+            return;
+        }
+        if (checkSem) {
+            setModule2(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'сем' && item.module === 2) {
+                    return item
+                }
+            }))
+            setModule3(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'сем' && item.module === 3) {
+                    return item
+                }
+            }))
+            setModule1(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'сем' && item.module === 1) {
+                    return item
+                }
+            }))
+
+            return;
+        }
+    }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
 
     const changeValue = (value) => {
         if (value === '') {
@@ -134,7 +182,29 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
     }
 
     const submit = () => {
-        if (value !== '') {
+        if (value === '' || Number(value) < 18) {
+            setValue('0')
+            return;
+        }
+
+        if (Number(value) === 0) {
+            return
+        }
+
+        dispatch(changeExam(subRes[0].id, Number(value), subId))
+    }
+
+    const keySubmit = (e) => {
+        if (e.code === 'Enter') {
+            if (value === '' || Number(value) < 18) {
+                setValue('0')
+                return;
+            }
+
+            if (Number(value) === 0) {
+                return
+            }
+
             dispatch(changeExam(subRes[0].id, Number(value), subId))
         }
     }
@@ -154,7 +224,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
                                 }
                                 {
                                     mark &&
-                                        <ChangeMark subId={subId} key={item.id} item={item}/>
+                                        <ChangeMark changeChildMark={changeChildMark} key={item.id} item={item}/>
                                 }
                                 {
                                     !mark && !absent &&
@@ -177,7 +247,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>{subRes[0].firstModuleMark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].firstModuleMark}</td>
                 </>
             }
             {
@@ -192,7 +262,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
                                 }
                                 {
                                     mark &&
-                                    <ChangeMark subId={subId} key={item.id} item={item}/>
+                                    <ChangeMark changeChildMark={changeChildMark} key={item.id} item={item}/>
                                 }
                                 {
                                     !mark && !absent &&
@@ -215,7 +285,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>{subRes[0].secondModuleMark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].secondModuleMark}</td>
                 </>
             }
             {
@@ -230,7 +300,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
                                 }
                                 {
                                     mark &&
-                                    <ChangeMark subId={subId} key={item.id} item={item}/>
+                                    <ChangeMark changeChildMark={changeChildMark} key={item.id} item={item}/>
                                 }
                                 {
                                     !mark && !absent &&
@@ -253,7 +323,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>{subRes[0].thirdModuleMark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].thirdModuleMark}</td>
                 </>
             }
             {
@@ -266,10 +336,10 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
                                     exam
                                         ?
                                         <td className='grade-table-column-type'>
-                                            <input onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
+                                            <input onKeyDown={keySubmit} style={{fontSize: 18}} onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
                                         </td>
                                         :
-                                        <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>{subRes[0].examResult}</td>
+                                        <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].examResult}</td>
                                 }
                             </>
                     }
@@ -278,56 +348,56 @@ const OneRowTable: FC<OneRowTableProps> = ({checkThird, checkFirst, checkSecond,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold'}} className='grade-table-column-type'>{subRes[0].mark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].mark}</td>
                 </>
             }
             {
                 subRes.length !== 0 &&
                 <>
                     {
-                        subRes[0].mark < 60 &&
+                        ((subRes[0].mark < 60) || (subRes[0].firstModuleMark < 18 || subRes[0].secondModuleMark < 18 || subRes[0].thirdModuleMark < 18)) &&
                             <>
 
                                 {
                                     SubjectType[subjectResults[0].subject[0].type] === 'Экзамен'
                                         ?
-                                        <td style={{fontWeight: 'bold', color: 'red'}} className='grade-table-column-type'>2</td>
+                                        <td style={{fontWeight: 'bold', color: 'red', fontSize: 18}} className='grade-table-column-type'>2</td>
                                         :
                                         <td style={{fontWeight: 'bold', color: 'red'}} className='grade-table-column-type'>Незачет</td>
                                 }
                             </>
                     }
                     {
-                        subRes[0].mark > 59 && subRes[0].mark < 71 &&
+                        (subRes[0].mark > 59 && subRes[0].mark < 71) && (subRes[0].firstModuleMark >= 18 && subRes[0].secondModuleMark >= 18 && subRes[0].thirdModuleMark >= 18) &&
                         <>
                             {
                                 SubjectType[subRes[0].subject[0].type] === 'Экзамен'
                                     ?
-                                    <td style={{fontWeight: 'bold', color: '#FFB74D'}} className='grade-table-column-type'>3</td>
+                                    <td style={{fontWeight: 'bold', color: '#FFB74D', fontSize: 18}} className='grade-table-column-type'>3</td>
                                     :
                                     <td style={{fontWeight: 'bold', color: '#388E3C'}} className='grade-table-column-type'>Зачет</td>
                             }
                         </>
                     }
                     {
-                        subRes[0].mark > 70 && subRes[0].mark < 85 &&
+                        (subRes[0].mark > 70 && subRes[0].mark < 85) && (subRes[0].firstModuleMark >= 18 && subRes[0].secondModuleMark >= 18 && subRes[0].thirdModuleMark >= 18) &&
                         <>
                             {
                                 SubjectType[subRes[0].subject[0].type] === 'Экзамен'
                                     ?
-                                    <td style={{fontWeight: 'bold', color: '#7CB342'}} className='grade-table-column-type'>4</td>
+                                    <td style={{fontWeight: 'bold', color: '#7CB342', fontSize: 18}} className='grade-table-column-type'>4</td>
                                     :
                                     <td style={{fontWeight: 'bold', color: '#388E3C'}} className='grade-table-column-type'>Зачет</td>
                             }
                         </>
                     }
                     {
-                        subRes[0].mark > 84 &&
+                        (subRes[0].mark > 84) && (subRes[0].firstModuleMark >= 18 && subRes[0].secondModuleMark >= 18 && subRes[0].thirdModuleMark >= 18) &&
                         <>
                             {
                                 SubjectType[subRes[0].subject[0].type] === 'Экзамен'
                                     ?
-                                    <td style={{fontWeight: 'bold', color: '#388E3C'}} className='grade-table-column-type'>5</td>
+                                    <td style={{fontWeight: 'bold', color: '#388E3C', fontSize: 18}} className='grade-table-column-type'>5</td>
                                     :
                                     <td style={{fontWeight: 'bold', color: '#388E3C'}} className='grade-table-column-type'>Зачет</td>
                             }

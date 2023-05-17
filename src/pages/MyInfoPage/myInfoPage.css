@@ -18,7 +18,7 @@
 
 .subj-type {
     opacity: 1;
-    width: 10%;
+    width: 11%;
     padding-left: 10px;
     font-size: 16px;
     font-style: oblique;
@@ -27,7 +27,7 @@
 .subj-name {
     color: var(--fontColor);
     text-decoration: none;
-    width: 70%;
+    width: 68%;
     font-size: 18px;
 }
 

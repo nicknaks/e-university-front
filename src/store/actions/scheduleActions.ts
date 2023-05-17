@@ -453,7 +453,7 @@ export const getSubjectsResult = (id) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjectsResult",
-                    "query": `query fetchSubjectsResult{ subjectResults(filter:{studentID:"${id}"}){ studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total }}`,
+                    "query": `query fetchSubjectsResult{ subjectResults(filter:{studentID:"${id}"}){ studentID subjectID subject{ id name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total }}`,
                 },
                 withCredentials: true,
             });
@@ -683,7 +683,7 @@ export const changeAbsentFalseAction = (ids, id) => {
     }
 }
 
-export const changeMark = (id, mark, subId) => {
+export const changeMarkAction = (id, mark, subId) => {
     return async (dispatch) => {
         try {
             dispatch(scheduleActionLoading(true));
@@ -761,6 +761,117 @@ export const changeExam = (id, exam, subId) => {
             if (res.data.data.classes !== null) {
                 dispatch(scheduleActionClasses(res.data.data.classes))
             }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const changeName = (id, name, subId) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { classNameSet(input:{classID:"${id}", name:"${name}"}){ id groupID subjectID day module name comment type studentProgress{ id isAbsent mark studentID }}}`,
+                },
+                withCredentials: true
+            });
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchClasses",
+                    "query": `query fetchClasses{ classes(filter:{subjectID:"${subId}"}){ id groupID subjectID day module name comment type studentProgress{ id isAbsent mark studentID }} }`,
+                },
+                withCredentials: true,
+            });
+
+            dispatch(scheduleActionClassesNull([]));
+
+            if (res.data.data.classes !== null) {
+                dispatch(scheduleActionClasses(res.data.data.classes))
+            }
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const changeTotal = (id, total, subId) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { totalMarkSet(input:{subjectResultID:"${id}", totalMark:${total}}) { id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult}}`,
+                },
+                withCredentials: true
+            });
+
+            dispatch(getOneSubjectsResult(1, subId))
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const changeProgressAction = (id, first, second, third, subId) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const add = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    query: `mutation { subjectResultSet(input:{subjectResultID:"${id}", firstModuleMark:${first}, secondModuleMark: ${second}, thirdModuleMark: ${third}}) { id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult}}`,
+                },
+                withCredentials: true
+            });
+
+            dispatch(getOneSubjectsResult(1, subId))
 
             return true
         } catch (error) {

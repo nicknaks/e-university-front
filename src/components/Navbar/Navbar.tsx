@@ -28,7 +28,6 @@ const Navbar: FC = () => {
     useEffect(() => {
         if (loc.pathname === '/groups') {
             refFirst.current.classList.add('navbar-link-active');
-            refSecond.current.classList.remove('navbar-link-active');
             refThird.current.classList.remove('navbar-link-active');
 
             return;
@@ -36,7 +35,6 @@ const Navbar: FC = () => {
 
         if (loc.pathname === '/teachers') {
             refThird.current.classList.add('navbar-link-active');
-            refSecond.current.classList.remove('navbar-link-active');
             refFirst.current.classList.remove('navbar-link-active');
 
             return;
@@ -44,7 +42,6 @@ const Navbar: FC = () => {
 
         refFirst.current.classList.remove('navbar-link-active');
         refThird.current.classList.remove('navbar-link-active');
-        refSecond.current.classList.remove('navbar-link-active');
     }, [loc.pathname])
 
     useEffect(() => {
@@ -134,7 +131,6 @@ const Navbar: FC = () => {
                 <div className="navbar-br"></div>
                 <div className='link-container'>
                     <Link to='/groups' onClick={clear} ref={refFirst} className='navbar-link'>Раписание занятий</Link>
-                    <Link to='/' ref={refSecond} className='navbar-link'>Успеваемость студентов</Link>
                     <Link to='/teachers' ref={refThird} className='navbar-link'>Преподаватели</Link>
                 </div>
                 {

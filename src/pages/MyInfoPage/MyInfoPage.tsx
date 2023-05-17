@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useAppDispatch} from "../../hooks/useAppDispatch";
 import {isLogin} from "../../store/actions/authActions";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {getMySchedule, getSubjects, getSubjectsResult} from "../../store/actions/scheduleActions";
 import {useAppSelector} from "../../hooks/useAppSelector";
 import './myInfoPage.css'
@@ -128,10 +128,63 @@ const MyInfoPage: FC = () => {
                             {
                                 subjectResults.map((item) => {
                                     return <div className='subj-row'>
-                                        <div className='subj-name'>{item.subject[0].name}</div>
+                                        {
+                                            SubjectType[item.subject[0].type] === 'К.Р.' || SubjectType[item.subject[0].type] === 'Практика'
+                                                ?
+                                                <Link to={`/gradekr/${item.subject[0].id}`} className='subj-name subj-link'>{item.subject[0].name}</Link>
+                                                :
+                                                <Link to={`/grade/${item.subject[0].id}`} className='subj-name subj-link'>{item.subject[0].name}</Link>
+                                        }
                                         <div className='subj-teach'>{item.subject[0].teacher.name}</div>
-                                        <div style={{paddingLeft: 10, width: '15%'}} className='subj-group'>{item.subject[0].group.number}</div>
                                         <div className='subj-type'>{SubjectType[item.subject[0].type]}</div>
+                                        {
+                                            item.mark < 60 && (item.firstModuleMark < 18 || item.secondModuleMark < 18 || item.thirdModuleMark < 18) &&
+                                            <>
+                                                {
+                                                    SubjectType[item.subject[0].type] === 'Зачет'
+                                                        ?
+                                                            <div style={{color: 'red'}} className='subj-group'>Незачет</div>
+                                                        :
+                                                            <div style={{color: 'red'}} className='subj-group'>2</div>
+                                                }
+                                            </>
+                                        }
+                                        {
+                                            (item.mark >= 60 && item.mark <= 70) && (item.firstModuleMark >= 18 && item.secondModuleMark >= 18 && item.thirdModuleMark >= 18) &&
+                                            <>
+                                                {
+                                                    SubjectType[item.subject[0].type] === 'Зачет'
+                                                        ?
+                                                        <div style={{color: '#388E3C'}} className='subj-group'>Зачет</div>
+                                                        :
+                                                        <div style={{color: '#FFB74D'}} className='subj-group'>3</div>
+                                                }
+                                            </>
+                                        }
+                                        {
+                                            (item.mark >= 71 && item.mark <= 84) && (item.firstModuleMark >= 18 && item.secondModuleMark >= 18 && item.thirdModuleMark >= 18) &&
+                                            <>
+                                                {
+                                                    SubjectType[item.subject[0].type] === 'Зачет'
+                                                        ?
+                                                        <div style={{color: '#388E3C'}} className='subj-group'>Зачет</div>
+                                                        :
+                                                        <div style={{color: '#7CB342'}} className='subj-group'>4</div>
+                                                }
+                                            </>
+                                        }
+                                        {
+                                            (item.mark >= 85) && (item.firstModuleMark >= 18 && item.secondModuleMark >= 18 && item.thirdModuleMark >= 18) &&
+                                            <>
+                                                {
+                                                    SubjectType[item.subject[0].type] === 'Зачет'
+                                                        ?
+                                                        <div style={{color: '#388E3C'}} className='subj-group'>Зачет</div>
+                                                        :
+                                                        <div style={{color: '#388E3C'}} className='subj-group'>5</div>
+                                                }
+                                            </>
+                                        }
                                     </div>
                                 })
                             }
