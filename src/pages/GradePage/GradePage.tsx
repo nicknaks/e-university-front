@@ -80,7 +80,7 @@ const GradePage: FC = () => {
     useEffect(() => {
 
         if ((module1.length === 0 && module2.length === 0 && module3.length === 0)) {
-            console.log(classes)
+
             if (classes.length !== 0) {
 
                 setTempClasses(classes);
@@ -128,6 +128,32 @@ const GradePage: FC = () => {
         }
 
         if (checkFirst) {
+            if (checkLek) {
+                debugger
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 1 && LessonType[item.type] === 'лек') {
+                        return item
+                    }
+                }));
+                console.log(tempClasses)
+                setModule2([])
+                setModule3([])
+
+                return;
+            }
+
+            if (checkSem) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 1 && LessonType[item.type] === 'сем') {
+                        return item
+                    }
+                }));
+                setModule2([])
+                setModule3([])
+
+                return;
+            }
+
             setTempClasses(classes.filter((item) => {
                 if (item.module === 1) {
                     return item
@@ -139,6 +165,30 @@ const GradePage: FC = () => {
             return
         }
         if (checkSecond) {
+            if (checkLek) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 2 && LessonType[item.type] === 'лек') {
+                        return item
+                    }
+                }));
+                setModule1([])
+                setModule3([])
+
+                return;
+            }
+
+            if (checkSem) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 2 && LessonType[item.type] === 'сем') {
+                        return item
+                    }
+                }));
+                setModule1([])
+                setModule3([])
+
+                return;
+            }
+
             setTempClasses(classes.filter((item) => {
                 if (item.module === 2) {
                     return item
@@ -150,6 +200,30 @@ const GradePage: FC = () => {
             return;
         }
         if (checkThird) {
+            if (checkLek) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 3 && LessonType[item.type] === 'лек') {
+                        return item
+                    }
+                }));
+                setModule2([])
+                setModule1([])
+
+                return;
+            }
+
+            if (checkSem) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 3 && LessonType[item.type] === 'сем') {
+                        return item
+                    }
+                }));
+                setModule2([])
+                setModule1([])
+
+                return;
+            }
+
             setTempClasses(classes.filter((item) => {
                 if (item.module === 3) {
                     return item
@@ -160,6 +234,7 @@ const GradePage: FC = () => {
 
             return;
         }
+
         if (checkTotal) {
             setTempClasses([])
             setModule2([])
@@ -168,6 +243,7 @@ const GradePage: FC = () => {
 
             return;
         }
+
         if (checkLek) {
             setTempClasses(classes.filter((item) => {
                 if (LessonType[item.type] === 'лек') {
@@ -217,6 +293,8 @@ const GradePage: FC = () => {
             return;
         }
     }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
+
+    console.log(tempClasses)
 
     const changeAbsent = (e) => {
         if (e.target.textContent === 'Режим проставления пропусков' && !mark) {
@@ -318,7 +396,7 @@ const GradePage: FC = () => {
     }
 
     const changeFirstCheck = (e) => {
-        if (checkThird || checkSecond || checkLek || checkSem || checkTotal || exam || absent || mark) {
+        if (checkThird || checkSecond || checkTotal || exam || absent || mark) {
             return
         }
 
@@ -326,7 +404,7 @@ const GradePage: FC = () => {
     }
 
     const changeSecondCheck = (e) => {
-        if (checkFirst || checkThird || checkLek || checkSem || checkTotal || exam || absent || mark) {
+        if (checkFirst || checkThird || checkTotal || exam || absent || mark) {
             return
         }
 
@@ -334,7 +412,7 @@ const GradePage: FC = () => {
     }
 
     const changeThirdCheck = (e) => {
-        if (checkFirst || checkSecond || checkLek || checkSem || checkTotal || exam || absent || mark) {
+        if (checkFirst || checkSecond || checkTotal || exam || absent || mark) {
             return
         }
 
@@ -350,7 +428,7 @@ const GradePage: FC = () => {
     }
 
     const changeLekCheck = (e) => {
-        if (checkFirst || checkThird || checkSecond || checkTotal || checkSem || exam || absent || mark) {
+        if (checkTotal || checkSem || exam || absent || mark) {
             return
         }
 
@@ -358,7 +436,7 @@ const GradePage: FC = () => {
     }
 
     const changeSemCheck = (e) => {
-        if (checkFirst || checkThird || checkSecond || checkTotal || checkLek || exam || absent || mark) {
+        if (checkTotal || checkLek || exam || absent || mark) {
             return
         }
 
@@ -503,7 +581,7 @@ const GradePage: FC = () => {
                                                                         ?
                                                                         <ChangeName key={item.id} changeChild={changeChild} item={item}/>
                                                                         :
-                                                                        <td className='grade-table-column-type'> {item.name}<p></p> {LessonType[item.type]}<p></p>{item.day}</td>
+                                                                            <td className='grade-table-column-type'> <span style={{fontWeight: 'bold'}}>{item.name}</span><p></p> {LessonType[item.type]}<p></p>{item.day}</td>
                                                                     }
                                                                 </>
                                                         })

@@ -112,14 +112,92 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
         }
 
         if (checkFirst) {
+            if (checkLek) {
+                setModule1(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'лек' && item.module === 1) {
+
+                        return item
+                    }
+                }))
+                setModule2([])
+                setModule3([])
+
+                return;
+            }
+
+            if (checkSem) {
+                setModule1(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'сем' && item.module === 1) {
+
+                        return item
+                    }
+                }))
+                setModule2([])
+                setModule3([])
+
+                return;
+            }
+
             setModule2([])
             setModule3([])
         }
         if (checkSecond) {
+            if (checkLek) {
+                setModule2(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'лек' && item.module === 2) {
+
+                        return item
+                    }
+                }))
+                setModule1([])
+                setModule3([])
+
+                return;
+            }
+
+            if (checkSem) {
+                setModule2(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'сем' && item.module === 2) {
+
+                        return item
+                    }
+                }))
+                setModule1([])
+                setModule3([])
+
+                return;
+            }
+
             setModule1([])
             setModule3([])
         }
         if (checkThird) {
+            if (checkLek) {
+                setModule3(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'лек' && item.module === 3) {
+
+                        return item
+                    }
+                }))
+                setModule2([])
+                setModule1([])
+
+                return;
+            }
+
+            if (checkSem) {
+                setModule3(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'сем' && item.module === 3) {
+
+                        return item
+                    }
+                }))
+                setModule2([])
+                setModule1([])
+
+                return;
+            }
+
             setModule2([])
             setModule1([])
         }
@@ -168,6 +246,8 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
             return;
         }
     }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
+
+    console.log(module1)
 
     const changeValue = (value) => {
         if (value === '') {
