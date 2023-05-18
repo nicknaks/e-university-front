@@ -62,6 +62,10 @@ const TimeTablePage: FC = () => {
     const [subjId, setSubjId] = useState('');
     const [change, setChange] = useState(false);
 
+    const [tableId, setTableId] = useState('')
+
+    console.log(schedule)
+
     useEffect(() => {
         document.getElementsByTagName('title')[0].innerText = 'Расписание группы'
         const id = window.location.pathname.slice(10);
@@ -69,6 +73,7 @@ const TimeTablePage: FC = () => {
         dispatch(getSchedule(id)).then((res) => {
             if (!res) {
                 setTeach(true);
+                setTableId(id)
                 dispatch(getScheduleTeacher(id))
             }
         });
@@ -561,7 +566,18 @@ const TimeTablePage: FC = () => {
                         {
                             teach ?
                                 <>
-                                    Расписание преподавателя {schedule[0].teacher.name}
+                                    {
+                                        tableId === schedule[0].addTeacherID
+                                            ?
+                                            <>
+                                                Расписание преподавателя {schedule[0].addTeacher.name}
+                                            </>
+                                            :
+                                            <>
+                                                Расписание преподавателя {schedule[0].teacher.name}
+                                            </>
+                                    }
+
                                 </>
                                 :
                                 <>

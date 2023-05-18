@@ -634,7 +634,7 @@ const GradePage: FC = () => {
                                                                     {
                                                                         mark
                                                                         ?
-                                                                        <ChangeName key={item.id} changeChild={changeChild} item={item}/>
+                                                                        <ChangeName key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
                                                                         :
                                                                             <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
                                                                     }
@@ -653,9 +653,9 @@ const GradePage: FC = () => {
                                                                 {
                                                                     mark
                                                                         ?
-                                                                        <ChangeName key={item.id} changeChild={changeChild} item={item}/>
+                                                                        <ChangeName key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
                                                                         :
-                                                                        <td className='grade-table-column-type'> {item.name}<p></p> {LessonType[item.type]}<p></p>{item.day}</td>
+                                                                        <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
                                                                 }
                                                             </>
                                                         })
@@ -672,9 +672,9 @@ const GradePage: FC = () => {
                                                                 {
                                                                     mark
                                                                         ?
-                                                                        <ChangeName key={item.id} changeChild={changeChild} item={item}/>
+                                                                        <ChangeName key={item.id} date={item.day} changeChild={changeChild} item={item}/>
                                                                         :
-                                                                        <td className='grade-table-column-type'>{item.name}<p></p>{LessonType[item.type]}<p></p>  {item.day}</td>
+                                                                        <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
                                                                 }
                                                             </>
                                                         })
