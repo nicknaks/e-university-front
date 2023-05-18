@@ -25,7 +25,7 @@ export const getSchedule = (id) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSchedule",
-                    "query": `query fetchSchedule{ schedule (filter: {groupID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
+                        "query": `query fetchSchedule{ schedule (filter: {groupID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type addTeacherID addTeacher{id name}}}`,
                 }
             });
 
@@ -63,7 +63,7 @@ export const getScheduleTeacher = (id) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSchedule",
-                    "query": `query fetchSchedule{ schedule (filter: {teacherID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
+                    "query": `query fetchSchedule{ schedule (filter: {teacherID:"${id}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type addTeacherID addTeacher{id name}}}`,
                 }
             });
 
@@ -102,7 +102,7 @@ export const getMySchedule = () => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchMySchedule",
-                    "query": `query fetchMySchedule{ mySchedule{id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
+                    "query": `query fetchMySchedule{ mySchedule{id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type addTeacherID addTeacher{id name}}}`,
                 },
                 withCredentials: true,
             });
@@ -169,7 +169,7 @@ export const getSubjects = (id) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
-                    "query": `query fetchSubjects{ subjects (filter:{teacherID:"${id}"}) { id group{ id number } teacher{ name } name type}}`,
+                    "query": `query fetchSubjects{ subjects (filter:{teacherID:"${id}"}) { id group{ id number } teacher{ id name } name type addTeacherID addTeacher{id name}}}`,
                 },
                 withCredentials: true,
             });
@@ -216,7 +216,7 @@ export const addSubjects = (name, groupId, teacherId, type) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
-                    "query": `query fetchSubjects{ subjects (filter:{groupID:"${groupId}"}) { id group{ number } teacher{ name } name type}}`,
+                    "query": `query fetchSubjects{ subjects (filter:{groupID:"${groupId}"}) { id group{ number } teacher{ id name } name type addTeacherID addTeacher{id name}}}`,
                 },
                 withCredentials: true,
             });
@@ -264,7 +264,7 @@ export const changeTypeSubjects = (id, groupId, type) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
-                    "query": `query fetchSubjects{ subjects (filter:{groupID:"${groupId}"}) { id group{ number } teacher{ name } name type}}`,
+                    "query": `query fetchSubjects{ subjects (filter:{groupID:"${groupId}"}) { id group{ number } teacher{ id name } name type addTeacherID addTeacher{id name}}}`,
                 },
                 withCredentials: true,
             });
@@ -317,7 +317,7 @@ export const addLesson = (id, type, couple, day, isDen, isNum, cab, groupId) => 
                     headers: {"Content-Type": "application/json",},
                     data: {
                         "operationName": "fetchSchedule",
-                        "query": `query fetchSchedule{ schedule (filter: {groupID:"${groupId}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type }}`,
+                        "query": `query fetchSchedule{ schedule (filter: {groupID:"${groupId}"}) {id name couple cabinet groupID teacherID name subjectID isNumerator isDenominator day group{number} teacher{name} type addTeacherID addTeacher{id name}}}`,
                     }
                 });
 
@@ -343,7 +343,7 @@ export const getGroupSubjects = (id) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjects",
-                    "query": `query fetchSubjects{ subjects (filter:{groupID:"${id}"}) { id group{ number } teacher{ name } name type}}`,
+                    "query": `query fetchSubjects{ subjects (filter:{groupID:"${id}"}) { id group{ number } teacher{ id name } name type addTeacherID addTeacher{id name}}}`,
                 },
                 withCredentials: true,
             });
@@ -453,7 +453,7 @@ export const getSubjectsResult = (id) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjectsResult",
-                    "query": `query fetchSubjectsResult{ subjectResults(filter:{studentID:"${id}"}){ studentID subjectID subject{ id name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total }}`,
+                    "query": `query fetchSubjectsResult{ subjectResults(filter:{studentID:"${id}"}){ studentID subjectID subject{ id name teacherID type group {number} teacher{ id name } } firstModuleMark secondModuleMark thirdModuleMark mark total countAbsent}}`,
                 },
                 withCredentials: true,
             });
@@ -490,7 +490,7 @@ export const getOneSubjectsResult = (id, subId) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjectsResult",
-                    "query": `query fetchSubjectsResult{ subjectResults(filter:{subjectID: "${subId}"}){ id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult}}`,
+                    "query": `query fetchSubjectsResult{ subjectResults(filter:{subjectID: "${subId}"}){ id studentID subjectID subject{ name teacherID type group {number} teacher{id name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult countAbsent}}`,
                 },
                 withCredentials: true,
             });
@@ -527,7 +527,7 @@ export const getOneSubjects = (id) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubject",
-                    "query": `query fetchSubject{ subjects (filter:{ID:"${id}"}) { id group{ id number } teacher{ name } name type}}`,
+                    "query": `query fetchSubject{ subjects (filter:{ID:"${id}"}) { id group{ id number } teacher{ id name } name type addTeacherID addTeacher{id name}}}`,
                 },
                 withCredentials: true,
             });
@@ -740,7 +740,7 @@ export const changeExam = (id, exam, subId) => {
                 method: 'post',
                 headers: {"Content-Type": "application/json",},
                 data: {
-                    query: `mutation { examResultSet(input:{examResultID:"${id}", mark:${exam}}){ id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult} }`,
+                    query: `mutation { examResultSet(input:{examResultID:"${id}", mark:${exam}}){ id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult countAbsent} }`,
                 },
                 withCredentials: true
             });
@@ -834,7 +834,7 @@ export const changeTotal = (id, total, subId) => {
                 method: 'post',
                 headers: {"Content-Type": "application/json",},
                 data: {
-                    query: `mutation { totalMarkSet(input:{subjectResultID:"${id}", totalMark:${total}}) { id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult}}`,
+                    query: `mutation { totalMarkSet(input:{subjectResultID:"${id}", totalMark:${total}}) { id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult countAbsent}}`,
                 },
                 withCredentials: true
             });
@@ -866,7 +866,7 @@ export const changeProgressAction = (id, first, second, third, subId) => {
                 method: 'post',
                 headers: {"Content-Type": "application/json",},
                 data: {
-                    query: `mutation { subjectResultSet(input:{subjectResultID:"${id}", firstModuleMark:${first}, secondModuleMark: ${second}, thirdModuleMark: ${third}}) { id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult}}`,
+                    query: `mutation { subjectResultSet(input:{subjectResultID:"${id}", firstModuleMark:${first}, secondModuleMark: ${second}, thirdModuleMark: ${third}}) { id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult countAbsent}}`,
                 },
                 withCredentials: true
             });

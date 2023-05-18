@@ -13,7 +13,6 @@ import {
 } from "../../store/actions/scheduleActions";
 import {LessonType, SubjectType} from "../../store/reducers/sheduleReducer/types";
 import OneRowTable from "../../components/OneRowTable/OneRowTable";
-import {scheduleActionClassesNull} from "../../store/reducers/sheduleReducer/sheduleReducer";
 import ChangeName from "../../components/changeName/ChangeName";
 
 const GradePage: FC = () => {
@@ -67,7 +66,7 @@ const GradePage: FC = () => {
         dispatch(getClasses(id));
 
         return () => {
-            dispatch(scheduleActionClassesNull([]));
+            //dispatch(scheduleActionClassesNull([]));
         }
     }, [me])
 
@@ -79,10 +78,9 @@ const GradePage: FC = () => {
 
     useEffect(() => {
 
-        if ((module1.length === 0 && module2.length === 0 && module3.length === 0)) {
+        if ((module1.length === 0 && module2.length === 0 && module3.length === 0) || (classes[0].type !== tempClasses[0].type) || (classes.length !== tempClasses.length)) {
 
             if (classes.length !== 0) {
-
                 setTempClasses(classes);
 
                 setModule1(classes.filter((item) => {
@@ -129,13 +127,17 @@ const GradePage: FC = () => {
 
         if (checkFirst) {
             if (checkLek) {
-                debugger
                 setTempClasses(classes.filter((item) => {
                     if (item.module === 1 && LessonType[item.type] === 'лек') {
                         return item
                     }
                 }));
-                console.log(tempClasses)
+                setModule1(classes.filter((item) => {
+                    if (LessonType[item.type] === 'лек' && item.module === 1) {
+                        return item
+                    }
+                }))
+
                 setModule2([])
                 setModule3([])
 
@@ -148,6 +150,12 @@ const GradePage: FC = () => {
                         return item
                     }
                 }));
+                setModule1(classes.filter((item) => {
+                    if (LessonType[item.type] === 'сем' && item.module === 1) {
+                        return item
+                    }
+                }))
+
                 setModule2([])
                 setModule3([])
 
@@ -159,6 +167,11 @@ const GradePage: FC = () => {
                     return item
                 }
             }));
+            setModule1(classes.filter((item) => {
+                if (item.module === 1) {
+                    return item
+                }
+            }))
             setModule2([])
             setModule3([])
 
@@ -171,6 +184,12 @@ const GradePage: FC = () => {
                         return item
                     }
                 }));
+                setModule2(classes.filter((item) => {
+                    if (LessonType[item.type] === 'лек' && item.module === 2) {
+                        return item
+                    }
+                }))
+
                 setModule1([])
                 setModule3([])
 
@@ -183,6 +202,12 @@ const GradePage: FC = () => {
                         return item
                     }
                 }));
+                setModule2(classes.filter((item) => {
+                    if (LessonType[item.type] === 'сем' && item.module === 2) {
+                        return item
+                    }
+                }))
+
                 setModule1([])
                 setModule3([])
 
@@ -190,6 +215,11 @@ const GradePage: FC = () => {
             }
 
             setTempClasses(classes.filter((item) => {
+                if (item.module === 2) {
+                    return item
+                }
+            }))
+            setModule2(classes.filter((item) => {
                 if (item.module === 2) {
                     return item
                 }
@@ -206,6 +236,12 @@ const GradePage: FC = () => {
                         return item
                     }
                 }));
+                setModule3(classes.filter((item) => {
+                    if (LessonType[item.type] === 'лек' && item.module === 3) {
+                        return item
+                    }
+                }))
+
                 setModule2([])
                 setModule1([])
 
@@ -218,6 +254,12 @@ const GradePage: FC = () => {
                         return item
                     }
                 }));
+                setModule3(classes.filter((item) => {
+                    if (LessonType[item.type] === 'сем' && item.module === 3) {
+                        return item
+                    }
+                }))
+
                 setModule2([])
                 setModule1([])
 
@@ -225,6 +267,11 @@ const GradePage: FC = () => {
             }
 
             setTempClasses(classes.filter((item) => {
+                if (item.module === 3) {
+                    return item
+                }
+            }))
+            setModule3(classes.filter((item) => {
                 if (item.module === 3) {
                     return item
                 }
@@ -294,8 +341,6 @@ const GradePage: FC = () => {
         }
     }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
 
-    console.log(tempClasses)
-
     const changeAbsent = (e) => {
         if (e.target.textContent === 'Режим проставления пропусков' && !mark) {
             markBtn.current.classList.add('check-btn');
@@ -355,7 +400,7 @@ const GradePage: FC = () => {
     }
 
     const changeMark = (e) => {
-        if (e.target.textContent === 'Режим проставления оценок' && !absent) {
+        if (e.target.textContent === 'Режим редактирования' && !absent) {
             setMark(true);
             absentBtn.current.classList.add('check-btn');
             e.target.textContent = 'Выйти из режима';
@@ -380,7 +425,7 @@ const GradePage: FC = () => {
 
         absentBtn.current.classList.remove('check-btn');
         setMark(false);
-        e.target.textContent = 'Режим проставления оценок';
+        e.target.textContent = 'Режим редактирования';
     }
 
     const changeExam = (e) => {
@@ -448,6 +493,9 @@ const GradePage: FC = () => {
     }
 
 
+    console.log('temp', tempClasses)
+    console.log('classes', classes)
+
     return (
         loading
             ?
@@ -461,13 +509,20 @@ const GradePage: FC = () => {
                     subject.length !== 0 &&
                     <div style={{marginTop: 20, width: '70%'}} className='subj-row'>
                         <div className='subj-name'>{subject[0].name}</div>
-                        <div className='subj-teach'>{subject[0].teacher.name}</div>
+                        <div className='teachname-cont'>
+                            <div className='subj-teach'>{subject[0].teacher.name}</div>
+                            {
+                                subject[0].addTeacher !== null &&
+                                <div className='subj-teach'>{subject[0].addTeacher.name}</div>
+                            }
+
+                        </div>
                         <div style={{paddingLeft: 10, width: '15%'}} className='subj-group'>{subject[0].group.number}</div>
                         <div className='subj-type'>{SubjectType[subject[0].type]}</div>
                     </div>
                 }
                 {
-                    Object.keys(me).length !== 0 && me.type !== 'STUDENT' &&
+                    ((Object.keys(me).length !== 0 && subject.length !== 0) && ((me.type !== 'STUDENT' && (subject[0].teacher.id === me.owner_id.toString() || (subject[0].addTeacher !== null && subject[0].addTeacher.id === me.owner_id.toString()))) || me.type === 'ADMIN')) &&
                     <>
                         {
                             checkFirst || checkThird || checkSecond || checkTotal || checkLek || checkSem
@@ -479,7 +534,7 @@ const GradePage: FC = () => {
                                             ?
                                             <button style={{width: '30%'}} className='btn-subj check-btn'>Выйти из режима</button>
                                             :
-                                            <button style={{width: '30%'}} className='btn-subj check-btn'>Режим проставления оценок</button>
+                                            <button style={{width: '30%'}} className='btn-subj check-btn'>Режим редактирования</button>
                                     }
                                     {
                                         subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
@@ -502,7 +557,7 @@ const GradePage: FC = () => {
                                             ?
                                             <button onClick={(e) => changeMark(e)} style={{width: '30%'}} className='btn-subj'>Выйти из режима</button>
                                             :
-                                            <button ref={markBtn} onClick={(e) => changeMark(e)} style={{width: '30%'}} className='btn-subj'>Режим проставления оценок</button>
+                                            <button ref={markBtn} onClick={(e) => changeMark(e)} style={{width: '30%'}} className='btn-subj'>Режим редактирования</button>
                                     }
                                     {
                                         subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
@@ -581,7 +636,7 @@ const GradePage: FC = () => {
                                                                         ?
                                                                         <ChangeName key={item.id} changeChild={changeChild} item={item}/>
                                                                         :
-                                                                            <td className='grade-table-column-type'> <span style={{fontWeight: 'bold'}}>{item.name}</span><p></p> {LessonType[item.type]}<p></p>{item.day}</td>
+                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
                                                                     }
                                                                 </>
                                                         })
@@ -633,6 +688,7 @@ const GradePage: FC = () => {
                                             }
                                             <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Результат</td>
                                             <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Итог</td>
+                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Кол-во пропусков</td>
                                         </tr>
                                         {
                                             <>

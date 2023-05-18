@@ -135,7 +135,14 @@ const MyInfoPage: FC = () => {
                                                 :
                                                 <Link to={`/grade/${item.subject[0].id}`} className='subj-name subj-link'>{item.subject[0].name}</Link>
                                         }
-                                        <div className='subj-teach'>{item.subject[0].teacher.name}</div>
+                                        <div className='teachname-cont'>
+                                            <div className='subj-teach'>{item.subject[0].teacher.name}</div>
+                                            {
+                                                item.subject[0].addTeacher !== null &&
+                                                <div className='subj-teach'>{item.subject[0].addTeacher.name}</div>
+                                            }
+
+                                        </div>
                                         <div className='subj-type'>{SubjectType[item.subject[0].type]}</div>
                                         {
                                             item.mark < 60 && (item.firstModuleMark < 18 || item.secondModuleMark < 18 || item.thirdModuleMark < 18) &&

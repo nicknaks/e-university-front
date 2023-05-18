@@ -131,6 +131,10 @@
     transition: all .5s;
 }
 
+.mark-input::placeholder {
+    font-size: 14px;
+}
+
 .filter-cont {
     align-items: center;
     width: 100%;
@@ -148,4 +152,9 @@
 .check-btn {
     cursor: default !important;
     background-color: lightgray !important;
+}
+
+.name-class {
+    font-family: 'Gilroy-Bold', sans-serif;
+    font-size: 18px;
 }

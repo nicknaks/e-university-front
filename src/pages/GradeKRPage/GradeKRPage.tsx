@@ -106,13 +106,20 @@ const GradeKrPage: FC = () => {
                     subject.length !== 0 &&
                     <div style={{marginTop: 20, width: '70%'}} className='subj-row'>
                         <div className='subj-name'>{subject[0].name}</div>
-                        <div className='subj-teach'>{subject[0].teacher.name}</div>
+                        <div className='teachname-cont'>
+                            <div className='subj-teach'>{subject[0].teacher.name}</div>
+                            {
+                                subject[0].addTeacher !== null &&
+                                <div className='subj-teach'>{subject[0].addTeacher.name}</div>
+                            }
+
+                        </div>
                         <div style={{paddingLeft: 10, width: '15%'}} className='subj-group'>{subject[0].group.number}</div>
                         <div className='subj-type'>{SubjectType[subject[0].type]}</div>
                     </div>
                 }
                 {
-                    Object.keys(me).length !== 0 && me.type !== 'STUDENT' &&
+                    ((Object.keys(me).length !== 0 && subject.length !== 0) && ((me.type !== 'STUDENT' && (subject[0].teacher.id === me.owner_id.toString() || (subject[0].addTeacher !== null && subject[0].addTeacher.id === me.owner_id.toString()))) || me.type === 'ADMIN')) &&
                         <div style={{justifyContent: 'center'}} className='btn-grade-cont'>
                             {
                                 progress

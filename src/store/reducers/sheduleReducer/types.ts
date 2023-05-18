@@ -45,6 +45,8 @@ export interface Schedule {
     isNumerator: boolean,
     teacher: Teacher
     group: Group
+    addTeacherID: string,
+    addTeacher: Teacher,
 }
 
 export interface Subjects {
@@ -55,6 +57,8 @@ export interface Subjects {
     group: Group
     teacher: Teacher,
     type: SubjectType,
+    addTeacherID: string,
+    addTeacher: Teacher
 }
 
 export interface SubjectResults {
@@ -68,6 +72,7 @@ export interface SubjectResults {
     mark: number,
     total: number,
     examResult: number,
+    countAbsent, number,
 }
 
 export interface ClassProgress {

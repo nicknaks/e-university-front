@@ -125,6 +125,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refNumCouple2.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refNumCouple2.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refNumCouple2.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -141,6 +145,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refDenCouple2.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refDenCouple2.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {
@@ -164,6 +172,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refComCouple2.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refComCouple2.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refComCouple2.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -184,6 +196,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refNumCouple3.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refNumCouple3.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refNumCouple3.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -200,6 +216,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refDenCouple3.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refDenCouple3.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {
@@ -223,6 +243,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refComCouple3.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refComCouple3.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refComCouple3.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -243,6 +267,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refNumCouple4.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refNumCouple4.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refNumCouple4.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -259,6 +287,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refDenCouple4.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refDenCouple4.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {
@@ -282,6 +314,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refComCouple4.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refComCouple4.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refComCouple4.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -302,6 +338,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refNumCouple1.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refNumCouple1.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refNumCouple1.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -318,6 +358,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refDenCouple1.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refDenCouple1.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {
@@ -341,6 +385,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refComCouple1.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refComCouple1.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refComCouple1.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -361,6 +409,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refNumCouple5.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refNumCouple5.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refNumCouple5.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -377,6 +429,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refDenCouple5.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refDenCouple5.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {
@@ -400,6 +456,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refComCouple5.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refComCouple5.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refComCouple5.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -420,6 +480,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refNumCouple6.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refNumCouple6.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refNumCouple6.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -436,6 +500,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refDenCouple6.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refDenCouple6.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {
@@ -459,6 +527,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refComCouple6.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refComCouple6.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refComCouple6.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -479,6 +551,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
                 refNumCouple7.current.innerHTML += `${item.teacher.name} ${` `}`;
             }
 
+            if (item.addTeacher !== null && !teach) {
+                refNumCouple7.current.innerHTML += `${item.addTeacher.name} ${` `}`;
+            }
+
             if (item.group !== undefined && teach) {
                 refNumCouple7.current.innerHTML += `${item.group.number} ${` `}`;
             }
@@ -495,6 +571,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refDenCouple7.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refDenCouple7.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {
@@ -516,6 +596,10 @@ const OneTable: FC<OneTableProps> = ({changeTimeTable, groupId, day, subj, chang
 
             if (item.teacher !== undefined && !teach) {
                 refComCouple7.current.innerHTML += `${item.teacher.name} ${` `}`;
+            }
+
+            if (item.addTeacher !== null && !teach) {
+                refComCouple7.current.innerHTML += `${item.addTeacher.name} ${` `}`;
             }
 
             if (item.group !== undefined && teach) {

@@ -34,7 +34,7 @@ const ChangeName: FC<ChangeMarkProps> = ({changeChild, item}) => {
 
     return (
             <td className='grade-table-column-type'>
-                <input onKeyDown={keySubmit} onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
+                <input style={{width: 77}} onKeyDown={keySubmit} placeholder='Название' onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
             </td>
     );
 };

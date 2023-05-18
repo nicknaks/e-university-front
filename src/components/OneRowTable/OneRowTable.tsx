@@ -138,6 +138,11 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                 return;
             }
 
+            setModule1(oneClass.filter((item) => {
+                if (item.module === 1) {
+                    return item
+                }
+            }))
             setModule2([])
             setModule3([])
         }
@@ -168,6 +173,11 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                 return;
             }
 
+            setModule2(oneClass.filter((item) => {
+                if (item.module === 2) {
+                    return item
+                }
+            }))
             setModule1([])
             setModule3([])
         }
@@ -198,6 +208,11 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                 return;
             }
 
+            setModule3(oneClass.filter((item) => {
+                if (item.module === 3) {
+                    return item
+                }
+            }))
             setModule2([])
             setModule1([])
         }
@@ -246,8 +261,6 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
             return;
         }
     }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
-
-    console.log(module1)
 
     const changeValue = (value) => {
         if (value === '') {
@@ -483,6 +496,12 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                             }
                         </>
                     }
+                </>
+            }
+            {
+                subRes.length !== 0 &&
+                <>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].countAbsent}</td>
                 </>
             }
 

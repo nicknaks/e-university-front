@@ -513,7 +513,14 @@ const TimeTablePage: FC = () => {
                                                     </>
 
                                             }
-                                            <div className='subj-teach'>{item.teacher.name}</div>
+                                            <div className='teachname-cont'>
+                                                <div className='subj-teach'>{item.teacher.name}</div>
+                                                {
+                                                    item.addTeacher !== null &&
+                                                    <div className='subj-teach'>{item.addTeacher.name}</div>
+                                                }
+
+                                            </div>
                                             <div className='subj-type'>{SubjectType[item.type]}</div>
                                             {
                                                 me.type === 'ADMIN' &&
