@@ -113,9 +113,16 @@ const MyInfoPage: FC = () => {
                         ?
                         <>
                             {
+                                subject.length !== 0 &&
                                 subject.map((item) => {
                                     return <div className='subj-row'>
-                                        <div className='subj-name'>{item.name}</div>
+                                        {
+                                            SubjectType[item.type] === 'К.Р.' || SubjectType[item.type] === 'Практика'
+                                                ?
+                                                <Link to={`/gradekr/${item.id}`} className='subj-name subj-link'>{item.name}</Link>
+                                                :
+                                                <Link to={`/grade/${item.id}`} className='subj-name subj-link'>{item.name}</Link>
+                                        }
                                         <div className='subj-group'>{item.group.number}</div>
                                         <div className='subj-type'>{SubjectType[item.type]}</div>
                                     </div>
@@ -126,6 +133,7 @@ const MyInfoPage: FC = () => {
                         <>
 
                             {
+                                subjectResults.length !== 0 &&
                                 subjectResults.map((item) => {
                                     return <div className='subj-row'>
                                         {
@@ -138,7 +146,7 @@ const MyInfoPage: FC = () => {
                                         <div className='teachname-cont'>
                                             <div className='subj-teach'>{item.subject[0].teacher.name}</div>
                                             {
-                                                item.subject[0].addTeacher !== null &&
+                                                item.subject[0].addTeacher !== null || item.subject[0].addTeacher !== undefined &&
                                                 <div className='subj-teach'>{item.subject[0].addTeacher.name}</div>
                                             }
 
