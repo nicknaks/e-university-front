@@ -4,10 +4,11 @@ import {useAppDispatch} from "../../hooks/useAppDispatch";
 interface ChangeMarkProps {
     item: any,
     date: string,
+    type: string,
     changeChild: (name) => void,
 }
 
-const ChangeName: FC<ChangeMarkProps> = ({date,changeChild, item}) => {
+const ChangeName: FC<ChangeMarkProps> = ({type, date,changeChild, item}) => {
     const [value, setValue] = useState(item.name? item.name : '');
     const dispatch = useAppDispatch();
 
@@ -35,8 +36,11 @@ const ChangeName: FC<ChangeMarkProps> = ({date,changeChild, item}) => {
 
     return (
             <td className='grade-table-column-type'>
-                <input style={{width: 77, marginBottom: 10}} onKeyDown={keySubmit} placeholder='Название' onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
+                <input style={{width: 77}} onKeyDown={keySubmit} placeholder='Название' onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
+                <p></p>
                 {date}
+                <p></p>
+                {type}
             </td>
     );
 };
