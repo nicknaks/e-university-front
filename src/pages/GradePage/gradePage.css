@@ -19,7 +19,7 @@
 
 .grade-table-cont {
     border-collapse: collapse;
-    height: auto;
+    height: 182px;
     font-weight: lighter;
     margin-top: 40px;
     border-bottom: 0;
@@ -44,7 +44,7 @@
     font-size: 16px;
     text-align: center;
     border: 1px solid var(--textColor);
-    height: 50px;
+    height: 60px;
     width: 100px;
 }
 
@@ -157,4 +157,9 @@
 .name-class {
     font-family: 'Gilroy-Bold', sans-serif;
     font-size: 18px;
+}
+
+.tables {
+    width: 100%;
+    display: flex;
 }

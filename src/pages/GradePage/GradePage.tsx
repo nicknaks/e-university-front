@@ -37,6 +37,7 @@ const GradePage: FC = () => {
     const [checkTotal, setCheckTotal] = useState(false);
     const [checkLek, setCheckLek] = useState(false);
     const [checkSem, setCheckSem] = useState(false);
+    const [checkLab, setCheckLab] = useState(false);
     const [childnName, setChildnName] = useState([]);
     const [childnMark, setChildnMark] = useState([]);
 
@@ -77,7 +78,6 @@ const GradePage: FC = () => {
     }, [subject])
 
     useEffect(() => {
-
         if ((module1.length === 0 && module2.length === 0 && module3.length === 0) || (classes[0].type !== tempClasses[0].type) || (classes.length !== tempClasses.length)) {
 
             if (classes.length !== 0) {
@@ -144,6 +144,24 @@ const GradePage: FC = () => {
                 return;
             }
 
+            if (checkLab) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 1 && LessonType[item.type] === 'лаб') {
+                        return item
+                    }
+                }));
+                setModule1(classes.filter((item) => {
+                    if (LessonType[item.type] === 'лаб' && item.module === 1) {
+                        return item
+                    }
+                }))
+
+                setModule2([])
+                setModule3([])
+
+                return;
+            }
+
             if (checkSem) {
                 setTempClasses(classes.filter((item) => {
                     if (item.module === 1 && LessonType[item.type] === 'сем') {
@@ -178,6 +196,24 @@ const GradePage: FC = () => {
             return
         }
         if (checkSecond) {
+            if (checkLab) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 2 && LessonType[item.type] === 'лаб') {
+                        return item
+                    }
+                }));
+                setModule2(classes.filter((item) => {
+                    if (LessonType[item.type] === 'лаб' && item.module === 2) {
+                        return item
+                    }
+                }))
+
+                setModule1([])
+                setModule3([])
+
+                return;
+            }
+
             if (checkLek) {
                 setTempClasses(classes.filter((item) => {
                     if (item.module === 2 && LessonType[item.type] === 'лек') {
@@ -230,6 +266,24 @@ const GradePage: FC = () => {
             return;
         }
         if (checkThird) {
+            if (checkLab) {
+                setTempClasses(classes.filter((item) => {
+                    if (item.module === 3 && LessonType[item.type] === 'лаб') {
+                        return item
+                    }
+                }));
+                setModule3(classes.filter((item) => {
+                    if (LessonType[item.type] === 'лаб' && item.module === 3) {
+                        return item
+                    }
+                }))
+
+                setModule2([])
+                setModule1([])
+
+                return;
+            }
+
             if (checkLek) {
                 setTempClasses(classes.filter((item) => {
                     if (item.module === 3 && LessonType[item.type] === 'лек') {
@@ -291,6 +345,30 @@ const GradePage: FC = () => {
             return;
         }
 
+        if (checkLab) {
+            setTempClasses(classes.filter((item) => {
+                if (LessonType[item.type] === 'лаб') {
+                    return item
+                }
+            }))
+            setModule2(classes.filter((item) => {
+                if (LessonType[item.type] === 'лаб' && item.module === 2) {
+                    return item
+                }
+            }))
+            setModule3(classes.filter((item) => {
+                if (LessonType[item.type] === 'лаб' && item.module === 3) {
+                    return item
+                }
+            }))
+            setModule1(classes.filter((item) => {
+                if (LessonType[item.type] === 'лаб' && item.module === 1) {
+                    return item
+                }
+            }))
+
+            return;
+        }
         if (checkLek) {
             setTempClasses(classes.filter((item) => {
                 if (LessonType[item.type] === 'лек') {
@@ -339,7 +417,7 @@ const GradePage: FC = () => {
 
             return;
         }
-    }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
+    }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek, checkLab])
 
     const changeAbsent = (e) => {
         if (e.target.textContent === 'Режим проставления пропусков' && !mark) {
@@ -465,7 +543,7 @@ const GradePage: FC = () => {
     }
 
     const changeTotalCheck = (e) => {
-        if (checkFirst || checkThird || checkLek || checkSem || checkSecond || exam || absent || mark) {
+        if (checkFirst || checkThird || checkLek || checkSem || checkLab || checkSecond || exam || absent || mark) {
             return
         }
 
@@ -473,7 +551,7 @@ const GradePage: FC = () => {
     }
 
     const changeLekCheck = (e) => {
-        if (checkTotal || checkSem || exam || absent || mark) {
+        if (checkTotal || checkSem || checkLab ||exam || absent || mark) {
             return
         }
 
@@ -481,11 +559,19 @@ const GradePage: FC = () => {
     }
 
     const changeSemCheck = (e) => {
-        if (checkTotal || checkLek || exam || absent || mark) {
+        if (checkTotal || checkLek || checkLab || exam || absent || mark) {
             return
         }
 
         setCheckSem(e.target.checked);
+    }
+
+    const changeLabCheck = (e) => {
+        if (checkTotal || checkLek || checkSem || exam || absent || mark) {
+            return
+        }
+
+        setCheckLab(e.target.checked);
     }
 
     const scrollDiv = (e) => {
@@ -525,7 +611,7 @@ const GradePage: FC = () => {
                     ((Object.keys(me).length !== 0 && subject.length !== 0) && ((me.type !== 'STUDENT' && (subject[0].teacher.id === me.owner_id.toString() || (subject[0].addTeacher !== null && subject[0].addTeacher.id === me.owner_id.toString()))) || me.type === 'ADMIN')) &&
                     <>
                         {
-                            checkFirst || checkThird || checkSecond || checkTotal || checkLek || checkSem
+                            checkFirst || checkThird || checkSecond || checkTotal || checkLek || checkSem || checkLab
                             ?
                                 <div className='btn-grade-cont'>
                                     <button style={{width: '30%'}} className='btn-subj check-btn'>Режим проставления пропусков</button>
@@ -611,6 +697,11 @@ const GradePage: FC = () => {
                         <div className="checkbox__checkmark"></div>
                         <div style={{marginLeft: 15, marginRight: 0}} className="checkbox__body">Только семинар</div>
                     </label>
+                    <label style={{marginLeft: 60}} className="checkbox style-e">
+                        <input onChange={(e) => changeLabCheck(e)} checked={checkLab} type="checkbox"/>
+                        <div className="checkbox__checkmark"></div>
+                        <div style={{marginLeft: 15, marginRight: 0}} className="checkbox__body">Только лабораторные</div>
+                    </label>
                 </div>
                 {
                     students !== null &&
@@ -620,103 +711,129 @@ const GradePage: FC = () => {
                                 ?
                                 <div style={{marginTop: 20}} className='main-name'>Студенты отсуствуют у данной группы</div>
                                 :
-                                <div ref={tableHead} onScroll={(e) => scrollDiv(e)} className='scroll-table'>
-                                    <table style={{width: `${tempClasses.length * 100 + 150 + 600}px`}} className='grade-table-cont'>
+                                <div className='tables'>
+                                    <table className='grade-table-cont'>
                                         <tbody>
-                                        <tr className='grade-table-row'>
-                                            <td className='grade-table-column-fio'>ФИО</td>
-                                            {
-                                                module1.length !== 0 &&
-                                                <>
-                                                    {
-                                                        module1.map((item) => {
-                                                            return <>
-                                                                    {
-                                                                        mark
-                                                                        ?
-                                                                        <ChangeName type={LessonType[item.type]} key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
-                                                                        :
-                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
-                                                                    }
-                                                                </>
-                                                        })
-                                                    }
-                                                </>
-                                            }
-                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 1</td>
-                                            {
-                                                module2.length !== 0 &&
-                                                <>
-                                                    {
-                                                        module2.map((item) => {
-                                                            return <>
-                                                                {
-                                                                    mark
-                                                                        ?
-                                                                        <ChangeName type={LessonType[item.type]} key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
-                                                                        :
-                                                                        <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
-                                                                }
-                                                            </>
-                                                        })
-                                                    }
-                                                </>
-                                            }
-                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 2</td>
-                                            {
-                                                module3.length !== 0 &&
-                                                <>
-                                                    {
-                                                        module3.map((item) => {
-                                                            return <>
-                                                                {
-                                                                    mark
-                                                                        ?
-                                                                        <ChangeName type={LessonType[item.type]} key={item.id} date={item.day} changeChild={changeChild} item={item}/>
-                                                                        :
-                                                                        <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
-                                                                }
-                                                            </>
-                                                        })
-                                                    }
-                                                </>
-                                            }
-                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 3</td>
-                                            {
-                                                subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Экзамен</td>
-                                            }
-                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Результат</td>
-                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Итог</td>
-                                            <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Кол-во пропусков</td>
-                                        </tr>
                                         {
-                                            <>
-                                                {
-                                                    students.map((item, index) => {
-                                                        return <OneRowTable exam={exam}
-                                                                            key={item.id}
-                                                                            mark={mark}
-                                                                            changeChildMark={changeChildMark}
-                                                                            checkLek={checkLek}
-                                                                            checkSem={checkSem}
-                                                                            checkAllAbsent={checkAllAbsent}
-                                                                            absent={absent}
-                                                                            name={item.name}
-                                                                            classes={classes}
-                                                                            subId={subId}
-                                                                            checkFirst={checkFirst}
-                                                                            checkSecond={checkSecond}
-                                                                            checkThird={checkThird}
-                                                                            checkTotal={checkTotal}
-                                                                            studId={item.id}/>
-                                                    })
-                                                }
-                                            </>
+                                            mark
+                                                ?
+                                                <tr style={{height: 78}} className='grade-table-row'>
+                                                    <td className='grade-table-column-fio'>ФИО</td>
+                                                </tr>
+                                                :
+                                                <tr className='grade-table-row'>
+                                                    <td className='grade-table-column-fio'>ФИО</td>
+                                                </tr>
+                                        }
+                                        {
+                                            students.map((item) => {
+                                                return  <tr className='grade-table-row'>
+                                                    <td className='grade-table-column-fio'>{item.name}</td>
+                                                </tr>
+                                            })
+
                                         }
                                         </tbody>
                                     </table>
+                                    <div ref={tableHead} onScroll={(e) => scrollDiv(e)} className='scroll-table'>
+                                        <table style={{width: `${tempClasses.length * 100 + 150 + 600}px`}} className='grade-table-cont'>
+                                            <tbody>
+                                            <tr className='grade-table-row'>
+                                                {
+                                                    module1.length !== 0 &&
+                                                    <>
+                                                        {
+                                                            module1.map((item) => {
+                                                                return <>
+                                                                    {
+                                                                        mark
+                                                                            ?
+                                                                            <ChangeName type={LessonType[item.type]} key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
+                                                                            :
+                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
+                                                                    }
+                                                                </>
+                                                            })
+                                                        }
+                                                    </>
+                                                }
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 1</td>
+                                                {
+                                                    module2.length !== 0 &&
+                                                    <>
+                                                        {
+                                                            module2.map((item) => {
+                                                                return <>
+                                                                    {
+                                                                        mark
+                                                                            ?
+                                                                            <ChangeName type={LessonType[item.type]} key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
+                                                                            :
+                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
+                                                                    }
+                                                                </>
+                                                            })
+                                                        }
+                                                    </>
+                                                }
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 2</td>
+                                                {
+                                                    module3.length !== 0 &&
+                                                    <>
+                                                        {
+                                                            module3.map((item) => {
+                                                                return <>
+                                                                    {
+                                                                        mark
+                                                                            ?
+                                                                            <ChangeName type={LessonType[item.type]} key={item.id} date={item.day} changeChild={changeChild} item={item}/>
+                                                                            :
+                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
+                                                                    }
+                                                                </>
+                                                            })
+                                                        }
+                                                    </>
+                                                }
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 3</td>
+                                                {
+                                                    subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
+                                                    <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Экзамен</td>
+                                                }
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Результат</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Итог</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Кол-во пропусков</td>
+                                            </tr>
+                                            {
+                                                <>
+                                                    {
+                                                        students.map((item, index) => {
+                                                            return <OneRowTable exam={exam}
+                                                                                key={item.id}
+                                                                                mark={mark}
+                                                                                changeChildMark={changeChildMark}
+                                                                                checkLek={checkLek}
+                                                                                checkSem={checkSem}
+                                                                                checkAllAbsent={checkAllAbsent}
+                                                                                absent={absent}
+                                                                                checkLab={checkLab}
+                                                                                name={item.name}
+                                                                                classes={classes}
+                                                                                subId={subId}
+                                                                                checkFirst={checkFirst}
+                                                                                checkSecond={checkSecond}
+                                                                                checkThird={checkThird}
+                                                                                checkTotal={checkTotal}
+                                                                                studId={item.id}/>
+                                                        })
+                                                    }
+                                                </>
+                                            }
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
+
                         }
                     </>
                 }

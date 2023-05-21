@@ -17,7 +17,7 @@ const ChangeMark: FC<ChangeMarkProps> = ({item, changeChildMark}) => {
             return
         }
 
-        if (!isNaN(Number(value))) {
+        if (value.replace(/\D/g,'')) {
             setValue(value)
         }
     }

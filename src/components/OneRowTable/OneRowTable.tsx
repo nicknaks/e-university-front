@@ -21,10 +21,11 @@ interface OneRowTableProps {
     checkTotal: boolean,
     checkLek: boolean,
     checkSem: boolean,
+    checkLab: boolean,
     checkAllAbsent: (id, double) => void,
 }
 
-const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem, checkTotal, checkThird, checkFirst, checkSecond, exam, mark, checkAllAbsent, absent, name, classes, studId, subId}) => {
+const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek, checkSem, checkTotal, checkThird, checkFirst, checkSecond, exam, mark, checkAllAbsent, absent, name, classes, studId, subId}) => {
     const {subjectResults} = useAppSelector(state => state.schedule);
     const dispatch = useAppDispatch();
 
@@ -125,6 +126,19 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                 return;
             }
 
+            if (checkLab) {
+                setModule1(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'лаб' && item.module === 1) {
+
+                        return item
+                    }
+                }))
+                setModule2([])
+                setModule3([])
+
+                return;
+            }
+
             if (checkSem) {
                 setModule1(oneClass.filter((item) => {
                     if (LessonType[item.type] === 'сем' && item.module === 1) {
@@ -160,6 +174,19 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                 return;
             }
 
+            if (checkLab) {
+                setModule2(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'лаб' && item.module === 2) {
+
+                        return item
+                    }
+                }))
+                setModule1([])
+                setModule3([])
+
+                return;
+            }
+
             if (checkSem) {
                 setModule2(oneClass.filter((item) => {
                     if (LessonType[item.type] === 'сем' && item.module === 2) {
@@ -185,6 +212,19 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
             if (checkLek) {
                 setModule3(oneClass.filter((item) => {
                     if (LessonType[item.type] === 'лек' && item.module === 3) {
+
+                        return item
+                    }
+                }))
+                setModule2([])
+                setModule1([])
+
+                return;
+            }
+
+            if (checkLab) {
+                setModule3(oneClass.filter((item) => {
+                    if (LessonType[item.type] === 'лаб' && item.module === 3) {
 
                         return item
                     }
@@ -241,6 +281,26 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
 
             return;
         }
+        if (checkLab) {
+            setModule2(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'лаб' && item.module === 2) {
+                    return item
+                }
+            }))
+            setModule3(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'лаб' && item.module === 3) {
+                    return item
+                }
+            }))
+            setModule1(oneClass.filter((item) => {
+                if (LessonType[item.type] === 'лаб' && item.module === 1) {
+
+                    return item
+                }
+            }))
+
+            return;
+        }
         if (checkSem) {
             setModule2(oneClass.filter((item) => {
                 if (LessonType[item.type] === 'сем' && item.module === 2) {
@@ -260,7 +320,7 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
 
             return;
         }
-    }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek])
+    }, [checkThird, checkFirst, checkSecond, checkTotal, checkSem, checkLek, checkLab])
 
     const changeValue = (value) => {
         if (value === '') {
@@ -304,7 +364,6 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
 
     return (
         <tr className='grade-table-row'>
-            <td className='grade-table-column-fio'>{name}</td>
             {
                 module1.length !== 0 &&
                 <>
@@ -323,12 +382,17 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                                     !mark && !absent &&
                                     <>
                                         {
-                                            item.block[0].isAbsent
-                                                ?
-                                                <td style={{backgroundColor: 'lightgray'}} className='grade-table-column-type'>{item.block[0].mark}</td>
+                                            item.block.length !== 0 &&
+                                            <>
+                                                {
+                                                    item.block[0].isAbsent
+                                                        ?
+                                                        <td style={{backgroundColor: 'lightgray'}} className='grade-table-column-type'>{item.block[0].mark}</td>
 
-                                                :
-                                                <td className='grade-table-column-type'>{item.block[0].mark}</td>
+                                                        :
+                                                        <td className='grade-table-column-type'>{item.block[0].mark}</td>
+                                                }
+                                            </>
                                         }
                                     </>
                                 }
@@ -361,12 +425,17 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                                     !mark && !absent &&
                                     <>
                                         {
-                                            item.block[0].isAbsent
-                                                ?
-                                                <td style={{backgroundColor: 'lightgray'}} className='grade-table-column-type'>{item.block[0].mark}</td>
+                                            item.block.length !== 0 &&
+                                            <>
+                                                {
+                                                    item.block[0].isAbsent
+                                                        ?
+                                                        <td style={{backgroundColor: 'lightgray'}} className='grade-table-column-type'>{item.block[0].mark}</td>
 
-                                                :
-                                                <td className='grade-table-column-type'>{item.block[0].mark}</td>
+                                                        :
+                                                        <td className='grade-table-column-type'>{item.block[0].mark}</td>
+                                                }
+                                            </>
                                         }
                                     </>
                                 }
@@ -399,12 +468,17 @@ const OneRowTable: FC<OneRowTableProps> = ({changeChildMark, checkLek, checkSem,
                                     !mark && !absent &&
                                     <>
                                         {
-                                            item.block[0].isAbsent
-                                                ?
-                                                <td style={{backgroundColor: 'lightgray'}} className='grade-table-column-type'>{item.block[0].mark}</td>
+                                            item.block.length !== 0 &&
+                                            <>
+                                                {
+                                                    item.block[0].isAbsent
+                                                        ?
+                                                        <td style={{backgroundColor: 'lightgray'}} className='grade-table-column-type'>{item.block[0].mark}</td>
 
-                                                :
-                                                <td className='grade-table-column-type'>{item.block[0].mark}</td>
+                                                        :
+                                                        <td className='grade-table-column-type'>{item.block[0].mark}</td>
+                                                }
+                                            </>
                                         }
                                     </>
                                 }
