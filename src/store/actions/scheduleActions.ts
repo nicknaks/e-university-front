@@ -856,7 +856,7 @@ export const changeTotal = (id, total, subId) => {
     }
 }
 
-export const changeProgressAction = (id, first, second, third, subId) => {
+export const changeProgressAction = (id, module, mark, subId) => {
     return async (dispatch) => {
         try {
             dispatch(scheduleActionLoading(true));
@@ -866,7 +866,7 @@ export const changeProgressAction = (id, first, second, third, subId) => {
                 method: 'post',
                 headers: {"Content-Type": "application/json",},
                 data: {
-                    query: `mutation { subjectResultSet(input:{subjectResultID:"${id}", firstModuleMark:${first}, secondModuleMark: ${second}, thirdModuleMark: ${third}}) { id studentID subjectID subject{ name teacherID type group {number} teacher{ name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult countAbsent}}`,
+                    query: `mutation { moduleSetResult(input:{subjectResultID:"${id}", module:${module}, mark:${mark}}) { firstModuleMark firstModuleMarkComment secondModuleMark secondModuleMarkComment thirdModuleMark thirdModuleMarkComment examResult examResultComment}}`,
                 },
                 withCredentials: true
             });
@@ -884,6 +884,29 @@ export const changeProgressAction = (id, first, second, third, subId) => {
             }
         } finally {
             dispatch(scheduleActionLoading(false));
+        }
+    }
+}
+
+export const getExel = (id) => {
+    return async (dispatch) => {
+        try {
+            const res = await axios({
+                url: `http://localhost:8090/download?id=${id}`,
+                method: 'get',
+                headers: {"Content-Type": "application/json"},
+                withCredentials: true
+            });
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
         }
     }
 }

@@ -99,6 +99,10 @@ const OneRowKr: FC<OneRowKRProps> = ({changeChildBool, changeChild, edit, name, 
                 e.target.childNodes[0].classList.add('add');
                 changeChildBool({id: tempSub[0].id, place: 3})
             }
+            if (e.target.childNodes[0].classList[0] === 'fourth-progressbar-cont' && e.target.childNodes[0].classList.length !== 2) {
+                e.target.childNodes[0].classList.add('add');
+                changeChildBool({id: tempSub[0].id, place: 4})
+            }
         }
 
         if (e.target.classList[0] === 'first-progressbar-cont' && e.target.classList.length !== 2) {
@@ -112,7 +116,10 @@ const OneRowKr: FC<OneRowKRProps> = ({changeChildBool, changeChild, edit, name, 
         if (e.target.classList[0] === 'third-progressbar-cont' && e.target.classList.length !== 2) {
             e.target.classList.add('add');
             changeChildBool({id: tempSub[0].id, place: 3})
-
+        }
+        if (e.target.classList[0] === 'fourth-progressbar-cont' && e.target.classList.length !== 2) {
+            e.target.classList.add('add');
+            changeChildBool({id: tempSub[0].id, place: 4})
         }
     }
 
@@ -123,78 +130,93 @@ const OneRowKr: FC<OneRowKRProps> = ({changeChildBool, changeChild, edit, name, 
                 tempSub.length !== 0 &&
                 <>
                     {
-                        tempSub[0].firstModuleMark > 0
+                        tempSub[0].firstModuleMark === 0
                             ?
+                                <td className='kr-table-elem'>
+                                    <div className='first-progressbar-cont'>
+                                    </div>
+                                </td>
+                            :
+                            tempSub[0].firstModuleMark > 0 && tempSub[0].firstModuleMark < 18
+                                ?
+                                <td className='kr-table-elem choose-table'>
+                                    <div className='first-progressbar-cont'>
+                                        <div style={{backgroundColor: "#E57373"}} className='progressbar'></div>
+                                    </div>
+                                </td>
+                                :
                                 <td className='kr-table-elem'>
                                     <div className='first-progressbar-cont'>
                                         <div className='progressbar'></div>
                                     </div>
                                 </td>
-                            :
-                            edit
-                                ?
-                                <td className='kr-table-elem choose-table'>
-                                    <div className='first-progressbar-cont'>
-                                    </div>
-                                </td>
-                                :
-                                <td className='kr-table-elem'>
-                                    <div className='first-progressbar-cont'>
-                                    </div>
-                                </td>
                     }
 
                     {
-                        tempSub[0].secondModuleMark > 0
+                        tempSub[0].secondModuleMark === 0
                             ?
                             <td style={{padding: '5px 0 5px 0'}} className='kr-table-elem'>
                                 <div className='second-progressbar-cont'>
-                                    <div className='progressbar'></div>
                                 </div>
                             </td>
                             :
-                            edit
+                            tempSub[0].secondModuleMark > 0 && tempSub[0].secondModuleMark < 18
                                 ?
-                                <td style={{padding: '5px 0 5px 0'}} className='kr-table-elem choose-table'>
+                                <td style={{padding: '5px 0 5px 0'}} className='kr-table-elem'>
                                     <div className='second-progressbar-cont'>
+                                        <div style={{backgroundColor: "#E57373"}} className='progressbar'></div>
                                     </div>
                                 </td>
                                 :
                                 <td style={{padding: '5px 0 5px 0'}} className='kr-table-elem'>
                                     <div className='second-progressbar-cont'>
+                                        <div className='progressbar'></div>
                                     </div>
                                 </td>
                     }
-
                     {
-                        tempSub[0].thirdModuleMark > 0
+                        tempSub[0].thirdModuleMark === 0
                             ?
-                            <td style={{padding: '5px 15px 5px 0'}} className='kr-table-elem'>
+                            <td style={{padding: '5px 0 5px 0'}} className='kr-table-elem'>
                                 <div className='third-progressbar-cont'>
-                                    <div className='progressbar'></div>
                                 </div>
                             </td>
                             :
-                            edit
+                            tempSub[0].thirdModuleMark > 0 && tempSub[0].thirdModuleMark < 18
                                 ?
-                                <td style={{padding: '5px 15px 5px 0'}} className='kr-table-elem choose-table'>
+                                <td style={{padding: '5px 0 5px 0'}} className='kr-table-elem'>
                                     <div className='third-progressbar-cont'>
+                                        <div style={{backgroundColor: "#E57373"}} className='progressbar'></div>
                                     </div>
                                 </td>
                                 :
-                                <td style={{padding: '5px 15px 5px 0'}} className='kr-table-elem'>
+                                <td style={{padding: '5px 0 5px 0'}} className='kr-table-elem'>
                                     <div className='third-progressbar-cont'>
+                                        <div className='progressbar'></div>
                                     </div>
                                 </td>
                     }
                     {
-                        edit
+                        tempSub[0].examResult === 0
                             ?
-                            <td className='grade-table-column-type'>
-                                <input onKeyDown={keySubmit} style={{fontSize: 18}} onBlur={submit} className='mark-input' value={value} onChange={(e) => changeValue(e.target.value)} type="text"/>
+                            <td style={{padding: '5px 15px 5px 0', borderRight: '1px solid #176dea'}} className='kr-table-elem'>
+                                <div className='fourth-progressbar-cont'>
+                                </div>
                             </td>
                             :
-                            <td style={{fontSize: 18}} className='grade-table-column-type'>{tempSub[0].mark}</td>
+                            tempSub[0].examResult > 0 && tempSub[0].examResult < 18
+                                ?
+                                <td style={{padding: '5px 15px 5px 0', borderRight: '1px solid #176dea'}} className='kr-table-elem'>
+                                    <div className='fourth-progressbar-cont'>
+                                        <div style={{backgroundColor: "#E57373"}} className='progressbar'></div>
+                                    </div>
+                                </td>
+                                :
+                                <td style={{padding: '5px 15px 5px 0', borderRight: '1px solid #176dea'}} className='kr-table-elem'>
+                                    <div className='fourth-progressbar-cont'>
+                                        <div className='progressbar'></div>
+                                    </div>
+                                </td>
                     }
                 </>
             }

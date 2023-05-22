@@ -35,6 +35,10 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
     const [module3, setModule3] = useState([]);
     const [subRes, setSubRes] = useState([]);
     const [value, setValue] = useState('');
+    const [sumSem, setSumSem] = useState(0);
+    const [sumLab, setSumLab] = useState(0);
+    const [sumLekAbsent, setSumLekAbsent] = useState(0);
+    const [sumFullAbsent, setSumFullAbsent] = useState(0);
 
     useEffect(() => {
         dispatch(getOneSubjectsResult(studId, subId));
@@ -47,6 +51,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
                 });
 
                 return {
+                    day: item.day,
                     type: item.type,
                     id: item.id,
                     module: item.module,
@@ -77,6 +82,38 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
             && module2.length === 0
             && module3.length === 0) {
             if (oneClass.length !== 0) {
+                const now = new Date()
+
+                oneClass.forEach((item) => {
+                    if ((Number(item.day.slice(3)) === now.getMonth() + 1) && (Number(item.day.slice(0, 2)) <= now.getDate()) && item.block[0].isAbsent) {
+                        setSumFullAbsent(prevState => prevState + 1)
+                    }
+                })
+
+                oneClass.forEach((item) => {
+                    if ((Number(item.day.slice(3)) < now.getMonth() + 1) && item.block[0].isAbsent) {
+                        setSumFullAbsent(prevState => prevState + 1)
+                    }
+                })
+
+                oneClass.forEach((item) => {
+                    if (item.block[0].isAbsent && LessonType[item.type] === 'лек') {
+                        setSumLekAbsent(prevState => prevState + 1)
+                    }
+                })
+
+                oneClass.forEach((item) => {
+                    if (LessonType[item.type] === 'сем') {
+                        setSumSem(prevState => prevState + item.block[0].mark)
+                    }
+                })
+
+                oneClass.forEach((item) => {
+                    if (LessonType[item.type] === 'лаб') {
+                        setSumLab(prevState => prevState + item.block[0].mark)
+                    }
+                })
+
                 oneClass.forEach((item) => {
                     if (item.module === 1) {
                         setModule1(prevState => [...prevState, item])
@@ -404,7 +441,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].firstModuleMark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(subRes[0].firstModuleMark)}</td>
                 </>
             }
             {
@@ -447,7 +484,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].secondModuleMark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(subRes[0].secondModuleMark)}</td>
                 </>
             }
             {
@@ -490,7 +527,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].thirdModuleMark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(subRes[0].thirdModuleMark)}</td>
                 </>
             }
             {
@@ -515,9 +552,17 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
             {
                 subRes.length !== 0 &&
                 <>
-                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].mark}</td>
+                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(subRes[0].mark)}</td>
                 </>
             }
+            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumSem}</td>
+            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumLab}</td>
+            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumLekAbsent}</td>
+            {
+                oneClass.length !== 0 &&
+                <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.ceil(sumFullAbsent / oneClass.length * 100)}%</td>
+            }
+
             {
                 subRes.length !== 0 &&
                 <>
@@ -570,12 +615,6 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
                             }
                         </>
                     }
-                </>
-            }
-            {
-                subRes.length !== 0 &&
-                <>
-                    <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{subRes[0].countAbsent}</td>
                 </>
             }
 

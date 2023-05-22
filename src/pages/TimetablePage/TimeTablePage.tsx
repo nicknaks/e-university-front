@@ -64,8 +64,6 @@ const TimeTablePage: FC = () => {
 
     const [tableId, setTableId] = useState('')
 
-    console.log(schedule)
-
     useEffect(() => {
         document.getElementsByTagName('title')[0].innerText = 'Расписание группы'
         const id = window.location.pathname.slice(10);

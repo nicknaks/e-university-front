@@ -7,7 +7,7 @@ import {isLogin} from "../../store/actions/authActions";
 import {useNavigate} from "react-router-dom";
 import {
     changeAbsentAction, changeAbsentFalseAction, changeMarkAction, changeName,
-    getClasses,
+    getClasses, getExel,
     getOneSubjects,
     getStudents
 } from "../../store/actions/scheduleActions";
@@ -578,9 +578,12 @@ const GradePage: FC = () => {
         setScroll(e.target.scrollLeft)
     }
 
+    const download = () => {
+        dispatch(getExel(subId));
+    }
 
-    console.log('temp', tempClasses)
-    console.log('classes', classes)
+    //console.log('temp', tempClasses)
+    //console.log('classes', classes)
 
     return (
         loading
@@ -721,7 +724,7 @@ const GradePage: FC = () => {
                                                     <td className='grade-table-column-fio'>ФИО</td>
                                                 </tr>
                                                 :
-                                                <tr className='grade-table-row'>
+                                                <tr style={{height: 67}} className='grade-table-row'>
                                                     <td className='grade-table-column-fio'>ФИО</td>
                                                 </tr>
                                         }
@@ -736,7 +739,7 @@ const GradePage: FC = () => {
                                         </tbody>
                                     </table>
                                     <div ref={tableHead} onScroll={(e) => scrollDiv(e)} className='scroll-table'>
-                                        <table style={{width: `${tempClasses.length * 100 + 150 + 600}px`}} className='grade-table-cont'>
+                                        <table style={{width: `${tempClasses.length * 100 + 150 + 900}px`}} className='grade-table-cont'>
                                             <tbody>
                                             <tr className='grade-table-row'>
                                                 {
@@ -757,7 +760,7 @@ const GradePage: FC = () => {
                                                         }
                                                     </>
                                                 }
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 1</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#B7D7EC'}} className='grade-table-column-type'>Модуль 1</td>
                                                 {
                                                     module2.length !== 0 &&
                                                     <>
@@ -776,7 +779,7 @@ const GradePage: FC = () => {
                                                         }
                                                     </>
                                                 }
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 2</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#B7D7EC'}} className='grade-table-column-type'>Модуль 2</td>
                                                 {
                                                     module3.length !== 0 &&
                                                     <>
@@ -795,14 +798,17 @@ const GradePage: FC = () => {
                                                         }
                                                     </>
                                                 }
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Модуль 3</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#B7D7EC'}} className='grade-table-column-type'>Модуль 3</td>
                                                 {
                                                     subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
                                                     <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Экзамен</td>
                                                 }
                                                 <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Результат</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Итог</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Кол-во пропусков</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Сумма баллов за семинары</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Сумма баллов за лабы</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Кол-во пропусков лекций</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>% пропусков на сегодня</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#597EA7'}} className='grade-table-column-type'>Итог</td>
                                             </tr>
                                             {
                                                 <>
@@ -833,10 +839,10 @@ const GradePage: FC = () => {
                                         </table>
                                     </div>
                                 </div>
-
                         }
                     </>
                 }
+                <button style={{marginTop: 30}} onClick={download} className='btn-subj'>Скачать Excel</button>
             </div>
     );
 };

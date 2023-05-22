@@ -9,11 +9,12 @@ import {isLogin} from "../../store/actions/authActions";
 import {
     changeProgressAction,
     changeTotal,
-    getClasses,
+    getExel,
     getOneSubjects, getStudents
 } from "../../store/actions/scheduleActions";
 import {scheduleActionClassesNull} from "../../store/reducers/sheduleReducer/sheduleReducer";
 import OneRowKR from "../OneRowKR/OneRowKR";
+import OneRowUnderKr from "../../components/OneRowUnderKr/OneRowUnderKr";
 
 const GradeKrPage: FC = () => {
     const {loading, subject, students} = useAppSelector(state => state.schedule);
@@ -25,6 +26,7 @@ const GradeKrPage: FC = () => {
     const [progress, setProgress] = useState(false);
     const [childMark, setChildMark] = useState([])
     const [childBool, setChildBool] = useState([])
+    const [res, setRes] = useState([])
 
     useEffect(() => {
         document.getElementsByTagName('title')[0].innerText = 'Успеваемость';
@@ -62,25 +64,12 @@ const GradeKrPage: FC = () => {
             return
         }
 
-        if (childMark.length !== 0) {
-            childMark.forEach((item) => {
-                dispatch(changeTotal(item.id, item.mark, subId))
+        if (res.length !== 0) {
+            res.forEach((item) => {
+                dispatch(changeProgressAction(item.id, item.module, item.mark, subId))
             })
         }
 
-        if (childBool.length !== 0) {
-            childBool.forEach((item) => {
-                if (item.place === 1) {
-                    dispatch(changeProgressAction(item.id, true, false, false, subId))
-                }
-                if (item.place === 2) {
-                    dispatch(changeProgressAction(item.id, false, true, false, subId))
-                }
-                if (item.place === 3) {
-                    dispatch(changeProgressAction(item.id, false, false, true, subId))
-                }
-            })
-        }
         setProgress(false);
         e.target.textContent = 'Режим проставления прогресса';
     }
@@ -91,6 +80,14 @@ const GradeKrPage: FC = () => {
 
     const changeChildBool = (bool) => {
         setChildBool(prevState => [...prevState, bool])
+    }
+
+    const download = () => {
+        dispatch(getExel(subId));
+    }
+
+    const changeMarkChild = (obj) => {
+        setRes(prevState => [...prevState, obj])
     }
 
     return (
@@ -139,26 +136,45 @@ const GradeKrPage: FC = () => {
                                 ?
                                 <div style={{marginTop: 20}} className='main-name'>Студенты отсуствуют у данной группы</div>
                                 :
-                                <table style={{width: 850}} className='grade-table-cont'>
+                                <table style={{width: 950}} className='grade-table-cont'>
                                     <tbody>
                                     <tr className='grade-table-row'>
                                         <td style={{width: 150}} className='grade-table-column-fio'>ФИО</td>
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 1</td>
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 2</td>
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 3</td>
-                                        <td style={{fontWeight: 'bold', width: 100}} className='grade-table-column-type'>Оценка</td>
+                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 4</td>
                                     </tr>
                                     {
                                         students.map((item) => {
-                                            return <OneRowKR changeChildBool={changeChildBool} changeChild={changeChild} edit={progress} key={item.id} name={item.name} studId={item.id} subId={subId}/>
+                                            return <OneRowKR changeChildBool={changeChildBool} changeChild={changeChild} edit={false} key={item.id} name={item.name} studId={item.id} subId={subId}/>
                                         })
                                     }
                                     </tbody>
                                 </table>
-
+                        }
+                        {
+                            students.length !== 0 &&
+                                <table style={{width: 950}} className='grade-table-cont'>
+                                    <tbody>
+                                    <tr className='grade-table-row'>
+                                        <td style={{width: 150}} className='grade-table-column-fio'>ФИО</td>
+                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 1</td>
+                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 2</td>
+                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 3</td>
+                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 4</td>
+                                    </tr>
+                                    {
+                                        students.map((item) => {
+                                            return <OneRowUnderKr changeMarkChild={changeMarkChild} edit={progress} studId={item.id} name={item.name}/>
+                                        })
+                                    }
+                                    </tbody>
+                                </table>
                         }
                     </>
                 }
+                <button style={{marginTop: 30}} onClick={download} className='btn-subj'>Скачать Excel</button>
             </div>
     );
 };
