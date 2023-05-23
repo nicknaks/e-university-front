@@ -490,7 +490,7 @@ export const getOneSubjectsResult = (id, subId) => {
                 headers: {"Content-Type": "application/json",},
                 data: {
                     "operationName": "fetchSubjectsResult",
-                    "query": `query fetchSubjectsResult{ subjectResults(filter:{subjectID: "${subId}"}){ id studentID subjectID subject{ name teacherID type group {number} teacher{id name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult countAbsent}}`,
+                    "query": `query fetchSubjectsResult{ subjectResults(filter:{subjectID: "${subId}"}){ id studentID subjectID subject{ name teacherID type group {number} teacher{id name } } firstModuleMark secondModuleMark thirdModuleMark mark total examResult countAbsent firstModuleMarkComment secondModuleMarkComment thirdModuleMarkComment examResultComment}}`,
                 },
                 withCredentials: true,
             });
@@ -856,20 +856,35 @@ export const changeTotal = (id, total, subId) => {
     }
 }
 
-export const changeProgressAction = (id, module, mark, subId) => {
+export const changeProgressAction = (id, module, subId, mark?, text?) => {
     return async (dispatch) => {
         try {
             dispatch(scheduleActionLoading(true));
 
-            const add = await axios({
-                url: localUrl,
-                method: 'post',
-                headers: {"Content-Type": "application/json",},
-                data: {
-                    query: `mutation { moduleSetResult(input:{subjectResultID:"${id}", module:${module}, mark:${mark}}) { firstModuleMark firstModuleMarkComment secondModuleMark secondModuleMarkComment thirdModuleMark thirdModuleMarkComment examResult examResultComment}}`,
-                },
-                withCredentials: true
-            });
+            if (text === undefined) {
+                const add = await axios({
+                    url: localUrl,
+                    method: 'post',
+                    headers: {"Content-Type": "application/json",},
+                    data: {
+                        query: `mutation { moduleSetResult(input:{subjectResultID:"${id}", module:${module}, mark:${mark}}) { firstModuleMark firstModuleMarkComment secondModuleMark secondModuleMarkComment thirdModuleMark thirdModuleMarkComment examResult examResultComment}}`,
+                    },
+                    withCredentials: true
+                });
+            }
+
+            if (text !== undefined && mark !== undefined) {
+                const add = await axios({
+                    url: localUrl,
+                    method: 'post',
+                    headers: {"Content-Type": "application/json",},
+                    data: {
+                        query: `mutation { moduleSetResult(input:{subjectResultID:"${id}", module:${module}, mark:${mark}, comment:"${text}"}) { firstModuleMark firstModuleMarkComment secondModuleMark secondModuleMarkComment thirdModuleMark thirdModuleMarkComment examResult examResultComment}}`,
+                    },
+                    withCredentials: true
+                });
+
+            }
 
             dispatch(getOneSubjectsResult(1, subId))
 
@@ -888,7 +903,7 @@ export const changeProgressAction = (id, module, mark, subId) => {
     }
 }
 
-export const getExel = (id) => {
+export const getExel = (id, obj) => {
     return async (dispatch) => {
         try {
             const res = await fetch(`http://localhost:8090/download?id=${id}`,{
@@ -901,7 +916,7 @@ export const getExel = (id) => {
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = fileURL;
-            a.download = 'Успеваемость Excel';
+            a.download = `${obj.group}_${obj.name}`;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(fileURL);

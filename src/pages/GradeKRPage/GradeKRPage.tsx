@@ -8,7 +8,6 @@ import {useNavigate} from "react-router-dom";
 import {isLogin} from "../../store/actions/authActions";
 import {
     changeProgressAction,
-    changeTotal,
     getExel,
     getOneSubjects, getStudents
 } from "../../store/actions/scheduleActions";
@@ -25,8 +24,10 @@ const GradeKrPage: FC = () => {
     const [subId, setSubId] = useState('');
     const [progress, setProgress] = useState(false);
     const [childMark, setChildMark] = useState([])
+    const [childComm, setChildComm] = useState([])
     const [childBool, setChildBool] = useState([])
     const [res, setRes] = useState([])
+    const [objSub, setObjSub] = useState(null);
 
     useEffect(() => {
         document.getElementsByTagName('title')[0].innerText = 'Успеваемость';
@@ -52,6 +53,10 @@ const GradeKrPage: FC = () => {
 
     useEffect(() => {
         if (subject.length !== 0) {
+            setObjSub({
+                group: subject[0].group.number,
+                name: subject[0].name
+            })
             dispatch(getStudents(subject[0].group.id));
         }
     }, [subject])
@@ -64,9 +69,15 @@ const GradeKrPage: FC = () => {
             return
         }
 
+        if (childComm.length !== 0) {
+            childComm.forEach((item) => {
+                dispatch(changeProgressAction(item.id, item.module, subId, item.mark, item.text))
+            })
+        }
+
         if (res.length !== 0) {
             res.forEach((item) => {
-                dispatch(changeProgressAction(item.id, item.module, item.mark, subId))
+                dispatch(changeProgressAction(item.id, item.module, subId, item.mark))
             })
         }
 
@@ -83,11 +94,15 @@ const GradeKrPage: FC = () => {
     }
 
     const download = () => {
-        dispatch(getExel(subId));
+        dispatch(getExel(subId, objSub));
     }
 
     const changeMarkChild = (obj) => {
         setRes(prevState => [...prevState, obj])
+    }
+
+    const changeCommChild = (obj) => {
+        setChildComm(prevState => [...prevState, obj])
     }
 
     return (
@@ -136,14 +151,14 @@ const GradeKrPage: FC = () => {
                                 ?
                                 <div style={{marginTop: 20}} className='main-name'>Студенты отсуствуют у данной группы</div>
                                 :
-                                <table style={{width: 950}} className='grade-table-cont'>
+                                <table style={{width: 1050}} className='grade-table-cont'>
                                     <tbody>
                                     <tr className='grade-table-row'>
                                         <td style={{width: 150}} className='grade-table-column-fio'>ФИО</td>
-                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 1</td>
-                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 2</td>
-                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 3</td>
-                                        <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 4</td>
+                                        <td style={{fontWeight: 'bold', width: 225}} className='grade-table-column-type'>Модуль 1</td>
+                                        <td style={{fontWeight: 'bold', width: 225}} className='grade-table-column-type'>Модуль 2</td>
+                                        <td style={{fontWeight: 'bold', width: 225}} className='grade-table-column-type'>Модуль 3</td>
+                                        <td style={{fontWeight: 'bold', width: 225}} className='grade-table-column-type'>Модуль 4</td>
                                     </tr>
                                     {
                                         students.map((item) => {
@@ -155,7 +170,7 @@ const GradeKrPage: FC = () => {
                         }
                         {
                             students.length !== 0 &&
-                                <table style={{width: 950}} className='grade-table-cont'>
+                                <table style={{width: 1050}} className='grade-table-cont'>
                                     <tbody>
                                     <tr className='grade-table-row'>
                                         <td style={{width: 150}} className='grade-table-column-fio'>ФИО</td>
@@ -163,11 +178,11 @@ const GradeKrPage: FC = () => {
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 2</td>
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 3</td>
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 4</td>
-                                        <td style={{fontWeight: 'bold', width: 200, backgroundColor: '#597EA7'}} className='grade-table-column-type'>Итого</td>
+                                        <td style={{fontWeight: 'bold', width: 100, backgroundColor: '#597EA7'}} className='grade-table-column-type'>Итого</td>
                                     </tr>
                                     {
                                         students.map((item) => {
-                                            return <OneRowUnderKr changeMarkChild={changeMarkChild} edit={progress} studId={item.id} name={item.name}/>
+                                            return <OneRowUnderKr  changeMarkComm={changeCommChild} changeMarkChild={changeMarkChild} edit={progress} studId={item.id} name={item.name}/>
                                         })
                                     }
                                     </tbody>
@@ -175,7 +190,7 @@ const GradeKrPage: FC = () => {
                         }
                     </>
                 }
-                <button style={{marginTop: 30}} onClick={download} className='btn-subj'>Скачать Excel</button>
+                <button style={{marginTop: 30, marginBottom: 30}} onClick={download} className='btn-subj'>Скачать Excel</button>
             </div>
     );
 };

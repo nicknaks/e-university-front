@@ -40,6 +40,7 @@ const GradePage: FC = () => {
     const [checkLab, setCheckLab] = useState(false);
     const [childnName, setChildnName] = useState([]);
     const [childnMark, setChildnMark] = useState([]);
+    const [objSub, setObjSub] = useState(null);
 
     const [scroll, setScroll] = useState(0);
 
@@ -73,6 +74,10 @@ const GradePage: FC = () => {
 
     useEffect(() => {
         if (subject.length !== 0) {
+            setObjSub({
+                group: subject[0].group.number,
+                name: subject[0].name
+            })
             dispatch(getStudents(subject[0].group.id));
         }
     }, [subject])
@@ -579,7 +584,7 @@ const GradePage: FC = () => {
     }
 
     const download = () => {
-        dispatch(getExel(subId));
+        dispatch(getExel(subId, objSub));
     }
 
     //console.log('temp', tempClasses)
@@ -724,7 +729,7 @@ const GradePage: FC = () => {
                                                     <td className='grade-table-column-fio'>ФИО</td>
                                                 </tr>
                                                 :
-                                                <tr style={{height: 67}} className='grade-table-row'>
+                                                <tr style={{height: 71}} className='grade-table-row'>
                                                     <td className='grade-table-column-fio'>ФИО</td>
                                                 </tr>
                                         }
@@ -753,7 +758,7 @@ const GradePage: FC = () => {
                                                                             ?
                                                                             <ChangeName type={LessonType[item.type]} key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
                                                                             :
-                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
+                                                                            <td style={{height: 71}} className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
                                                                     }
                                                                 </>
                                                             })
@@ -772,7 +777,7 @@ const GradePage: FC = () => {
                                                                             ?
                                                                             <ChangeName type={LessonType[item.type]} key={item.id}  date={item.day} changeChild={changeChild} item={item}/>
                                                                             :
-                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
+                                                                            <td style={{height: 71}} className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
                                                                     }
                                                                 </>
                                                             })
@@ -791,24 +796,24 @@ const GradePage: FC = () => {
                                                                             ?
                                                                             <ChangeName type={LessonType[item.type]} key={item.id} date={item.day} changeChild={changeChild} item={item}/>
                                                                             :
-                                                                            <td className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
+                                                                            <td style={{height: 71}} className='grade-table-column-type'>{LessonType[item.type]}<p></p><span className='name-class'>{item.name}</span><p></p>{item.day}</td>
                                                                     }
                                                                 </>
                                                             })
                                                         }
                                                     </>
                                                 }
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#B7D7EC'}} className='grade-table-column-type'>Модуль 3</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#B7D7EC', height: 71}} className='grade-table-column-type'>Модуль 3</td>
                                                 {
                                                     subject.length !== 0 && SubjectType[subject[0].type] === 'Экзамен' &&
-                                                    <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Экзамен</td>
+                                                    <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Экзамен</td>
                                                 }
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Результат</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Сумма баллов за семинары</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Сумма баллов за лабы</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>Кол-во пропусков лекций</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1'}} className='grade-table-column-type'>% пропусков на сегодня</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#597EA7'}} className='grade-table-column-type'>Итог</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1' , height: 71}} className='grade-table-column-type'>Результат</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Сумма баллов за семинары</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Сумма баллов за лабы</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Кол-во пропусков лекций</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>% пропусков на сегодня</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#597EA7', height: 71}} className='grade-table-column-type'>Итог</td>
                                             </tr>
                                             {
                                                 <>
@@ -842,7 +847,7 @@ const GradePage: FC = () => {
                         }
                     </>
                 }
-                <button style={{marginTop: 30}} onClick={download} className='btn-subj'>Скачать Excel</button>
+                <button style={{marginTop: 30, marginBottom: 30}} onClick={download} className='btn-subj'>Скачать Excel</button>
             </div>
     );
 };
