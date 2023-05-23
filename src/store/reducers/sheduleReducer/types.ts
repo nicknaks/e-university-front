@@ -72,7 +72,11 @@ export interface SubjectResults {
     mark: number,
     total: number,
     examResult: number,
-    countAbsent, number,
+    countAbsent: number,
+    firstModuleMarkComment: string,
+    secondModuleMarkComment: string,
+    thirdModuleMarkComment: string,
+    examResultComment: string,
 }
 
 export interface ClassProgress {

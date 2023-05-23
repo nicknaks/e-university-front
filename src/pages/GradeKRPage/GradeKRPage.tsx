@@ -163,6 +163,7 @@ const GradeKrPage: FC = () => {
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 2</td>
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 3</td>
                                         <td style={{fontWeight: 'bold', width: 200}} className='grade-table-column-type'>Модуль 4</td>
+                                        <td style={{fontWeight: 'bold', width: 200, backgroundColor: '#597EA7'}} className='grade-table-column-type'>Итого</td>
                                     </tr>
                                     {
                                         students.map((item) => {

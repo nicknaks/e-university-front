@@ -84,3 +84,40 @@
 .add {
     box-shadow: 0 0 5px green;
 }
+
+.comm-cont {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comm-open {
+    transform: rotate(-45deg);
+    margin-left: 6px;
+    width: 15px;
+    height: 15px;
+}
+
+.comm-input-cont {
+    opacity: 0;
+    left: -9999px;
+    transition: opacity 0.5s;
+    width: 250px;
+    background-color: white;
+    box-shadow: 0 20px 40px 0 rgb(0 0 0 / 30%);
+    height: 100px;
+    position: absolute;
+    bottom: 18px;
+    z-index: 15;
+    border-radius: 10px;
+}
+
+.help-div {
+    cursor: pointer;
+    position: relative;
+}
+
+.help-div:hover .comm-input-cont{
+    opacity: 1;
+    left: 8px;
+}

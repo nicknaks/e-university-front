@@ -891,12 +891,20 @@ export const changeProgressAction = (id, module, mark, subId) => {
 export const getExel = (id) => {
     return async (dispatch) => {
         try {
-            const res = await axios({
-                url: `http://localhost:8090/download?id=${id}`,
+            const res = await fetch(`http://localhost:8090/download?id=${id}`,{
                 method: 'get',
-                headers: {"Content-Type": "application/json"},
-                withCredentials: true
+                headers: {"Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"},
             });
+
+            const blob = await res.blob()
+            const fileURL = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = fileURL;
+            a.download = 'Успеваемость Excel';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(fileURL);
 
             return true
         } catch (error) {
