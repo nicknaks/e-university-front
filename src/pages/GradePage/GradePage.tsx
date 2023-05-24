@@ -829,7 +829,6 @@ const GradePage: FC = () => {
                                                                                 absent={absent}
                                                                                 checkLab={checkLab}
                                                                                 name={item.name}
-                                                                                classes={classes}
                                                                                 subId={subId}
                                                                                 checkFirst={checkFirst}
                                                                                 checkSecond={checkSecond}

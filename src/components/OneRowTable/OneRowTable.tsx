@@ -9,10 +9,9 @@ import ChangeMark from "../ChangeMark/ChangeMark";
 interface OneRowTableProps {
     subId: string,
     studId: string,
-    classes: Array<Class>,
     name: string,
     absent: boolean,
-    changeChildMark: (mark) => void;
+    changeChildMark: (mark)  => void;
     mark: boolean,
     exam: boolean,
     checkFirst: boolean,
@@ -25,8 +24,8 @@ interface OneRowTableProps {
     checkAllAbsent: (id, double) => void,
 }
 
-const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek, checkSem, checkTotal, checkThird, checkFirst, checkSecond, exam, mark, checkAllAbsent, absent, name, classes, studId, subId}) => {
-    const {subjectResults} = useAppSelector(state => state.schedule);
+const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek, checkSem, checkTotal, checkThird, checkFirst, checkSecond, exam, mark, checkAllAbsent, absent, name, studId, subId}) => {
+    const {subjectResults, classes} = useAppSelector(state => state.schedule);
     const dispatch = useAppDispatch();
 
     const [oneClass, setOneClass] = useState([])
@@ -59,7 +58,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
                 }
             }));
         }
-    }, [])
+    }, [classes])
 
     useEffect(() => {
         if (subjectResults.length !== 0) {

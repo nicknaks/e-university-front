@@ -150,7 +150,6 @@
     resize: none;
     outline: none;
     border: 0;
-    border-radius: 10px;
 }
 
 .text-comm::-webkit-scrollbar {
