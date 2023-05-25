@@ -559,34 +559,39 @@ const TimeTablePage: FC = () => {
             }
             <div className='main-name'>
                 {
-                    schedule[0] !== undefined ?
+                    schedule.length !== 0 &&
                     <>
                         {
-                            teach ?
+                            schedule[0] !== undefined ?
                                 <>
                                     {
-                                        tableId === schedule[0].addTeacherID
-                                            ?
+                                        teach ?
                                             <>
-                                                Расписание преподавателя {schedule[0].addTeacher.name}
+                                                {
+                                                    tableId === schedule[0].addTeacherID
+                                                        ?
+                                                        <>
+                                                            Расписание преподавателя {schedule[0].addTeacher.name}
+                                                        </>
+                                                        :
+                                                        <>
+                                                            Расписание преподавателя {schedule[0].teacher.name}
+                                                        </>
+                                                }
+
                                             </>
                                             :
                                             <>
-                                                Расписание преподавателя {schedule[0].teacher.name}
+                                                Расписание группы {schedule[0].group.number}
                                             </>
                                     }
-
                                 </>
                                 :
                                 <>
-                                    Расписание группы {schedule[0].group.number}
+                                    Для такой группы пока нет расписания
                                 </>
                         }
                     </>
-                        :
-                        <>
-                            Для такой группы пока нет расписания
-                        </>
                 }
             </div>
             {
@@ -594,132 +599,137 @@ const TimeTablePage: FC = () => {
                 <button onClick={changeTimeTable} className='edit-btn'>Редактировать</button>
             }
             {
-                schedule[0] !== undefined &&
-                <div className='table-container'>
-                    <div className='left-tables'>
-                        <div className='table-day'>
-                            <div className='on-tbl'>
-                                <div className='table-day'>Понедельник</div>
+                schedule.length !== 0 &&
+                <>
+                    {
+                        schedule[0] !== undefined &&
+                        <div className='table-container'>
+                            <div className='left-tables'>
+                                <div className='table-day'>
+                                    <div className='on-tbl'>
+                                        <div className='table-day'>Понедельник</div>
 
-                            </div>
-                            <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={1} teach={teach} key={1} schedule={day1}/>
-                        </div>
-                        <div className='table-day'>
-                            <div className='on-tbl'>
-                                <div className='table-day'>Среда</div>
-
-                            </div>
-                            <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={3} teach={teach} key={3} schedule={day3}/>
-                        </div>
-                        <div className='table-day'>
-                            <div className='on-tbl'>
-                                <div className='table-day'>Пятница</div>
-
-                            </div>
-                            <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={5} key={5} teach={teach} schedule={day5}/>
-                        </div>
-                    </div>
-                    <div className='right-tables'>
-                        <div className='table-day'>
-                            <div className='on-tbl'>
-                                <div className='table-day'>Вторник</div>
-
-                            </div>
-                            <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={2} key={2} teach={teach} schedule={day2}/>
-                        </div>
-
-                        <div className='table-day'>
-                            <div className='on-tbl'>
-                                <div className='table-day'>Четверг</div>
-
-                            </div>
-                            <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={4} key={4} teach={teach} schedule={day4}/>
-                        </div>
-
-                        <div className='table-day'>
-                            <div className='on-tbl'>
-                                <div className='table-day'>Суббота</div>
-
-                            </div>
-                            <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={6} key={6} teach={teach} schedule={day6}/>
-                        </div>
-                    </div>
-                </div>
-            }
-            {
-                schedule[0] !== undefined ?
-                    <>
-                        {
-                            teach ?
-                                <>
-
-                                </>
-                                :
-                                <>
-                                    <div ref={refPopUp} className='popUp-container'>
-                                        <div ref={refPopUpBody} className='popUp'>
-                                            <svg onClick={closePopUp} className='close-popup' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-                                                <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5  c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4  C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/>
-                                            </svg>
-                                            <form className="menu-form" method="post" action="/" noValidate encType="application/json">
-                                                <div className='form-input-cont'>
-                                                    <div className='input-text'>Предмет</div>
-                                                    <input ref={refName} type='text' value={name} className='input-form' onChange={(e) => changeName(e.target.value)}/>
-                                                </div>
-                                                <div className='form-input-cont'>
-                                                    <div className='input-text'>Преподаватель</div>
-                                                    <div style={{width: '100%'}} className="open-list-fac">
-                                                        <div ref={refHeadTeachList} onClick={openTeachUl} className='head-of-list'>
-                                                            {teachList}
-                                                            <svg ref={refTeachArrow} className='list-arrow' viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                                                                <path fill="#000000"
-                                                                      d="M104.704 338.752a64 64 0 0 1 90.496 0l316.8 316.8 316.8-316.8a64 64 0 0 1 90.496 90.496L557.248 791.296a64 64 0 0 1-90.496 0L104.704 429.248a64 64 0 0 1 0-90.496z"/>
-                                                            </svg>
-                                                        </div>
-                                                        <ul style={{zIndex: '13'}} ref={refTeachUl} className='header-list header-list-hidden'>
-                                                            {
-                                                                teachers.map((item) => {
-                                                                    return <ListElement select={(e) => selectTeachList(e, item.id)} choose={teachList} key={item.id} id={item.id} name={item.name}/>
-                                                                })
-                                                            }
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className='form-input-cont'>
-                                                    <div className='input-text'>Тип предмета</div>
-                                                    <div style={{width: '100%'}} className="open-list-fac">
-                                                        <div ref={refHeadTypeList} onClick={openTypeUl} className='head-of-list'>
-                                                            {typeList}
-                                                            <svg ref={refTypeArrow} className='list-arrow' viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-                                                                <path fill="#000000"
-                                                                      d="M104.704 338.752a64 64 0 0 1 90.496 0l316.8 316.8 316.8-316.8a64 64 0 0 1 90.496 90.496L557.248 791.296a64 64 0 0 1-90.496 0L104.704 429.248a64 64 0 0 1 0-90.496z"/>
-                                                            </svg>
-                                                        </div>
-                                                        <ul style={{zIndex: '10'}} ref={refTypeUl} className='header-list header-list-hidden'>
-                                                            {
-                                                                Object.values(SubjectType).slice(1).map((item, index) => {
-                                                                    return <ListElement select={selectTypeList} choose={typeList} key={index} name={item}/>
-                                                                })
-                                                            }
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className='form-input-cont'>
-                                                    <div className='input-text'>Группа</div>
-                                                    <input type='text' value={schedule[0].group.number} disabled={true} style={{backgroundColor: 'lightgray', border: 0}} className='input-form'/>
-                                                </div>
-                                                <div className='error' ref={refError}>{error}</div>
-                                                <button onClick={sumbit} className='btn-form'>Создать предмет</button>
-                                            </form>
-                                        </div>
                                     </div>
-                                </>
-                        }
-                    </>
-                    :
-                    <>
+                                    <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={1} teach={teach} key={1} schedule={day1}/>
+                                </div>
+                                <div className='table-day'>
+                                    <div className='on-tbl'>
+                                        <div className='table-day'>Среда</div>
 
-                    </>
+                                    </div>
+                                    <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={3} teach={teach} key={3} schedule={day3}/>
+                                </div>
+                                <div className='table-day'>
+                                    <div className='on-tbl'>
+                                        <div className='table-day'>Пятница</div>
+
+                                    </div>
+                                    <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={5} key={5} teach={teach} schedule={day5}/>
+                                </div>
+                            </div>
+                            <div className='right-tables'>
+                                <div className='table-day'>
+                                    <div className='on-tbl'>
+                                        <div className='table-day'>Вторник</div>
+
+                                    </div>
+                                    <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={2} key={2} teach={teach} schedule={day2}/>
+                                </div>
+
+                                <div className='table-day'>
+                                    <div className='on-tbl'>
+                                        <div className='table-day'>Четверг</div>
+
+                                    </div>
+                                    <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={4} key={4} teach={teach} schedule={day4}/>
+                                </div>
+
+                                <div className='table-day'>
+                                    <div className='on-tbl'>
+                                        <div className='table-day'>Суббота</div>
+
+                                    </div>
+                                    <OneTable changeTimeTable={changeTimeTable} groupId={groupId} subj={subject} change={change} day={6} key={6} teach={teach} schedule={day6}/>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    {
+                        schedule[0] !== undefined ?
+                            <>
+                                {
+                                    teach ?
+                                        <>
+
+                                        </>
+                                        :
+                                        <>
+                                            <div ref={refPopUp} className='popUp-container'>
+                                                <div ref={refPopUpBody} className='popUp'>
+                                                    <svg onClick={closePopUp} className='close-popup' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+                                                        <path d="M18.8,16l5.5-5.5c0.8-0.8,0.8-2,0-2.8l0,0C24,7.3,23.5,7,23,7c-0.5,0-1,0.2-1.4,0.6L16,13.2l-5.5-5.5  c-0.8-0.8-2.1-0.8-2.8,0C7.3,8,7,8.5,7,9.1s0.2,1,0.6,1.4l5.5,5.5l-5.5,5.5C7.3,21.9,7,22.4,7,23c0,0.5,0.2,1,0.6,1.4  C8,24.8,8.5,25,9,25c0.5,0,1-0.2,1.4-0.6l5.5-5.5l5.5,5.5c0.8,0.8,2.1,0.8,2.8,0c0.8-0.8,0.8-2.1,0-2.8L18.8,16z"/>
+                                                    </svg>
+                                                    <form className="menu-form" method="post" action="/" noValidate encType="application/json">
+                                                        <div className='form-input-cont'>
+                                                            <div className='input-text'>Предмет</div>
+                                                            <input ref={refName} type='text' value={name} className='input-form' onChange={(e) => changeName(e.target.value)}/>
+                                                        </div>
+                                                        <div className='form-input-cont'>
+                                                            <div className='input-text'>Преподаватель</div>
+                                                            <div style={{width: '100%'}} className="open-list-fac">
+                                                                <div ref={refHeadTeachList} onClick={openTeachUl} className='head-of-list'>
+                                                                    {teachList}
+                                                                    <svg ref={refTeachArrow} className='list-arrow' viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path fill="#000000"
+                                                                              d="M104.704 338.752a64 64 0 0 1 90.496 0l316.8 316.8 316.8-316.8a64 64 0 0 1 90.496 90.496L557.248 791.296a64 64 0 0 1-90.496 0L104.704 429.248a64 64 0 0 1 0-90.496z"/>
+                                                                    </svg>
+                                                                </div>
+                                                                <ul style={{zIndex: '13'}} ref={refTeachUl} className='header-list header-list-hidden'>
+                                                                    {
+                                                                        teachers.map((item) => {
+                                                                            return <ListElement select={(e) => selectTeachList(e, item.id)} choose={teachList} key={item.id} id={item.id} name={item.name}/>
+                                                                        })
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div className='form-input-cont'>
+                                                            <div className='input-text'>Тип предмета</div>
+                                                            <div style={{width: '100%'}} className="open-list-fac">
+                                                                <div ref={refHeadTypeList} onClick={openTypeUl} className='head-of-list'>
+                                                                    {typeList}
+                                                                    <svg ref={refTypeArrow} className='list-arrow' viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                                                                        <path fill="#000000"
+                                                                              d="M104.704 338.752a64 64 0 0 1 90.496 0l316.8 316.8 316.8-316.8a64 64 0 0 1 90.496 90.496L557.248 791.296a64 64 0 0 1-90.496 0L104.704 429.248a64 64 0 0 1 0-90.496z"/>
+                                                                    </svg>
+                                                                </div>
+                                                                <ul style={{zIndex: '10'}} ref={refTypeUl} className='header-list header-list-hidden'>
+                                                                    {
+                                                                        Object.values(SubjectType).slice(1).map((item, index) => {
+                                                                            return <ListElement select={selectTypeList} choose={typeList} key={index} name={item}/>
+                                                                        })
+                                                                    }
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                        <div className='form-input-cont'>
+                                                            <div className='input-text'>Группа</div>
+                                                            <input type='text' value={schedule[0].group.number} disabled={true} style={{backgroundColor: 'lightgray', border: 0}} className='input-form'/>
+                                                        </div>
+                                                        <div className='error' ref={refError}>{error}</div>
+                                                        <button onClick={sumbit} className='btn-form'>Создать предмет</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </>
+                                }
+                            </>
+                            :
+                            <>
+
+                            </>
+                    }
+                </>
             }
         </div>
     );

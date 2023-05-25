@@ -30,12 +30,8 @@ const ChangeMarkKR: FC<ChangeMarkProps> = ({firstText, changeChildComm, mark, mo
 
     const submit = () => {
         if (value === mark || value === '') {
-            setValue('0')
+            setValue(mark !== 0? mark : '0')
             return;
-        }
-
-        if (Number(value) === 0) {
-            return
         }
 
         changeChildMark({id: srId, mark: value, module: module, text: text})

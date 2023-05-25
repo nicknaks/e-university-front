@@ -24,12 +24,8 @@ const ChangeMark: FC<ChangeMarkProps> = ({item, changeChildMark}) => {
 
     const submit = () => {
         if (value === item.block[0].mark || value === '') {
-            setValue('0')
+            setValue(item.block[0].mark !== 0? item.block[0].mark : '0')
             return;
-        }
-
-        if (Number(value) === 0) {
-            return
         }
 
         changeChildMark({id: item.block[0].id, value})
