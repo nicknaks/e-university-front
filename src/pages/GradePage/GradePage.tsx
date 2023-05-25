@@ -14,6 +14,7 @@ import {
 import {LessonType, SubjectType} from "../../store/reducers/sheduleReducer/types";
 import OneRowTable from "../../components/OneRowTable/OneRowTable";
 import ChangeName from "../../components/changeName/ChangeName";
+import {scheduleActionClassesNull} from "../../store/reducers/sheduleReducer/sheduleReducer";
 
 const GradePage: FC = () => {
     const {loading, classes, subject, students} = useAppSelector(state => state.schedule)
@@ -68,7 +69,7 @@ const GradePage: FC = () => {
         dispatch(getClasses(id));
 
         return () => {
-            //dispatch(scheduleActionClassesNull([]));
+            dispatch(scheduleActionClassesNull([]));
         }
     }, [me])
 
@@ -810,7 +811,7 @@ const GradePage: FC = () => {
                                                 }
                                                 <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1' , height: 71}} className='grade-table-column-type'>Результат</td>
                                                 <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Сумма баллов за семинары</td>
-                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Сумма баллов за лабы</td>
+                                                <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Сумма баллов за ЛР</td>
                                                 <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>Кол-во пропусков лекций</td>
                                                 <td style={{fontWeight: 'bold', backgroundColor: '#6aa1f1', height: 71}} className='grade-table-column-type'>% пропусков на сегодня</td>
                                                 <td style={{fontWeight: 'bold', backgroundColor: '#597EA7', height: 71}} className='grade-table-column-type'>Итог</td>

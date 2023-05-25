@@ -77,7 +77,7 @@ const GradeKrPage: FC = () => {
 
         if (res.length !== 0) {
             res.forEach((item) => {
-                dispatch(changeProgressAction(item.id, item.module, subId, item.mark))
+                dispatch(changeProgressAction(item.id, item.module, subId, item.mark, item.text))
             })
         }
 
@@ -190,7 +190,6 @@ const GradeKrPage: FC = () => {
                         }
                     </>
                 }
-                <button style={{marginTop: 30, marginBottom: 30}} onClick={download} className='btn-subj'>Скачать Excel</button>
             </div>
     );
 };

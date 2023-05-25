@@ -17,7 +17,7 @@ const ChangeMark: FC<ChangeMarkProps> = ({item, changeChildMark}) => {
             return
         }
 
-        if (value.replace(/\D/g,'')) {
+        if (value.match(/[0-9\.]/)) {
             setValue(value)
         }
     }

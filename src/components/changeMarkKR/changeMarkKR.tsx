@@ -12,7 +12,7 @@ interface ChangeMarkProps {
 
 const ChangeMarkKR: FC<ChangeMarkProps> = ({firstText, changeChildComm, mark, module, srId, changeChildMark}) => {
     const [value, setValue] = useState(mark);
-    const [text, setText] = useState(firstText);
+    const [text, setText] = useState(firstText === null? '' : firstText);
     const refText = useRef<HTMLDivElement>()
     const refName = useRef<HTMLDivElement>()
 
@@ -38,7 +38,7 @@ const ChangeMarkKR: FC<ChangeMarkProps> = ({firstText, changeChildComm, mark, mo
             return
         }
 
-        changeChildMark({id: srId, mark: value, module: module})
+        changeChildMark({id: srId, mark: value, module: module, text: text})
     }
 
     const submitText = () => {
@@ -74,7 +74,7 @@ const ChangeMarkKR: FC<ChangeMarkProps> = ({firstText, changeChildComm, mark, mo
                 <span ref={refName} className='add-comm'>Комментарий</span>
                 <div className='help-div-edit'>
                     <div ref={refText} className='comm-input-cont'>
-                        <textarea onBlur={submitText} placeholder='Здесь можно оставить комментарий' value={text} onChange={(e) => changeText(e.target.value)} className='text-comm'></textarea>
+                        <input onBlur={submitText} placeholder='Оставить комментарий' value={text} onChange={(e) => changeText(e.target.value)} className='text-comm'></input>
                     </div>
                 </div>
             </div>

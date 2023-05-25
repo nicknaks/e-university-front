@@ -38,6 +38,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
     const [sumLab, setSumLab] = useState(0);
     const [sumLekAbsent, setSumLekAbsent] = useState(0);
     const [sumFullAbsent, setSumFullAbsent] = useState(0);
+    const [kolNowClass, setKolNowClass] = useState(0);
 
     useEffect(() => {
         dispatch(getOneSubjectsResult(studId, subId));
@@ -90,8 +91,20 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
                 })
 
                 oneClass.forEach((item) => {
+                    if ((Number(item.day.slice(3)) === now.getMonth() + 1) && (Number(item.day.slice(0, 2)) <= now.getDate())) {
+                        setKolNowClass(prevState => prevState + 1)
+                    }
+                })
+
+                oneClass.forEach((item) => {
                     if ((Number(item.day.slice(3)) < now.getMonth() + 1) && item.block[0].isAbsent) {
                         setSumFullAbsent(prevState => prevState + 1)
+                    }
+                })
+
+                oneClass.forEach((item) => {
+                    if ((Number(item.day.slice(3)) < now.getMonth() + 1)    ) {
+                        setKolNowClass(prevState => prevState + 1)
                     }
                 })
 
@@ -559,7 +572,7 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
             <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumLekAbsent}</td>
             {
                 oneClass.length !== 0 &&
-                <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.ceil(sumFullAbsent / oneClass.length * 100)}%</td>
+                <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(sumFullAbsent / kolNowClass * 100)}%</td>
             }
 
             {
