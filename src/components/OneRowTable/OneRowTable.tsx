@@ -567,29 +567,21 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
                     <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(subRes[0].mark)}</td>
                 </>
             }
-            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumSem}</td>
-            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumLab}</td>
-            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumLekAbsent}</td>
-            {
-                oneClass.length !== 0 &&
-                <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(sumFullAbsent / kolNowClass * 100)}%</td>
-            }
-
             {
                 subRes.length !== 0 &&
                 <>
                     {
                         ((subRes[0].mark < 60) || (subRes[0].firstModuleMark < 18 || subRes[0].secondModuleMark < 18 || subRes[0].thirdModuleMark < 18)) &&
-                            <>
+                        <>
 
-                                {
-                                    SubjectType[subjectResults[0].subject[0].type] === 'Экзамен'
-                                        ?
-                                        <td style={{fontWeight: 'bold', color: 'red', fontSize: 18}} className='grade-table-column-type'>2</td>
-                                        :
-                                        <td style={{fontWeight: 'bold', color: 'red'}} className='grade-table-column-type'>Незачет</td>
-                                }
-                            </>
+                            {
+                                SubjectType[subjectResults[0].subject[0].type] === 'Экзамен'
+                                    ?
+                                    <td style={{fontWeight: 'bold', color: 'red', fontSize: 18}} className='grade-table-column-type'>2</td>
+                                    :
+                                    <td style={{fontWeight: 'bold', color: 'red'}} className='grade-table-column-type'>Незачет</td>
+                            }
+                        </>
                     }
                     {
                         (subRes[0].mark > 59 && subRes[0].mark < 71) && (subRes[0].firstModuleMark >= 18 && subRes[0].secondModuleMark >= 18 && subRes[0].thirdModuleMark >= 18) &&
@@ -629,7 +621,13 @@ const OneRowTable: FC<OneRowTableProps> = ({checkLab, changeChildMark, checkLek,
                     }
                 </>
             }
-
+            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumSem}</td>
+            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumLab}</td>
+            <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{sumLekAbsent}</td>
+            {
+                oneClass.length !== 0 &&
+                <td style={{fontWeight: 'bold', fontSize: 18}} className='grade-table-column-type'>{Math.floor(sumFullAbsent / kolNowClass * 100)}%</td>
+            }
         </tr>
     );
 };

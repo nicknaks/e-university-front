@@ -1,7 +1,8 @@
 import {localUrl, mutationUrl} from "../store";
 import axios from "axios";
-import {authActionLogin, authActionLogout} from "../reducers/authReducer/AuthReducer";
+import {authActionLogin, authActionLogout, authActionTeacherName} from "../reducers/authReducer/AuthReducer";
 import {Me} from "../reducers/authReducer/types";
+import {scheduleActionLoading} from "../reducers/sheduleReducer/sheduleReducer";
 
 export const loginAction = (login, pass) => {
     return async (dispatch) => {
@@ -115,6 +116,38 @@ export const isLogin = () => {
             }
         } finally {
             // dispatch(authActionLoading(false));
+        }
+    }
+}
+
+export const getTeacherName = (id) => {
+    return async (dispatch) => {
+        try {
+            dispatch(scheduleActionLoading(true));
+
+            const res = await axios({
+                url: localUrl,
+                method: 'post',
+                headers: {"Content-Type": "application/json",},
+                data: {
+                    "operationName": "fetchTeachers",
+                    "query": `query fetchTeachers{ teachers (filter:{idIn:"${id}"}) { id name }}`,
+                },
+            });
+
+            dispatch(authActionTeacherName(res.data.data.teachers[0].name))
+
+            return true
+        } catch (error) {
+            if (error.response.data.status === 400) {
+                return 400;
+            }
+
+            if (Math.trunc(error.response.data.status / 100) === 5) {
+                return 500;
+            }
+        } finally {
+            dispatch(scheduleActionLoading(false));
         }
     }
 }

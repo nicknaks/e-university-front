@@ -163,3 +163,14 @@
     width: 100%;
     display: flex;
 }
+
+.grad-mark {
+    align-items: center;
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+}
+
+.first-grade {
+    margin-right: 30px;
+}

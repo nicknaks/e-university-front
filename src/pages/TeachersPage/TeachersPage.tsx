@@ -10,18 +10,28 @@ const TeachersPage: FC = () => {
     const dispatch = useAppDispatch();
     const {teachers, loading} = useAppSelector(state => state.schedule);
 
-    const [value, setValue] = useState('')
+    const [value, setValue] = useState(localStorage.getItem('input') === ''? '' : localStorage.getItem('input'))
     const [filter, setFilter] = useState([])
     const [write, setWrite] = useState(false)
 
     useEffect(() => {
-        document.getElementsByTagName('title')[0].innerText = 'Преподаватели'
+        document.getElementsByTagName('title')[0].innerText = 'Преподаватели';
 
-        dispatch(getTeachers())
+        dispatch(getTeachers());
     }, [])
 
     useEffect(() => {
-        setFilter(teachers);
+        if (value === ''){
+            setFilter(teachers);
+        }
+
+        if (value !== '') {
+            setFilter(teachers.filter((item) => {
+                if (item.name.toLowerCase().includes(value.toLowerCase())) {
+                    return item
+                }
+            }))
+        }
     }, [teachers])
 
     const changeValue = (value) => {
@@ -33,15 +43,18 @@ const TeachersPage: FC = () => {
 
         if (value === '') {
             setFilter(teachers)
+            localStorage.setItem('input', value);
 
             return;
         }
 
         setFilter(teachers.filter((item) => {
-            if (item.name.includes(value)) {
+            if (item.name.toLowerCase().includes(value.toLowerCase())) {
                 return item
             }
         }))
+
+        localStorage.setItem('input', value);
     }
 
     return (

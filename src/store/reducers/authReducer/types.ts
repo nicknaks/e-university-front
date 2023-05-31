@@ -13,11 +13,13 @@ export enum UserType {
 
 export interface AuthState {
     me: Me
+    name?: string,
 }
 
 export enum AuthActionEnum {
     SET_LOGIN = 'SET_LOGIN',
     SET_LOGOUT = 'SET_LOGOUT',
+    SET_NAME_TEACHER = 'SET_NAME_TEACHER',
 }
 
 export interface SetLoginAction {
@@ -30,4 +32,9 @@ export interface SetLogoutAction {
     payload: Me,
 }
 
-export type AuthAction = SetLoginAction | SetLogoutAction;
+export interface SetTeacherNameAction {
+    type: AuthActionEnum.SET_NAME_TEACHER,
+    payload: string,
+}
+
+export type AuthAction = SetLoginAction | SetLogoutAction | SetTeacherNameAction;

@@ -143,6 +143,13 @@ const GradeKrPage: FC = () => {
 
                         </div>
                 }
+                <div className='grad-mark'>
+                    <div style={{fontWeight: "bold", width: '280px'}} className='subj-group'>Градация оценок по баллам:</div>
+                    <div className='first-grade'>Меньше 60 - <span style={{color: 'red', fontSize: 20}}>2</span></div>
+                    <div className='first-grade'>От 61 до 70 - <span style={{color: '#FFB74D', fontSize: 20}}>3</span></div>
+                    <div className='first-grade'>От 71 до 84 - <span style={{color: '#7CB342', fontSize: 20}}>4</span></div>
+                    <div className='first-grade'>От 85 - <span style={{color: '#388E3C', fontSize: 20}}>5</span></div>
+                </div>
                 {
                     students !== null &&
                     <>

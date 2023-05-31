@@ -183,15 +183,23 @@
 }
 
 .svg-login {
+    margin-left: 10px;
     height: 50px;
     width: 50px;
     cursor: pointer;
-    margin-right: 10px;
+    margin-right: 20px;
     transition: all 0.5s;
 }
 
 .svg-login:hover {
     transform: scale(1.1);
+}
+
+.log-name {
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @media (min-width: 1250px) and (max-width: 1700px) {
