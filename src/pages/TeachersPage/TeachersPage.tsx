@@ -10,7 +10,7 @@ const TeachersPage: FC = () => {
     const dispatch = useAppDispatch();
     const {teachers, loading} = useAppSelector(state => state.schedule);
 
-    const [value, setValue] = useState(localStorage.getItem('input') === ''? '' : localStorage.getItem('input'))
+    const [value, setValue] = useState(localStorage.getItem('input') === null || localStorage.getItem('input') === '' ? '' : localStorage.getItem('input'))
     const [filter, setFilter] = useState([])
     const [write, setWrite] = useState(false)
 
@@ -26,11 +26,14 @@ const TeachersPage: FC = () => {
         }
 
         if (value !== '') {
-            setFilter(teachers.filter((item) => {
-                if (item.name.toLowerCase().includes(value.toLowerCase())) {
-                    return item
-                }
-            }))
+            console.log(value)
+            if (teachers !== null) {
+                setFilter(teachers.filter((item) => {
+                    if (item.name.toLowerCase().includes(value.toLowerCase())) {
+                        return item
+                    }
+                }))
+            }
         }
     }, [teachers])
 
@@ -48,11 +51,13 @@ const TeachersPage: FC = () => {
             return;
         }
 
-        setFilter(teachers.filter((item) => {
-            if (item.name.toLowerCase().includes(value.toLowerCase())) {
-                return item
-            }
-        }))
+        if (teachers !== null) {
+            setFilter(teachers.filter((item) => {
+                if (item.name.toLowerCase().includes(value.toLowerCase())) {
+                    return item
+                }
+            }))
+        }
 
         localStorage.setItem('input', value);
     }
